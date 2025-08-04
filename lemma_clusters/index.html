@@ -1,1 +1,803 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>semanticbob</title>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #f1f3f4;
+            --text-color: #202124;
+            --text-secondary: #5f6368;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Google Sans', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f8f9fa;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+        
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .word-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 2px rgba(60,64,67,0.1), 0 1px 3px rgba(60,64,67,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .word-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 6px rgba(60,64,67,0.2), 0 4px 12px rgba(60,64,67,0.15);
+        }
+        
+        .word-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            word-break: break-word;
+            width: 100%;
+        }
+        
+        .word-item a:hover {
+            text-decoration: underline;
+        }
+        
+        .freq {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            background: var(--secondary-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-top: 5px;
+        }
+        
+        .freq-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 8px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .freq-bar-fill {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .word-list {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .word-list {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>semanticbob</h1>
+        <div class="stats">
+            Showing <span id="word-count">0</span> words
+        </div>
+    </header>
+    
+    <main>
+        <div class="word-list">
+<a href="spongebob_clusters.html" class="word-item" title="View spongebob clusters">
+  <div class="word-name">spongebob</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 100.00%"></div>
+  </div>
+  <div class="freq">5,137</div>
+</a>
+<a href="patrick_clusters.html" class="word-item" title="View patrick clusters">
+  <div class="word-name">patrick</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 46.91%"></div>
+  </div>
+  <div class="freq">2,410</div>
+</a>
+<a href="squidward_clusters.html" class="word-item" title="View squidward clusters">
+  <div class="word-name">squidward</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 44.79%"></div>
+  </div>
+  <div class="freq">2,301</div>
+</a>
+<a href="get_clusters.html" class="word-item" title="View get clusters">
+  <div class="word-name">get</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 43.96%"></div>
+  </div>
+  <div class="freq">2,258</div>
+</a>
+<a href="like_clusters.html" class="word-item" title="View like clusters">
+  <div class="word-name">like</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 40.72%"></div>
+  </div>
+  <div class="freq">2,092</div>
+</a>
+<a href="well_clusters.html" class="word-item" title="View well clusters">
+  <div class="word-name">well</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 39.42%"></div>
+  </div>
+  <div class="freq">2,025</div>
+</a>
+<a href="krabs_clusters.html" class="word-item" title="View krabs clusters">
+  <div class="word-name">krabs</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 37.08%"></div>
+  </div>
+  <div class="freq">1,905</div>
+</a>
+<a href="got_clusters.html" class="word-item" title="View got clusters">
+  <div class="word-name">got</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 35.45%"></div>
+  </div>
+  <div class="freq">1,821</div>
+</a>
+<a href="hey_clusters.html" class="word-item" title="View hey clusters">
+  <div class="word-name">hey</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 34.96%"></div>
+  </div>
+  <div class="freq">1,796</div>
+</a>
+<a href="right_clusters.html" class="word-item" title="View right clusters">
+  <div class="word-name">right</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 34.36%"></div>
+  </div>
+  <div class="freq">1,765</div>
+</a>
+<a href="one_clusters.html" class="word-item" title="View one clusters">
+  <div class="word-name">one</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 34.28%"></div>
+  </div>
+  <div class="freq">1,761</div>
+</a>
+<a href="squarepants_clusters.html" class="word-item" title="View squarepants clusters">
+  <div class="word-name">squarepants</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 33.02%"></div>
+  </div>
+  <div class="freq">1,696</div>
+</a>
+<a href="know_clusters.html" class="word-item" title="View know clusters">
+  <div class="word-name">know</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 31.17%"></div>
+  </div>
+  <div class="freq">1,601</div>
+</a>
+<a href="let_clusters.html" class="word-item" title="View let clusters">
+  <div class="word-name">let</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 27.45%"></div>
+  </div>
+  <div class="freq">1,410</div>
+</a>
+<a href="see_clusters.html" class="word-item" title="View see clusters">
+  <div class="word-name">see</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 26.98%"></div>
+  </div>
+  <div class="freq">1,386</div>
+</a>
+<a href="yeah_clusters.html" class="word-item" title="View yeah clusters">
+  <div class="word-name">yeah</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 26.73%"></div>
+  </div>
+  <div class="freq">1,373</div>
+</a>
+<a href="good_clusters.html" class="word-item" title="View good clusters">
+  <div class="word-name">good</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 23.92%"></div>
+  </div>
+  <div class="freq">1,229</div>
+</a>
+<a href="come_clusters.html" class="word-item" title="View come clusters">
+  <div class="word-name">come</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 22.41%"></div>
+  </div>
+  <div class="freq">1,151</div>
+</a>
+<a href="back_clusters.html" class="word-item" title="View back clusters">
+  <div class="word-name">back</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 21.90%"></div>
+  </div>
+  <div class="freq">1,125</div>
+</a>
+<a href="going_clusters.html" class="word-item" title="View going clusters">
+  <div class="word-name">going</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 21.26%"></div>
+  </div>
+  <div class="freq">1,092</div>
+</a>
+<a href="want_clusters.html" class="word-item" title="View want clusters">
+  <div class="word-name">want</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 20.71%"></div>
+  </div>
+  <div class="freq">1,064</div>
+</a>
+<a href="time_clusters.html" class="word-item" title="View time clusters">
+  <div class="word-name">time</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 20.60%"></div>
+  </div>
+  <div class="freq">1,058</div>
+</a>
+<a href="think_clusters.html" class="word-item" title="View think clusters">
+  <div class="word-name">think</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 20.52%"></div>
+  </div>
+  <div class="freq">1,054</div>
+</a>
+<a href="look_clusters.html" class="word-item" title="View look clusters">
+  <div class="word-name">look</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 19.64%"></div>
+  </div>
+  <div class="freq">1,009</div>
+</a>
+<a href="okay_clusters.html" class="word-item" title="View okay clusters">
+  <div class="word-name">okay</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 18.67%"></div>
+  </div>
+  <div class="freq">959</div>
+</a>
+<a href="krabby_clusters.html" class="word-item" title="View krabby clusters">
+  <div class="word-name">krabby</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 18.43%"></div>
+  </div>
+  <div class="freq">947</div>
+</a>
+<a href="ready_clusters.html" class="word-item" title="View ready clusters">
+  <div class="word-name">ready</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 18.05%"></div>
+  </div>
+  <div class="freq">927</div>
+</a>
+<a href="little_clusters.html" class="word-item" title="View little clusters">
+  <div class="word-name">little</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 17.83%"></div>
+  </div>
+  <div class="freq">916</div>
+</a>
+<a href="aye_clusters.html" class="word-item" title="View aye clusters">
+  <div class="word-name">aye</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 17.60%"></div>
+  </div>
+  <div class="freq">904</div>
+</a>
+<a href="could_clusters.html" class="word-item" title="View could clusters">
+  <div class="word-name">could</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 17.42%"></div>
+  </div>
+  <div class="freq">895</div>
+</a>
+<a href="gary_clusters.html" class="word-item" title="View gary clusters">
+  <div class="word-name">gary</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 16.96%"></div>
+  </div>
+  <div class="freq">871</div>
+</a>
+<a href="would_clusters.html" class="word-item" title="View would clusters">
+  <div class="word-name">would</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 16.41%"></div>
+  </div>
+  <div class="freq">843</div>
+</a>
+<a href="take_clusters.html" class="word-item" title="View take clusters">
+  <div class="word-name">take</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 16.08%"></div>
+  </div>
+  <div class="freq">826</div>
+</a>
+<a href="patty_clusters.html" class="word-item" title="View patty clusters">
+  <div class="word-name">patty</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 15.96%"></div>
+  </div>
+  <div class="freq">820</div>
+</a>
+<a href="yes_clusters.html" class="word-item" title="View yes clusters">
+  <div class="word-name">yes</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 15.69%"></div>
+  </div>
+  <div class="freq">806</div>
+</a>
+<a href="boy_clusters.html" class="word-item" title="View boy clusters">
+  <div class="word-name">boy</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 15.61%"></div>
+  </div>
+  <div class="freq">802</div>
+</a>
+<a href="need_clusters.html" class="word-item" title="View need clusters">
+  <div class="word-name">need</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 15.32%"></div>
+  </div>
+  <div class="freq">787</div>
+</a>
+<a href="never_clusters.html" class="word-item" title="View never clusters">
+  <div class="word-name">never</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 15.09%"></div>
+  </div>
+  <div class="freq">775</div>
+</a>
+<a href="say_clusters.html" class="word-item" title="View say clusters">
+  <div class="word-name">say</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 14.81%"></div>
+  </div>
+  <div class="freq">761</div>
+</a>
+<a href="something_clusters.html" class="word-item" title="View something clusters">
+  <div class="word-name">something</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 14.78%"></div>
+  </div>
+  <div class="freq">759</div>
+</a>
+<a href="huh_clusters.html" class="word-item" title="View huh clusters">
+  <div class="word-name">huh</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 14.78%"></div>
+  </div>
+  <div class="freq">759</div>
+</a>
+<a href="wait_clusters.html" class="word-item" title="View wait clusters">
+  <div class="word-name">wait</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 14.52%"></div>
+  </div>
+  <div class="freq">746</div>
+</a>
+<a href="sure_clusters.html" class="word-item" title="View sure clusters">
+  <div class="word-name">sure</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 14.29%"></div>
+  </div>
+  <div class="freq">734</div>
+</a>
+<a href="two_clusters.html" class="word-item" title="View two clusters">
+  <div class="word-name">two</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 13.82%"></div>
+  </div>
+  <div class="freq">710</div>
+</a>
+<a href="make_clusters.html" class="word-item" title="View make clusters">
+  <div class="word-name">make</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 13.67%"></div>
+  </div>
+  <div class="freq">702</div>
+</a>
+<a href="sandy_clusters.html" class="word-item" title="View sandy clusters">
+  <div class="word-name">sandy</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 13.53%"></div>
+  </div>
+  <div class="freq">695</div>
+</a>
+<a href="really_clusters.html" class="word-item" title="View really clusters">
+  <div class="word-name">really</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 13.51%"></div>
+  </div>
+  <div class="freq">694</div>
+</a>
+<a href="please_clusters.html" class="word-item" title="View please clusters">
+  <div class="word-name">please</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 13.33%"></div>
+  </div>
+  <div class="freq">685</div>
+</a>
+<a href="day_clusters.html" class="word-item" title="View day clusters">
+  <div class="word-name">day</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 12.85%"></div>
+  </div>
+  <div class="freq">660</div>
+</a>
+<a href="man_clusters.html" class="word-item" title="View man clusters">
+  <div class="word-name">man</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 12.54%"></div>
+  </div>
+  <div class="freq">644</div>
+</a>
+<a href="captain_clusters.html" class="word-item" title="View captain clusters">
+  <div class="word-name">captain</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 12.13%"></div>
+  </div>
+  <div class="freq">623</div>
+</a>
+<a href="work_clusters.html" class="word-item" title="View work clusters">
+  <div class="word-name">work</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 11.54%"></div>
+  </div>
+  <div class="freq">593</div>
+</a>
+<a href="way_clusters.html" class="word-item" title="View way clusters">
+  <div class="word-name">way</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 11.35%"></div>
+  </div>
+  <div class="freq">583</div>
+</a>
+<a href="help_clusters.html" class="word-item" title="View help clusters">
+  <div class="word-name">help</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 11.35%"></div>
+  </div>
+  <div class="freq">583</div>
+</a>
+<a href="ooh_clusters.html" class="word-item" title="View ooh clusters">
+  <div class="word-name">ooh</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 11.25%"></div>
+  </div>
+  <div class="freq">578</div>
+</a>
+<a href="sorry_clusters.html" class="word-item" title="View sorry clusters">
+  <div class="word-name">sorry</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 11.17%"></div>
+  </div>
+  <div class="freq">574</div>
+</a>
+<a href="krusty_clusters.html" class="word-item" title="View krusty clusters">
+  <div class="word-name">krusty</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 11.02%"></div>
+  </div>
+  <div class="freq">566</div>
+</a>
+<a href="thing_clusters.html" class="word-item" title="View thing clusters">
+  <div class="word-name">thing</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 10.96%"></div>
+  </div>
+  <div class="freq">563</div>
+</a>
+<a href="mean_clusters.html" class="word-item" title="View mean clusters">
+  <div class="word-name">mean</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 10.92%"></div>
+  </div>
+  <div class="freq">561</div>
+</a>
+<a href="plankton_clusters.html" class="word-item" title="View plankton clusters">
+  <div class="word-name">plankton</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 10.86%"></div>
+  </div>
+  <div class="freq">558</div>
+</a>
+<a href="krab_clusters.html" class="word-item" title="View krab clusters">
+  <div class="word-name">krab</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 10.73%"></div>
+  </div>
+  <div class="freq">551</div>
+</a>
+<a href="sir_clusters.html" class="word-item" title="View sir clusters">
+  <div class="word-name">sir</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 10.45%"></div>
+  </div>
+  <div class="freq">537</div>
+</a>
+<a href="give_clusters.html" class="word-item" title="View give clusters">
+  <div class="word-name">give</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 10.41%"></div>
+  </div>
+  <div class="freq">535</div>
+</a>
+<a href="money_clusters.html" class="word-item" title="View money clusters">
+  <div class="word-name">money</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 10.26%"></div>
+  </div>
+  <div class="freq">527</div>
+</a>
+<a href="whoa_clusters.html" class="word-item" title="View whoa clusters">
+  <div class="word-name">whoa</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 9.89%"></div>
+  </div>
+  <div class="freq">508</div>
+</a>
+<a href="old_clusters.html" class="word-item" title="View old clusters">
+  <div class="word-name">old</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 9.67%"></div>
+  </div>
+  <div class="freq">497</div>
+</a>
+<a href="patties_clusters.html" class="word-item" title="View patties clusters">
+  <div class="word-name">patties</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 9.54%"></div>
+  </div>
+  <div class="freq">490</div>
+</a>
+<a href="new_clusters.html" class="word-item" title="View new clusters">
+  <div class="word-name">new</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 9.52%"></div>
+  </div>
+  <div class="freq">489</div>
+</a>
+<a href="hmm_clusters.html" class="word-item" title="View hmm clusters">
+  <div class="word-name">hmm</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 9.46%"></div>
+  </div>
+  <div class="freq">486</div>
+</a>
+<a href="great_clusters.html" class="word-item" title="View great clusters">
+  <div class="word-name">great</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 9.19%"></div>
+  </div>
+  <div class="freq">472</div>
+</a>
+<a href="tell_clusters.html" class="word-item" title="View tell clusters">
+  <div class="word-name">tell</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 9.13%"></div>
+  </div>
+  <div class="freq">469</div>
+</a>
+<a href="stop_clusters.html" class="word-item" title="View stop clusters">
+  <div class="word-name">stop</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 8.76%"></div>
+  </div>
+  <div class="freq">450</div>
+</a>
+<a href="thanks_clusters.html" class="word-item" title="View thanks clusters">
+  <div class="word-name">thanks</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 8.68%"></div>
+  </div>
+  <div class="freq">446</div>
+</a>
+<a href="must_clusters.html" class="word-item" title="View must clusters">
+  <div class="word-name">must</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 8.57%"></div>
+  </div>
+  <div class="freq">440</div>
+</a>
+<a href="first_clusters.html" class="word-item" title="View first clusters">
+  <div class="word-name">first</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 8.47%"></div>
+  </div>
+  <div class="freq">435</div>
+</a>
+<a href="ever_clusters.html" class="word-item" title="View ever clusters">
+  <div class="word-name">ever</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 8.37%"></div>
+  </div>
+  <div class="freq">430</div>
+</a>
+<a href="better_clusters.html" class="word-item" title="View better clusters">
+  <div class="word-name">better</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 8.33%"></div>
+  </div>
+  <div class="freq">428</div>
+</a>
+<a href="home_clusters.html" class="word-item" title="View home clusters">
+  <div class="word-name">home</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 7.94%"></div>
+  </div>
+  <div class="freq">408</div>
+</a>
+<a href="bottom_clusters.html" class="word-item" title="View bottom clusters">
+  <div class="word-name">bottom</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 7.75%"></div>
+  </div>
+  <div class="freq">398</div>
+</a>
+<a href="hello_clusters.html" class="word-item" title="View hello clusters">
+  <div class="word-name">hello</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 7.71%"></div>
+  </div>
+  <div class="freq">396</div>
+</a>
+<a href="thank_clusters.html" class="word-item" title="View thank clusters">
+  <div class="word-name">thank</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 7.51%"></div>
+  </div>
+  <div class="freq">386</div>
+</a>
+<a href="laughing_clusters.html" class="word-item" title="View laughing clusters">
+  <div class="word-name">laughing</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 7.24%"></div>
+  </div>
+  <div class="freq">372</div>
+</a>
+<a href="best_clusters.html" class="word-item" title="View best clusters">
+  <div class="word-name">best</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 7.22%"></div>
+  </div>
+  <div class="freq">371</div>
+</a>
+<a href="friend_clusters.html" class="word-item" title="View friend clusters">
+  <div class="word-name">friend</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 6.97%"></div>
+  </div>
+  <div class="freq">358</div>
+</a>
+<a href="secret_clusters.html" class="word-item" title="View secret clusters">
+  <div class="word-name">secret</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 6.89%"></div>
+  </div>
+  <div class="freq">354</div>
+</a>
+<a href="eat_clusters.html" class="word-item" title="View eat clusters">
+  <div class="word-name">eat</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 6.75%"></div>
+  </div>
+  <div class="freq">347</div>
+</a>
+<a href="buddy_clusters.html" class="word-item" title="View buddy clusters">
+  <div class="word-name">buddy</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 6.75%"></div>
+  </div>
+  <div class="freq">347</div>
+</a>
+<a href="formula_clusters.html" class="word-item" title="View formula clusters">
+  <div class="word-name">formula</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 6.42%"></div>
+  </div>
+  <div class="freq">330</div>
+</a>
+<a href="meow_clusters.html" class="word-item" title="View meow clusters">
+  <div class="word-name">meow</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 5.94%"></div>
+  </div>
+  <div class="freq">305</div>
+</a>
+<a href="aah_clusters.html" class="word-item" title="View aah clusters">
+  <div class="word-name">aah</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 5.35%"></div>
+  </div>
+  <div class="freq">275</div>
+</a>
+<a href="puff_clusters.html" class="word-item" title="View puff clusters">
+  <div class="word-name">puff</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 4.67%"></div>
+  </div>
+  <div class="freq">240</div>
+</a>
+<a href="mrs_clusters.html" class="word-item" title="View mrs clusters">
+  <div class="word-name">mrs</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 4.57%"></div>
+  </div>
+  <div class="freq">235</div>
+</a>
+<a href="chum_clusters.html" class="word-item" title="View chum clusters">
+  <div class="word-name">chum</div>
+  <div class="freq-bar">
+    <div class="freq-bar-fill" style="width: 4.36%"></div>
+  </div>
+  <div class="freq">224</div>
+</a>
+        </div>
+    </main>
+    
+    <script>
+        // Update stats
+        document.addEventListener('DOMContentLoaded', function() {
+            const wordCount = document.querySelectorAll('.word-item').length;
+            const maxFreq = Math.max(...Array.from(document.querySelectorAll('.freq'))
+                .map(el => parseInt(el.textContent.replace(/,/g, ''))));
+                
+            document.getElementById('word-count').textContent = wordCount.toLocaleString();
+            document.getElementById('max-freq').textContent = maxFreq.toLocaleString();
+        });
+    </script>
+</body>
+</html>
