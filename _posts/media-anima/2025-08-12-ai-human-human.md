@@ -65,7 +65,7 @@ Actual human relationships involve a complex interplay of personal and cultural 
 <figcaption> Murderbot (Apple TV, 2025) portrays a security robot that has hacked its own "governor module", and maintains a rational concern for the humans it works for, yet maintains firm boundaries. </figcaption>
 </figure>
 
-So how do we implement this? Seymour et al (2024) propose two frameworks in their paper about multi-user conversation interfaces and agents for group decision-making, which could be used for negotiation and conflict resolution. 
+So how do we implement this? [Seymour et al (2024)](https://dl.acm.org/doi/abs/10.1145/3640794.3665888) propose two frameworks in their paper about multi-user conversation interfaces and agents for group decision-making, which could be used for negotiation and conflict resolution. 
 
 The first framework is based on Robert's Rules of Order, under an umbrella term they call "parliamentary systems":
 
