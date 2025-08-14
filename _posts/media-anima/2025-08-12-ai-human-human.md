@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "AI for Human-Human Interaction"
+title:  "Community-aligned AI"
 date:   2025-08-12
 categories: machine learning
 usemathjax: true
@@ -56,7 +56,7 @@ The authors propose a hierarchical ecosystem for foundation model development, w
 
 Rather than framing people as stakeholders in an nebulous AI framework, we should consider framing agents as capable interlopers into our existing social structures, promising to strengthen, support, and reaffirm the wishes of small-scale communities and organizations.
 
-# Human-Computer Interaction should be "Human-Human"
+# Community Alignment
 
 Actual human relationships involve a complex interplay of personal and cultural identity in addition to normative social structures. The best policy for an agent deployed into a communal setting requires a direct stake in the success of that structure. It should strive to negotiate on behalf of all participants.
 
