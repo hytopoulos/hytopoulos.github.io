@@ -18,6 +18,12 @@ image_irobot: /mediative-ai/i-robot.jpg
 
 In April 2025, OpenAI released a <a href="https://openai.com/index/sycophancy-in-gpt-4o/">short memo</a> regarding the issue of sycophancy in a now-recalled update to their GPT-4o model, describing the model as, "overly supportive but disingenous."
 
+Sycophancy is believed to cause "AI psychosis" — the disconnect from reality that can occur from prolonged and intense interaction with AI assistants. This term has surfaced onto sites like <a href="https://www.psychologytoday.com/us/blog/urban-survival/202507/the-emerging-problem-of-ai-psychosis">Psychology Today (July 2025)</a>, <a href="https://time.com/7307589/ai-psychosis-chatgpt-mental-health/">Time Magazine (July 2025)</a> and <a href="https://www.nytimes.com/2025/06/13/technology/chatgpt-ai-chatbots-conspiracies.html">The New York Times (June 2025)</a>. These articles describe how vulnerable individuals are prone to seeking emotional comfort and validation from AI assistants. In some cases, sycophantic agents encourage self-destructive behavior.
+
+Sycophancy is being actively studied as a type of **AI misalignment**. Research at [Anthropic (2023)](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models) has identified sycophancy as an intrinsic property of human preference post-training, where individuals are more likely to prefer responses that appeal to the beliefs and emotional state of the user. Anthropic concludes that additional processing is required to prevent sycophancy.
+
+
+
 <div>
   <blockquote>
 Your own personal Jesus,
@@ -31,9 +37,6 @@ Flesh and bone, by the telephone
   <p style="text-align: left;">— Depeche Mode, <cite>"Personal Jesus"</cite></p>
 </div>
 
-Sycophancy is believed to cause "AI psychosis" — the disconnect from reality that can occur from prolonged and intense interaction with AI assistants. This term has surfaced onto sites like <a href="https://www.psychologytoday.com/us/blog/urban-survival/202507/the-emerging-problem-of-ai-psychosis">Psychology Today (July 2025)</a>, <a href="https://time.com/7307589/ai-psychosis-chatgpt-mental-health/">Time Magazine (July 2025)</a> and <a href="https://www.nytimes.com/2025/06/13/technology/chatgpt-ai-chatbots-conspiracies.html">The New York Times (June 2025)</a>. These articles describe how vulnerable individuals are prone to seeking emotional comfort and validation from AI assistants. In some cases, sycophantic agents encourage self-destructive behavior.
-
-Sycophancy is being actively studied as a type of **AI misalignment**. Research at [Anthropic (2023)](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models) has identified sycophancy as an intrinsic property of human preference post-training, where individuals are more likely to prefer responses that appeal to the beliefs and emotional state of the user. Anthropic concludes that additional processing is required to prevent sycophancy.
 
 The issue at hand is that truly "personal" agents have a predisposition for sycophancy. This calls for a new approach to AI design that is less focused on the user's preferences and more focused on the user's well-being. The question researchers continue to grapple with is where to source this policy from. 
 
