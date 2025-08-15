@@ -22,7 +22,9 @@ Sycophancy is believed to cause "AI psychosis" — the disconnect from reality t
 
 Sycophancy is being actively studied as a type of **AI misalignment**. Researchers at [Anthropic](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models) (2023) have identified sycophancy as a general side effect of RLHF, where individuals are more likely to prefer responses that appeal to their preexisting beliefs and emotional state. Anthropic concludes that additional processing is required to prevent sycophancy.
 
-<div>
+This property could be seen as a form of "reward hacking", where an agent learns to "exploit" its environment in order to receive a reward, rather than learning to perform the task in the intended way. Considering that the reward function is the preference of an individual, we can understand how unintended consequences can arise, potentially reinforcing anti-social behavior without broader social considerations.
+
+<!-- <div>
   <blockquote>
 Your own personal Jesus,
 <br>
@@ -33,9 +35,7 @@ Feeling unknown, and you're all alone
 Flesh and bone, by the telephone
   </blockquote>
   <p style="text-align: left;">— Depeche Mode, <cite>"Personal Jesus"</cite></p>
-</div>
-
-Reward hacking is a phenomenon that occurs when an agent learns to "exploit" its environment in order to receive a reward, rather than learning to perform the task in the intended way. If we consider the reward function to be the preferences of an individual, then we begin to understand the potential for emotional manipulation. Currently, we circumscribe the social interactions of an agent to an individual level. This does not align with the communal nature of human relationships.
+</div> -->
 
 # Rewarding pro-social behavior
 
@@ -44,13 +44,13 @@ Reward hacking is a phenomenon that occurs when an agent learns to "exploit" its
 <figcaption> Murderbot (Apple TV, 2025) portrays a security robot that has hacked its own "governor module", and maintains a rational concern for the humans it works for, yet maintains firm boundaries. </figcaption>
 </figure>
 
-Human relationships involve a complex interplay of personal and cultural identity. Therefore, a reward policy for an agent in a communal setting should be tied to the success of the community. Agents, as mediative figures, should strive to negotiate on behalf of all participants.
+Currently, beyond values instilled during training, we circumscribe the social awareness of an agent to an individual level. This is not aligned with the communal nature of human relationships, which involve a complex interplay of personal and cultural identity. Therefore, we should consider what it means for an agent to be embedded within a community, and if a conversation in a vacuous chat interface leads to any kind of social benefit. It's possible to conceive of a reward policy for an agent in a communal setting that is tied to the success of the community. Agents, as mediative figures, should strive to negotiate on behalf of all participants. This has the potential to reduce sycophancy and successfully navigate real-life social interactions.
 
-Post-training on normative assumptions about social structures will not make the cut. The current paradigm of monolithic AI inevitably contains biases, as there is no universal pattern we can apply to communication. We must consider alternative approaches that adapt to local, contextual social structures.
+Post-training on normative assumptions about social structures will not make the cut. The current paradigm of monolithic AI inevitably contains biases, as there is no universal pattern we can apply to communication. We must consider alternative approaches that adapt to local, contextual social structures. This type of grounding not only promises to yield more ethically aligned agents, but also has the potential to reinforce identities facing erasure and marginalization.
 
 Furthermore, as we begin to explore the physical presence of AI, it is important to how these systems interact within social structures outside of a digital environment. We must carefully consider what method we use to shape agents toward socialization in communities, and what this kind of infusion means for society.
 
-One might say we still have a long way to go toward implementing these interactions, or even toward a clear understanding of what it means to do so, but it is clear that we are already witnessing the side effects of a technology that is encroaching into an unspoken and sacred territory of the human experience.
+We have a long way to go toward implementing these interactions, or even toward a clear understanding of what it means to do so, but it is clear that we are already witnessing the side effects of a technology that is stepping into an unspoken and sacred territory of the human experience.
 
 <!-- So how do we implement this? [Seymour et al (2024)](https://dl.acm.org/doi/abs/10.1145/3640794.3665888) propose two frameworks in their paper about multi-user conversation interfaces and agents for group decision-making, which could be used for negotiation and conflict resolution. 
 
