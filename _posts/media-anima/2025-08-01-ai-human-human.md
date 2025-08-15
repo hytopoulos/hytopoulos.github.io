@@ -46,7 +46,7 @@ Reward hacking is a phenomenon that occurs when an agent learns to "exploit" its
 
 Human relationships involve a complex interplay of personal and cultural identity. Therefore, a reward policy for an agent in a communal setting should be tied to the success of the community. Agents, as mediative figures, should strive to negotiate on behalf of all participants.
 
-Post-training on normative social structures will not make the cut. The current paradigm of monolithic AI inevitably contains biases, as there is no universal pattern we can apply to communication. So we must consider a different approaches that adapt to local, contextual social structures.
+Post-training on normative assumptions about social structures will not make the cut. The current paradigm of monolithic AI inevitably contains biases, as there is no universal pattern we can apply to communication. We must consider alternative approaches that adapt to local, contextual social structures.
 
 Furthermore, as we begin to explore the physical presence of AI, it is important to how these systems interact within social structures outside of a digital environment. We must carefully consider what method we use to shape agents toward socialization in communities, and what this kind of infusion means for society.
 
