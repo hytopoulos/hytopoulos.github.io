@@ -4,9 +4,9 @@ title:  "Community-aligned AI"
 date:   2025-08-01
 categories: machine learning
 usemathjax: true
-image: /assets/img/mediative-ai/googly-eyes-arm.png
-image_murderbot: /assets/img/mediative-ai/Murderbot_Hug.jpg
-image_irobot: /assets/img/mediative-ai/i-robot.jpg
+image: /assets/img/media-anima/googly-eyes-arm.png
+image_murderbot: /assets/img/media-anima/Murderbot_Hug.jpg
+image_irobot: /assets/img/media-anima/i-robot.jpg
 ---
 
 <figure>
