@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Synthesizing the Forgotten SNES C Compiler
+title:  "Synthesizing the Forgotten SNES C Compiler"
 date:   2023-06-30
 categories: decompilation
 usemathjax: true
