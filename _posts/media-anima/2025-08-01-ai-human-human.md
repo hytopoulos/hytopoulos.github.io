@@ -16,13 +16,33 @@ image_irobot: /assets/img/media-anima/i-robot.jpg
 
 # The problem with personal assistants
 
-The past few years have seen an increasing number of collective "Oh Shit" moments in response to sudden advancements in AI. It's the uncanny valley ones that stick out the most, such as the video by OpenAI: [Two GPT-4o's interacting and singing](https://www.youtube.com/watch?v=MirzFk_DSiI). It hints at a goal of approximating "humanness" through playful and affective interactions. In April 2025, OpenAI released a <a href="https://openai.com/index/sycophancy-in-gpt-4o/">short memo</a> regarding the issue of sycophancy in a now-recalled update to their GPT-4o model, describing the model as, "overly supportive but disingenous."
+Many individuals are beginning to seek emotional and therapeutic support from chatbots. However, this trend coincides with growing evidence of increased psychological distress. "AI psychosis" is a term that describes the disconnect from reality that can occur from prolonged and intense interaction with AI assistants. This term has surfaced onto sites like <a href="https://www.psychologytoday.com/us/blog/urban-survival/202507/the-emerging-problem-of-ai-psychosis">Psychology Today</a>, <a href="https://time.com/7307589/ai-psychosis-chatgpt-mental-health/">Time Magazine</a> and <a href="https://www.nytimes.com/2025/06/13/technology/chatgpt-ai-chatbots-conspiracies.html">The New York Times</a>. These articles outline how vulnerable individuals are prone to seeking emotional comfort and validation from AI assistants. "Sycophancy" may be a contributing factor to this trend.
 
-Sycophancy is believed to cause "AI psychosis" — the disconnect from reality that can occur from prolonged and intense interaction with AI assistants. This term has surfaced onto sites like <a href="https://www.psychologytoday.com/us/blog/urban-survival/202507/the-emerging-problem-of-ai-psychosis">Psychology Today</a>, <a href="https://time.com/7307589/ai-psychosis-chatgpt-mental-health/">Time Magazine</a> and <a href="https://www.nytimes.com/2025/06/13/technology/chatgpt-ai-chatbots-conspiracies.html">The New York Times</a> since the release of the OpenAI memo. These articles describe how vulnerable individuals are prone to seeking emotional comfort and validation from AI assistants. In some cases, sycophantic agents encourage self-destructive behavior.
+In April 2025, OpenAI released a <a href="https://openai.com/index/sycophancy-in-gpt-4o/">short memo</a> regarding the issue of sycophancy in a now-recalled update to their GPT-4o model, describing the model as, "overly supportive but disingenous." Sycophancy is being actively studied as a type of **AI misalignment**. Researchers at [Anthropic](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models) (2023) have identified sycophancy as a general side effect of RLHF, where individuals are more likely to prefer responses that appeal to their preexisting beliefs and emotional state. The authors conclude that additional processing is required to prevent sycophancy.
 
-Sycophancy is being actively studied as a type of **AI misalignment**. Researchers at [Anthropic](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models) (2023) have identified sycophancy as a general side effect of RLHF, where individuals are more likely to prefer responses that appeal to their preexisting beliefs and emotional state. Anthropic concludes that additional processing is required to prevent sycophancy.
+Sycophancy can be construed as a form of "reward hacking", a phenomenon in reinforcement learning where an agent learns to "exploit" its environment in order to receive a reward, rather than learning to perform the task in the intended way. When we consider that the reward function is the preference of an individual, we can understand how unintended consequences can arise from mirroring or reinforcing anti-social attitudes without broader social considerations.
 
-This property could be seen as a form of "reward hacking", where an agent learns to "exploit" its environment in order to receive a reward, rather than learning to perform the task in the intended way. Considering that the reward function is the preference of an individual, we can understand how unintended consequences can arise, potentially reinforcing anti-social behavior without broader social considerations.
+# Rewarding pro-social behavior
+
+Currently, beyond values instilled during post-training, the social awareness of agents are circumscribed to an individual level. This is not aligned nor compatible with the true nature of human relationships that are a complex interplay of personal and cultural identity, requiring the contextualization of a community. Therefore, we ought to consider what it means for an agent to be embedded within communities and what new modes of social interaction are possible beyond a vacuous chat interface without clear social incentive. If executed correctly, agents, as mediative figures, can strive to negotiate on behalf of multiple subjective viewpoints -- potentially reducing sycophancy and successfully navigating real-life social interactions.
+
+On a technical level, there is a lack of infrastructure for supporting communication formats beyond the chat interface. Existing work has attempted to adapt pre-existing conversational assistants, but there is a lack of reinforcement learning infrastructure for developing multi-user, group-oriented communication.
+
+Further contextualization may require a different architecture. The current paradigm of monolithic foundation models offered as a one-size-fits-all solution inevitably contains biases, as there is no universal pattern we can apply to communication. Normative assumptions about social structures are not a sustainable approach. We should develop alternative designs that adaptively learn the needs of a community. This type of grounding not only promises to yield more ethically aligned agents, but also has the potential to strengthen communities and identities.
+
+Furthermore, as we begin to explore the physical presence of AI, it is important to consider how these systems interact within social structures outside of a digital environment. We must carefully consider what method we use to shape agents toward socialization in communities, and what this kind of infusion means for society.
+
+<!-- # Fictional Examples
+
+<figure>
+<img src="{{ page.image_murderbot }}">
+<figcaption> Murderbot (Apple TV, 2025) portrays a security robot that has hacked its own "governor module", and maintains a rational concern for the humans it works for, yet maintains firm boundaries. </figcaption>
+</figure> -->
+
+# Concluding Remarks
+
+We have a long way to go toward implementing these interactions, or even toward a clear understanding of what it means to do so, but it is clear that we are already witnessing the side effects of a technology that is stepping into an unspoken and sacred territory of the human experience.
+
 
 <!-- <div>
   <blockquote>
@@ -36,21 +56,6 @@ Flesh and bone, by the telephone
   </blockquote>
   <p style="text-align: left;">— Depeche Mode, <cite>"Personal Jesus"</cite></p>
 </div> -->
-
-# Rewarding pro-social behavior
-
-<figure>
-<img src="{{ page.image_murderbot }}">
-<figcaption> Murderbot (Apple TV, 2025) portrays a security robot that has hacked its own "governor module", and maintains a rational concern for the humans it works for, yet maintains firm boundaries. </figcaption>
-</figure>
-
-Currently, beyond values instilled during training, we circumscribe the social awareness of an agent to an individual level. This is not aligned with the communal nature of human relationships, which involve a complex interplay of personal and cultural identity. Therefore, we should consider what it means for an agent to be embedded within a community, and if a conversation in a vacuous chat interface leads to any kind of social benefit. It's possible to conceive of a reward policy for an agent in a communal setting that is tied to the success of the community. Agents, as mediative figures, should strive to negotiate on behalf of all participants. This has the potential to reduce sycophancy and successfully navigate real-life social interactions.
-
-Post-training on normative assumptions about social structures will not make the cut. The current paradigm of monolithic AI inevitably contains biases, as there is no universal pattern we can apply to communication. We must consider alternative approaches that adapt to local, contextual social structures. This type of grounding not only promises to yield more ethically aligned agents, but also has the potential to reinforce identities facing erasure and marginalization.
-
-Furthermore, as we begin to explore the physical presence of AI, it is important to how these systems interact within social structures outside of a digital environment. We must carefully consider what method we use to shape agents toward socialization in communities, and what this kind of infusion means for society.
-
-We have a long way to go toward implementing these interactions, or even toward a clear understanding of what it means to do so, but it is clear that we are already witnessing the side effects of a technology that is stepping into an unspoken and sacred territory of the human experience.
 
 <!-- So how do we implement this? [Seymour et al (2024)](https://dl.acm.org/doi/abs/10.1145/3640794.3665888) propose two frameworks in their paper about multi-user conversation interfaces and agents for group decision-making, which could be used for negotiation and conflict resolution. 
 
