@@ -4,7 +4,7 @@ title:  "RL Decompiler"
 date:   2025-08-12
 categories: machine learning
 usemathjax: true
-image: /assets/img/rl-decompiler/score_mean.png
+image: /assets/img/decompilation/score_mean.png
 ---
 
 ## Introduction
@@ -26,11 +26,11 @@ Qwen Coder is already trained on a large corpus of code, probably including para
 
 First, we must define a metric for the quality of a decompilation. For this experiment, we use the Levenshtein distance between the original assembly and the generated assembly. The Levenshtein distance is the minimum number of single-character edits (insertions, deletions or substitutions) required to change one string into the other. A more robust approach might use a token-wise edit distance. But in theory, we should be able to achieve a Levenshtein distance of 1, which would indicate that the generated assembly is identical to the original assembly. When the code does not compile, the reward is 0.
 
-We use the `verl` library for reinforcement learning with Group Relative Policy Optimization (GRPO). For a given sample, GRPO generates several candidate completions, then optimizes the policy to prefer completions within the group that receive comparatively higher rewards. For example, if we prompt Qwen Coder to generate 10 potential decompilations for a given assembly listing, some portion might fail to compile (0 reward) and will be ranked the lowest. Other completions might identify that the assembly implements a certain algorithm and provide a vague implementation. This would be ranked higher than those that fail to compile, but lower than a literal translation that attends to each instruction.
+There are [several frameworks](https://x.com/iScienceLuvr/status/1955354769704599954) we can use for reinforcement learning. Let's use the `verl` library, which implements Group Relative Policy Optimization (GRPO) and sharded training. For a given sample, GRPO generates several candidate completions, then optimizes the policy to prefer completions within the group that receive comparatively higher rewards. For example, if we prompt Qwen Coder to generate 10 potential decompilations for a given assembly listing, some portion might fail to compile (0 reward) and will be ranked the lowest. Other completions might identify that the assembly implements a certain algorithm and provide a vague implementation. This would be ranked higher than those that fail to compile, but lower than a literal translation that attends to each instruction.
 
 ## Dataset
 
-The source of our training data is Google DeepMind's `code_contests` dataset, which is one of the largest datasets of readily compileable code (as far as I'm aware).
+The source of our training data is Google DeepMind's [code_contests](https://github.com/google-deepmind/code_contests) dataset, which is one of the largest datasets of readily compileable code (as far as I'm aware). I created a separate dataset only containing the subset of solutions written in C++ [here](https://huggingface.co/datasets/hytopot/code_contests_cpp).
 
 We can use the following python function to compile the code from the dataset into assembly, then split the assembly into separate functions.
 
@@ -62,20 +62,72 @@ def compile_and_split(sample: dict, *, sample_id: int) -> Optional[Dict[str, str
         # ...
 ```
 
-## Setting up the Environment
-
-There are many cloud providers offering compute resources, but I chose [Modal.com](https://modal.com/) for the $30 of credits it offers in its free tier, which is enough to train this model.
-
-Modal provides a [verl example](https://modal.com/docs/examples/grpo_verl) that we can adapt to train our model.
-
 ## Training
+
+
+There are many cloud providers offering compute resources, but I chose [Modal.com](https://modal.com/) for the $30 of credits it offers in its free tier, which is enough to train this model. Modal provides a [verl example](https://modal.com/docs/examples/grpo_verl) that we can adapt to train our model.
+
+While GRPO is designed for a reward model (LLM as a judge), it is not necessary for our case, and `verl` will allow us to define a custom reward function. Our reward function involves compiling source code, which is rather slow and should be parallelized. In order to parallelize a custom reward function in `verl`, we need to add a parameter for the reward model in our configuration (despite not actually using a reward model): `"reward_model.reward_manager='batch'"`.
+
+Here is a simplified version of the parallelized reward function:
+
+```py
+def reward_diff(solution_strs, ground_truths=None, data_sources=None, abilities=None, reward_models=None, extra_infos=None):
+    n_comp = len(solution_strs)
+    rewards = []
+
+    no_code = 0
+    comp_fail = 0
+    empty_funcs = 0
+
+    # Build compile jobs from model completions
+    jobs = []
+    for idx, completion in enumerate(solution_strs):
+        src = extract_code(completion) # expect completions to have a fenced code block
+        if src is None:
+            no_code += 1
+        else:
+            jobs.append((idx, src))
+
+    compiled = dispatch_compile_and_split(jobs, max_workers=os.cpu_count(), progress=False)
+
+    for idx in range(n_comp):
+        ref_asm = ground_truths[idx if idx < len(ground_truths) else -1]
+
+        # If the completion had no code, reward = 0
+        if idx not in compiled:
+            rewards.append(0.0)
+            continue
+
+        gen_funcs = compiled[idx]
+        if gen_funcs is None:
+            comp_fail += 1
+            rewards.append(0.0)
+            continue
+
+        scores = []
+        for _, gen_asm in gen_funcs.items():
+            dist = Levenshtein.distance(gen_asm, ref_asm)
+            norm = max(len(ref_asm), len(gen_asm)) or 1
+            scores.append(1.0 - dist / norm)
+
+        if not scores:
+            empty_funcs += 1
+            rewards.append(0.0)
+        else:
+            rewards.append(max(scores))
+
+    return rewards
+```
+
+The full script can be found [here](https://gist.github.com/hytopoulos/603c84b48c56ef2e174ed33bfd9ce71c).
+
+The model converges at ~30 steps (6 1/2 hours). Each step processes around 700,000 tokens, so it took around 21 million tokens to converge.
 
 <figure>
 <img src="{{ page.image }}">
 <figcaption>Fig 1. </figcaption>
 </figure>
-
-The model converges at ~30 steps (6 1/2 hours). Each step processes around 700,000 tokens, so it took around 21 million tokens to converge.
 
 ## Evaluation
 
