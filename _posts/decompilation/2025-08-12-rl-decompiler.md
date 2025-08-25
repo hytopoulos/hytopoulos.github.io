@@ -5,13 +5,14 @@ date:   2025-08-12
 categories: machine learning
 usemathjax: true
 image: /assets/img/decompilation/score_mean.png
+grpo_image: /assets/img/decompilation/grpo.png
 ---
 
 ## Introduction
 
 Decompilation is the process of converting compiled machine code back into source code. Decompilers, such as IDA Pro and Ghidra, are typically used to reverse engineer software into psuedocode. Decompilers are largely based on static analysis and rule-based heuristics. In Ghidra, all instruction sets are first converted to an intermediate representation, and then decompiled into a C-like psuedocode. IDA is closed-source but likely operates the same way. Neither offers readily compilable source code.
 
-In this post, we explore the use of reinforcement learning to adapt Qwen2.5-Coder-7B-Instruct into an end-to-end decompiler for C++, with two goals:
+In this post, we explore the use of reinforcement learning to train a LoRA adapter for Qwen2.5-Coder-7B-Instruct, which we will use as an end-to-end decompiler for C++. The model will be trained with two goals in mind:
 
 1. Generate compilable source code that resembles the original assembly.
 2. Generate source code that compiles into the exact same assembly as the original.
@@ -20,13 +21,25 @@ In this post, we explore the use of reinforcement learning to adapt Qwen2.5-Code
 
 Decompilation is a translation task. Translation tasks are often trained using cross-entropy loss on a parallel corpus and there are many existing AI decompilers that are trained in this way. However, there is no way to know if the generated code is compilable. Using reinforcement learning, we can encourage the model to generate compilable code by rewarding it for doing so, addressing goal #1.
 
-Qwen Coder is already trained on a large corpus of code, probably including parallel corpora of C++/ASM, so it likely possesses some understanding of the relationship between C++ and assembly. Using reinforcement learning, we can collapse the search space of possible translations, addressing goal #2.
+Qwen Coder is already trained on a large corpus of code, probably including parallel corpora of C++/ASM, so it likely possesses some understanding of the relationship between C++ and assembly. Using reinforcement learning, we are able to collapse the search space of possible translations, addressing goal #2.
 
 ## Algorithm details
 
 First, we must define a metric for the quality of a decompilation. For this experiment, we use the Levenshtein distance between the original assembly and the generated assembly. The Levenshtein distance is the minimum number of single-character edits (insertions, deletions or substitutions) required to change one string into the other. A more robust approach might use a token-wise edit distance. But in theory, we should be able to achieve a Levenshtein distance of 1, which would indicate that the generated assembly is identical to the original assembly. When the code does not compile, the reward is 0.
 
 There are [several frameworks](https://x.com/iScienceLuvr/status/1955354769704599954) we can use for reinforcement learning. Let's use the `verl` library, which implements Group Relative Policy Optimization (GRPO) and sharded training. For a given sample, GRPO generates several candidate completions, then optimizes the policy to prefer completions within the group that receive comparatively higher rewards. For example, if we prompt Qwen Coder to generate 10 potential decompilations for a given assembly listing, some portion might fail to compile (0 reward) and will be ranked the lowest. Other completions might identify that the assembly implements a certain algorithm and provide a vague implementation. This would be ranked higher than those that fail to compile, but lower than a literal translation that attends to each instruction.
+
+GRPO was initially proposed with a reward model (an LLM judge computes the reward), but for our purposes this is not useful. Thankfully, `verl` allows us to define a custom reward function.
+
+The GRPO algorithm contains two main terms: the reward computed from the current policy and a penalty for deviating too far from the reference policy (i.e the original model):
+
+<figure>
+<img src="{{grpo_image}}">
+</figure>
+
+The penalty is measured by using the KL divergence between the current policy and the reference policy. The influence of the penalty for deviating too far from the reference policy is controlled by a tunable beta coefficient. If this coefficient is too high, the output distribution will be very similar to the reference policy. If it is too low, the model might deviate too far from the reference policy and show signs of "reward hacking".
+
+Typically, `verl` will load a frozen copy of the original model into memory in order to compute the reference policy. It is possible to set beta to zero and avoid loading the original model into memory entirely. This means we are losing out on an important regularization term. However, since we are going to train a LoRA adapter, we can add a weight decay term to the optimizer, which [apparently](https://irhum.github.io/blog/lorawd/) regularizes the parameters back to the original model. While these are two different methods of regularization, they seem close enough for our purposes.
 
 ## Dataset
 
@@ -64,12 +77,11 @@ def compile_and_split(sample: dict, *, sample_id: int) -> Optional[Dict[str, str
 
 ## Training
 
-
 There are many cloud providers offering compute resources, but I chose [Modal.com](https://modal.com/) for the $30 of credits it offers in its free tier, which is enough to train this model. Modal provides a [verl example](https://modal.com/docs/examples/grpo_verl) that we can adapt to train our model.
 
-While GRPO is designed for a reward model (LLM as a judge), it is not necessary for our case, and `verl` will allow us to define a custom reward function. Our reward function involves compiling source code, which is rather slow and should be parallelized. In order to parallelize a custom reward function in `verl`, we need to add a parameter for the reward model in our configuration (despite not actually using a reward model): `"reward_model.reward_manager='batch'"`.
+Our reward function involves compiling source code, which is rather slow and should be parallelized. In order to parallelize a custom reward function in `verl`, we need to add a parameter for the reward model in our configuration (despite not actually using a reward model): `"reward_model.reward_manager='batch'"`.
 
-Here is a simplified version of the parallelized reward function:
+Here is our reward function (simplified):
 
 ```py
 def reward_diff(solution_strs, ground_truths=None, data_sources=None, abilities=None, reward_models=None, extra_infos=None):
@@ -122,17 +134,74 @@ def reward_diff(solution_strs, ground_truths=None, data_sources=None, abilities=
 
 The full script can be found [here](https://gist.github.com/hytopoulos/603c84b48c56ef2e174ed33bfd9ce71c).
 
-The model converges at ~30 steps (6 1/2 hours). Each step processes around 700,000 tokens, so it took around 21 million tokens to converge.
-
 <figure>
 <img src="{{ page.image }}">
-<figcaption>Fig 1. </figcaption>
+<!-- <figcaption>Fig 1. </figcaption> -->
 </figure>
+
+Between the LoRA adapter, and not using reference/reward models (which both need to be loaded into memory), training this model has a very low footprint. The model converges at ~30 steps (6 1/2 hours). Each step processes around 700,000 tokens, so it took around 21 million tokens to converge.
 
 ## Evaluation
 
-Let's compare our model to GPT 4.1.
+Here is the model output for a snippet of assembly:
 
+```
+******** Original **********
+
+s32 effect_J4_init(u8 data2) {
+    WORK_Other * ewk;
+    s16 ix;
+
+    if ((ix = pull_effect_work(5)) == -1) {
+        return -1;
+    }
+    
+    ewk = (WORK_Other *)frw[ix];
+    ewk->wu.be_flag = 1;
+    ewk->wu.id = 194;
+    ewk->wu.dir_timer = data2;
+    ewk->wu.work_id = 16;
+    ewk->wu.my_family = 8;
+    
+    if (data2 != 0xFF) {
+        ewk->wu.type = 1;
+    }
+    
+    ewk->wu.my_col_code = 1;
+    ewk->wu.my_clear_level = 144;
+    return 0;
+}
+
+******** Decompiled **********
+
+extern char frw[];
+
+int effect_J4_init(int edi) {
+    int result = pull_effect_work(5);
+    if (result == -1) {
+        return -1;
+    }
+
+    int index = result * 1792 + edi;
+    frw[index] = 1;
+    *(short*)(frw + index + 174) = edi;
+    *(int*)(frw + index + 6) = 12714000;
+    *(short*)(frw + index + 678) = 8;
+
+    if (edi!= -1) {
+        frw[index + 4] = 1;
+    }
+
+    *(short*)(frw + index + 674) = 1;
+    *(short*)(frw + index + 686) = 144;
+
+    return 0;
+}
+```
+
+We can see that our model successfully translated important parts of the compiled program back into C++. Access to data structures has been translated into pointer arithmetic, which might be a symptom of reward hacking. There is no incentive for the model to generate proper classes or structs or penalty for writing "unusual" code.
+
+Let's do a quick comparison between our model and GPT 4.1.
 
 ```python
 client = OpenAI()
@@ -166,15 +235,17 @@ local_rewards, qwenrl_metadata = compute_rewards(local_comps, refs)
 local_mean = float(np.mean(local_rewards)) if local_rewards else 0.0
 ```
 
-Comparing the results, we see that our model is able to consistently produce source code that compiles. Of the code that does successfully compile, our model increases the Levenshtein score by 19.6%.
+Comparing the results, we see that our model is able to consistently produce source code that compiles. Of the code that does successfully compile, our model increases the Levenshtein score by 19.6% when compared to the output of GPT 4.1.
 
 ```bash
 ==== Evaluation Summary ====
 Samples: 39
-qwenrl (hytopot/DeCMP-cpp-gcc-10-amd64): mean reward@1 = 0.3946 | tel {'no_code': 7, 'comp_fail': 0, 'empty_funcs': 0, 'n': 39}
-GPT-4.1 (     gpt-4.1): mean reward@1 = 0.3298 | tel={'no_code': 17, 'comp_fail': 2, 'empty_funcs': 0, 'n': 39}
+qwen: mean reward@1 = 0.3946 | no_code: 7, comp_fail: 0
+gpt-4.1: mean reward@1 = 0.3298 | no_code: 17, comp_fail: 2
 ```
 
 ## Conclusion
 
-This was a simple experiment to show how reinforcement learning can leverage LLMs for decompilation tasks. There are many improvements that can be made, such as pretraining on a C++/ASM corpus, encouraging struct generation, or developing separate tasks. One such task is to give the model partial C++ implementation, and ask it to "improve the score", which would allow the model to potentially iterate on its own in an agentic manner.
+This was a simple experiment to show how reinforcement learning can leverage LLMs for decompilation tasks. There are many improvements that can be made, such as pretraining on a C++/ASM corpus, encouraging struct generation, or developing separate tasks. Another task would be to give the model partial C++ implementation, and ask it to "improve the score", which would allow the model to potentially iterate on its own in an agentic manner.
+
+One limitation of this approach is that it requires a specific compiler to be used across training and inference. However, this can be a strength in reverse engineering contexts where the compiler is known. If we are able to train the model on a corpus of assembly listings from a single compiler, we could expect the model to very accurately decompile real programs from that compiler.
