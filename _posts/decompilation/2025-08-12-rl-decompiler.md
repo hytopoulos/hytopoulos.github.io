@@ -243,8 +243,8 @@ Comparing the results, we see that our model is able to consistently produce sou
 ```bash
 ==== Evaluation Summary ====
 Samples: 39
-qwen-base: mean reward@1 = 0.0604 | no_code: 28, comp_fail: 1, empty_funcs: 0, n: 39
-qwen: mean reward@1 = 0.3946 | no_code: 7, comp_fail: 0
+qwen: mean reward@1 = 0.0604 | no_code: 28, comp_fail: 1, empty_funcs: 0, n: 39
+qwen-ours: mean reward@1 = 0.3946 | no_code: 7, comp_fail: 0
 gpt-4.1: mean reward@1 = 0.3298 | no_code: 17, comp_fail: 2
 ```
 
