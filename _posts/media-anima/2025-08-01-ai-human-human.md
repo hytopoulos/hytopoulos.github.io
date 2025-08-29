@@ -24,7 +24,7 @@ Sycophancy can be construed as a form of "reward hacking", a phenomenon in reinf
 
 # Rewarding pro-social behavior
 
-Currently, the social awareness of agents is limited to "single-user" interactions. This does not reflect the true nature of human relationships, which often involve group conversation and contextual identities. Therefore, we ought to consider what it means for an agent to be embedded within communities and what new modes of social interaction are possible beyond a vacuous chat interface without clear social incentive. If executed correctly, agents, as mediative figures, can strive to negotiate on behalf of multiple subjective viewpoints -- potentially reducing sycophancy and successfully navigating real-life social interactions.
+Currently, the social awareness of agents is limited to "single-user" interactions. This does not reflect the true nature of human relationships, which often involve groups of people (communities) and contextual identities. I believe that one potential solution is to design agents that are embedded within communities and what modes of social interaction can occur away from a chat interface. Agents, as mediative figures, can strive to negotiate on behalf of multiple subjective viewpoints -- potentially reducing sycophancy and successfully navigating real-life social interactions.
 
 On a technical level, there is a lack of infrastructure for supporting communication formats beyond the chat interface. Existing work has attempted to adapt pre-existing conversational assistants, but there is a lack of reinforcement learning infrastructure for developing multi-user, group-oriented communication.
 
