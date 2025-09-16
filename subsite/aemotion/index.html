@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nooscope Results - Emotion Feature Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Nooscope Results</h1>
+        <p>Emotion Feature Analysis with Image Similarity</p>
+    </header>
+
+    <main>
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading emotion analysis data...</p>
+        </div>
+
+        <div id="content" class="content hidden">
+            <div class="filters">
+                <label for="emotion-filter">Filter by Emotion:</label>
+                <select id="emotion-filter">
+                    <option value="all">All Emotions</option>
+                </select>
+            </div>
+
+            <div id="results-container" class="results-container">
+                <!-- Results will be dynamically populated here -->
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
