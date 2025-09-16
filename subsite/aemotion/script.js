@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Load JSON data
 async function loadData() {
     try {
-        const response = await fetch('nooscope_results.json');
+        const response = await fetch('results.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
