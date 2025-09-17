@@ -1,0 +1,40 @@
+- name: "Aemotion"
+  path: "aemotion"
+  description: "In pursuit of the happiest images on the internet using the EMOTIC dataset."
+  keywords: ["Sparse Autoencoders", "VLMs", "Emotion Recognition"]
+  
+  
+- name: "Reinforcement Learning for Decompilation"
+  path: "decomprl"
+  description: "Staging a targeted decompilation attack on a compiler using a Levenshtein distance reward function."
+  keywords: ["Reinforcement Learning", "Decompilation", "C++"]
+
+- name: "Akkadian Tablet Restoration"
+  path: "akktablet"
+  description: "Restoring fractured cuneiform tablets with Llama."
+  keywords: ["LLMs", "Fine-tuning", "Low-resource languages"]
+
+- name: "Detecting Human Error in Software"
+  path: "human_errors"
+  description: "Detecting cognitive distortions in source code to combat security incidents."
+  keywords: ["LLMs", "Fine-tuning", "LoRA", "Security", "Multi-label classification"]
+
+- name: "In Concert"
+  path: "inconcert"
+  description: "Mapping the Music Industry with Colocated Performances."
+  keywords: ["Web Scraping"]
+
+- name: "Voice Authorization Required"
+  path: "openspeaker"
+  description: "One-shot speech verification using contrastive learning of waveforms."
+  keywords: ["Contrastive Learning", "ResNet", "Triplet Loss"]
+
+- name: "Arbitrarium"
+  path: "arbitrarium"
+  description: "Building an interactive visualization of WordNet and Framenet."
+  keywords: ["WordNet", "NLP", "Django", "React"]
+
+- name: "Lemma Clusters"
+  path: "lemma_clusters"
+  description: "Measuring semantic shift in Spongebob seasons 1-10."
+  keywords: ["NLP", "Clustering"]

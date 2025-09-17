@@ -224,6 +224,131 @@
     max-width: 393px;
     line-height: 1.688;
   }
+
+  .subsite-links {
+    margin-top: 2rem;
+    
+    h3 {
+      font-size: 1.2em;
+      margin-bottom: 1rem;
+      color: $black;
+      opacity: 0.9;
+    }
+  }
+
+  .subsite-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    justify-items: center;
+  }
+
+  .subsite-button {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-decoration: none;
+    border-radius: 8px;
+    background-color: rgba(128, 128, 128, 0.05);
+    border: 1px solid rgba(128, 128, 128, 0.1);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+    
+    &:hover {
+      background-color: rgba(128, 128, 128, 0.1);
+      border-color: rgba(128, 128, 128, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .subsite-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .subsite-thumbnail {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+
+    .subsite-label {
+      font-size: 0.9em;
+      font-weight: 600;
+      color: $text-base-color;
+      margin-bottom: 0.3rem;
+      line-height: 1.1;
+    }
+
+    .subsite-description {
+      font-size: 0.75em;
+      color: $text-base-color;
+      opacity: 0.8;
+      line-height: 1.3;
+      font-style: italic;
+    }
+  }
+
+  .subsite-project {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .subsite-keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .keyword-tag {
+    font-size: 0.65em;
+    background-color: rgba(128, 128, 128, 0.08);
+    color: $text-base-color;
+    padding: 0.2rem 0.4rem;
+    border-radius: 12px;
+    border: 1px solid rgba(128, 128, 128, 0.12);
+    font-weight: 400;
+    opacity: 0.7;
+  }
+
+  @include media-query($on-mobile) {
+    .subsite-buttons {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .subsite-button {
+      .subsite-content {
+        padding: 0.8rem;
+      }
+      
+      .subsite-thumbnail {
+        aspect-ratio: 1 / 1;
+      }
+      
+      .subsite-label {
+        font-size: 0.8em;
+        margin-bottom: 0.2rem;
+      }
+
+      .subsite-description {
+        font-size: 0.7em;
+      }
+    }
+
+    .subsite-keywords {
+      padding: 0 0.3rem;
+    }
+  }
 }
 
 // Content

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Viewer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+        }
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize map with no default tiles
+        var map = L.map('map', {
+            crs: L.CRS.Simple,
+            minZoom: 0.25,
+            maxZoom: 5,
+            zoomControl: true,
+            attributionControl: false
+        });
+
+        // Create image bounds (adjust these based on your SVG dimensions)
+        var bounds = [[0, 0], [1000, 1000]];
+        
+        // Add SVG as image overlay
+        var imageOverlay = L.imageOverlay('output6.svg', bounds).addTo(map);
+        
+        // Fit map to image bounds
+        map.fitBounds(bounds);
+        
+        // Optional: Add zoom controls styling
+        var style = document.createElement('style');
+        style.textContent = `
+            .leaflet-control-zoom a {
+                background-color: rgba(255,255,255,0.9) !important;
+                color: #333 !important;
+            }
+            .leaflet-control-zoom a:hover {
+                background-color: rgba(255,255,255,1) !important;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -6,4 +6,29 @@
   />
   <h2 class="author-name">{{ site.author.name }}</h2>
   <p class="author-bio">{{ site.author.bio }}</p>
+  
+  <!-- Subsite Links -->
+  <div class="subsite-links">
+    <h3>Projects</h3>
+    <div class="subsite-buttons">
+      {% for project in site.data.projects %}
+      <div class="subsite-project">
+        <a href="{{ '/subsite/' | append: project.path | append: '/' | relative_url }}" class="subsite-button" title="{{ project.name }} Project">
+          <div class="subsite-content">
+            <span class="subsite-label">{{ project.name }}</span>
+            <span class="subsite-description">{{ project.description }}</span>
+          </div>
+          <img src="{{ '/subsite/' | append: project.path | append: '/thumbnail.png' | relative_url }}" alt="{{ project.name }}" class="subsite-thumbnail" />
+        </a>
+        {% if project.keywords %}
+        <div class="subsite-keywords">
+          {% for keyword in project.keywords %}
+          <span class="keyword-tag">{{ keyword }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
