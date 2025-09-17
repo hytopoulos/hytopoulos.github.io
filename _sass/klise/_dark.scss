@@ -244,4 +244,35 @@ body[data-theme="dark"] {
       }
     }
   }
+
+  // Subsite Projects
+  .subsite-links {
+    h3 {
+      color: $dark-white;
+    }
+  }
+
+  .subsite-button {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .subsite-label {
+      color: $dark-white;
+    }
+
+    .subsite-description {
+      color: $dark-text-base-color;
+    }
+  }
+
+  .keyword-tag {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: $dark-text-base-color;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
 }
