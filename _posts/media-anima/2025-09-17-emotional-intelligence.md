@@ -30,10 +30,6 @@ Sparse autoencoders are a type of neural network that learn to compress data dow
 
 I trained a SAE on Reddit images, and extracted 65,000 features, corresponding to the dimensionality of the SAE. We can visually inspect a feature by sorting our images by how strongly they activate that feature. Some are inscrutable and odd, but a lot of them are interpretable.
 
-<figure>
-<img src="{{image}}">
-</figure>
-
 
 <!-- ### Feature Showcase
 
@@ -54,9 +50,15 @@ I trained a SAE on Reddit images, and extracted 65,000 features, corresponding t
 
 ### Feature Filtering
 
-Most of these are not relevant to emotion detection. One trick to sift through the SAE features and find the ones we care about is to collect a bunch of similar images as our "query" and see which features are most strongly activated. We can make it better by creating a "negative query" to subtract off noisy features.
+<!-- Most of these are not relevant to emotion detection.  -->
+One trick to sift through the SAE features and find the ones we care about is to collect a bunch of similar images as our "query" and see which features are most strongly activated. We can make it better by creating a "negative query" to subtract off noisy features.
 
 To find the most pleasing image I used the EMOTIC dataset with 23k images of people labeled with 26 different emotions. One might think this limits our emotional intelligence to images of people, but by negative querying other emotions, and taking advantage of the SigLIP transfer learning, we filter out the shared features and generalize to other portrayals of emotion.
+
+<figure>
+<img src="{{image}}">
+<figcaption>Top 20 images that most evoke "excitement"</figcaption>
+</figure>
 
 I was surprised to find that the resulting features are not limited to faces, and in some cases contain no people at all. Here is a website where I collected the top 20 example of the features activated by each emotion [here (cw unfiltered reddit images)](https://hytopoulos.github.io/subsite/aemotion/).
 
