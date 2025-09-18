@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Emotional General Intelligence"
-date:   2025-00-17
+date:   2025-09-17
 categories: machine learning
 usemathjax: true
 # image: /mediative-ai/ai.png
