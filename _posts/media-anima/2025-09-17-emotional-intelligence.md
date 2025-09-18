@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Emotional General Intelligence"
+title:  "Interpretable Emotional Intelligence"
 date:   2025-09-17
 categories: machine learning
 usemathjax: true
