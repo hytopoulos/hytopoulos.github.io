@@ -56,7 +56,7 @@ One trick to sift through the SAE features and find the ones we care about is to
 To find the most pleasing image I used the EMOTIC dataset with 23k images of people labeled with 26 different emotions. One might think this limits our emotional intelligence to images of people, but by negative querying other emotions, and taking advantage of the SigLIP transfer learning, we filter out the shared features and generalize to other portrayals of emotion.
 
 <figure>
-<img src="{{image}}">
+<img src="{{page.image}}">
 <figcaption>Top 20 images that most evoke "excitement"</figcaption>
 </figure>
 
