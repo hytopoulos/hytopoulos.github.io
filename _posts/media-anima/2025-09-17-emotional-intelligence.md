@@ -4,7 +4,7 @@ title:  "Interpretable Emotional Intelligence"
 date:   2025-09-17
 categories: machine learning
 usemathjax: true
-# image: /mediative-ai/ai.png
+image: /assets/img/media-anima/excite.png
 ---
 
 ### Introduction
@@ -30,7 +30,12 @@ Sparse autoencoders are a type of neural network that learn to compress data dow
 
 I trained a SAE on Reddit images, and extracted 65,000 features, corresponding to the dimensionality of the SAE. We can visually inspect a feature by sorting our images by how strongly they activate that feature. Some are inscrutable and odd, but a lot of them are interpretable.
 
-### Feature Showcase
+<figure>
+<img src="{{image}}">
+</figure>
+
+
+<!-- ### Feature Showcase
 
 <figure>
 <img src="https://pbs.twimg.com/media/G1Fx4-6bwAAohyk?format=jpg">
@@ -45,7 +50,9 @@ I trained a SAE on Reddit images, and extracted 65,000 features, corresponding t
 <figure>
 <img src="https://pbs.twimg.com/media/G1GBc3HbgAA2C8a?format=jpg&name=4096x4096">
 <figcaption>Filtering Reddit by a latent aesthetic feature</figcaption>
-</figure>
+</figure> -->
+
+### Feature Filtering
 
 Most of these are not relevant to emotion detection. One trick to sift through the SAE features and find the ones we care about is to collect a bunch of similar images as our "query" and see which features are most strongly activated. We can make it better by creating a "negative query" to subtract off noisy features.
 
