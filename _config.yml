@@ -12,7 +12,7 @@ mode: dark # default theme "dark" | "light"
 author:
   name: Theo Hytopoulos # author name
   bio: >- # tell to the world
-    I am a freelance ML researcher and programmer focusing on data-driven storytelling and social reasoning.
+    I am a freelance ML researcher and programmer interested in data-driven storytelling and social reasoning.
     <br>
     Check out my profile: <a href="https://github.com/hytopoulos" target="_blank" rel="noopener">@github</a>.
   username: hytopoulos # general username
