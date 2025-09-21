@@ -167,27 +167,33 @@ function createFeatureSection(item, index) {
     const isTopRanking = topRankingEntry && topRankingEntry.originalIndex === item.index;
     
     section.innerHTML = `
-        <div class="feature-header">
-            <h2 class="emotion-title">${item.label}</h2>
+        <div class="feature-header" onclick="toggleFeatureSection('${section.id}')">
             <div class="feature-title-group">
+                <h2 class="emotion-title">${item.label}</h2>
                 <span class="feature-element">Feature ${item.feat}</span>
                 <span class="delta-freq">(Δ${(item["Δfreq(pos-neg)"] * 100).toFixed(1)}%)</span>
                 ${!isTopRanking && topRankingEntry ? 
-                    `<a href="#feature-${topRankingEntry.originalIndex}" class="top-ranking-link" title="Go to top-ranking class for this feature">
+                    `<a href="#feature-${topRankingEntry.originalIndex}" class="top-ranking-link" title="Go to top-ranking class for this feature" onclick="event.stopPropagation()">
                         → Top: ${topRankingEntry.label} (Δ${(topRankingEntry.deltaFreq * 100).toFixed(2)}%)
                     </a>` : ''
                 }
             </div>
+            <span class="expand-icon">▼</span>
         </div>
         
-        ${getAlsoExpressedNote(item)}
-        
-        <div class="images-section">
-            <div class="images-grid-5x4" id="images-grid-${index}" data-matches='${JSON.stringify(responseData?.matches || [])}'>
-                <!-- 20 images will be preloaded in 5x4 grid -->
+        <div class="feature-content">
+            ${getAlsoExpressedNote(item)}
+            
+            <div class="images-section">
+                <div class="images-grid-masonry" id="images-grid-${index}" data-matches='${JSON.stringify(responseData?.matches || [])}'>
+                    <!-- Images will be loaded in masonry layout -->
+                </div>
             </div>
         </div>
     `;
+    
+    // Start sections collapsed by default
+    section.classList.add('collapsed');
     
     // Set up viewport-based loading for this grid
     setTimeout(() => {
@@ -213,7 +219,7 @@ function setupViewportLoading(gridId) {
                     entry.target.dataset.loaded = 'true';
                     const gridId = entry.target.id;
                     const matchesData = JSON.parse(entry.target.dataset.matches || '[]');
-                    preloadImagesIn5x4Grid(matchesData, gridId);
+                    preloadImagesInMasonryGrid(matchesData, gridId);
                 }
             });
         }, {
@@ -255,10 +261,10 @@ function getAlsoExpressedNote(item) {
     `;
 }
 
-// Preload images in a 5x4 grid (exactly 20 images)
-function preloadImagesIn5x4Grid(matches, gridId) {
+// Preload images in a masonry grid layout
+function preloadImagesInMasonryGrid(matches, gridId) {
     const grid = document.getElementById(gridId);
-    if (!grid || grid.querySelector('.grid-5x4')) {
+    if (!grid || grid.querySelector('.masonry-grid')) {
         return; // Already loaded or grid doesn't exist
     }
     
@@ -267,19 +273,9 @@ function preloadImagesIn5x4Grid(matches, gridId) {
         return;
     }
     
-    // Create 5x4 grid structure
+    // Create masonry grid structure
     const gridContainer = document.createElement('div');
-    gridContainer.className = 'grid-5x4';
-    
-    // Create exactly 20 empty slots
-    const slots = [];
-    for (let i = 0; i < 20; i++) {
-        const slot = document.createElement('div');
-        slot.className = 'image-slot empty';
-        slot.innerHTML = '<div class="empty-slot">—</div>';
-        slots.push(slot);
-        gridContainer.appendChild(slot);
-    }
+    gridContainer.className = 'masonry-grid';
     
     grid.innerHTML = '';
     grid.appendChild(gridContainer);
@@ -288,11 +284,12 @@ function preloadImagesIn5x4Grid(matches, gridId) {
     let loadedCount = 0;
     let matchIndex = 0;
     const usedUrls = new Set();
+    const maxImages = Math.min(30, matches.length); // Load up to 30 images for better masonry effect
     
     // Function to try loading next available image
     function tryLoadNextImage() {
-        if (loadedCount >= 20 || matchIndex >= matches.length) {
-            return; // All slots filled or no more images
+        if (loadedCount >= maxImages || matchIndex >= matches.length) {
+            return; // Max images loaded or no more images
         }
         
         const match = matches[matchIndex];
@@ -308,9 +305,11 @@ function preloadImagesIn5x4Grid(matches, gridId) {
         const img = new Image();
         
         img.onload = function() {
-            if (loadedCount < 20) {
+            if (loadedCount < maxImages) {
                 usedUrls.add(url);
-                const slot = slots[loadedCount];
+                
+                // Create image slot
+                const slot = document.createElement('div');
                 slot.className = 'image-slot loaded';
                 slot.innerHTML = `
                     <img src="${url}" alt="Image ${loadedCount + 1}">
@@ -318,10 +317,12 @@ function preloadImagesIn5x4Grid(matches, gridId) {
                         <div class="similarity-score">${(similarity * 100).toFixed(1)}%</div>
                     </div>
                 `;
+                
+                gridContainer.appendChild(slot);
                 loadedCount++;
                 
-                // Try to load next image
-                setTimeout(tryLoadNextImage, 10);
+                // Try to load next image with a small delay for better UX
+                setTimeout(tryLoadNextImage, 50);
             }
         };
         
@@ -414,6 +415,31 @@ function addSearchFunctionality() {
     // Insert search input after filters
     const filtersDiv = document.querySelector('.filters');
     filtersDiv.appendChild(searchInput);
+}
+
+// Toggle feature section expand/collapse
+function toggleFeatureSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    
+    const isCollapsed = section.classList.contains('collapsed');
+    
+    if (isCollapsed) {
+        section.classList.remove('collapsed');
+        section.classList.add('expanded');
+        
+        // Load images when expanding if not already loaded
+        const grid = section.querySelector('.images-grid-masonry');
+        if (grid && !grid.dataset.loaded) {
+            const gridId = grid.id;
+            const matchesData = JSON.parse(grid.dataset.matches || '[]');
+            preloadImagesInMasonryGrid(matchesData, gridId);
+            grid.dataset.loaded = 'true';
+        }
+    } else {
+        section.classList.remove('expanded');
+        section.classList.add('collapsed');
+    }
 }
 
 // Initialize search functionality after content loads

@@ -4,7 +4,6 @@ description: >- # site description
   Theo<a href="https://github.com/hytopoulos" target="_blank" rel="noopener">@github</a>.
 lang: en-US # default lang
 timezone: USA/Los_Angeles # set your timezone
-image: assets/img/ogp.png # This image used for Open Graph more info https://ogp.me/
 repo: https://github.com/hytopoulos/jekyll-klise # site repo [optional]
 mode: dark # default theme "dark" | "light"
 
@@ -19,7 +18,7 @@ author:
   github: hytopoulos # github username
   twitter: hytopoulos # twitter username
   facebook: hytopoulos # facebook username
-  email: theo.hytopoulos@gmail.com # email adress
+  email: theo.hyto@gmail.com # email adress
   avatar: /assets/img/avatar.png # change with your own avatar
 
 # URL settings

@@ -110,22 +110,50 @@ main {
 .feature-section {
     background: #2d2d2d;
     border-radius: 4px;
-    padding: 2rem;
     border: 1px solid #404040;
     margin-bottom: 1rem;
+    overflow: hidden;
 }
 
 .feature-section:hover {
     border-color: #555;
 }
 
+.feature-section.collapsed .feature-content {
+    display: none;
+}
+
+.feature-section.expanded .feature-content {
+    display: block;
+}
+
 .feature-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
+    padding: 2rem;
     border-bottom: 1px solid #404040;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.feature-header:hover {
+    background-color: #333;
+}
+
+.feature-content {
+    padding: 0 2rem 2rem 2rem;
+}
+
+.expand-icon {
+    font-size: 1.2rem;
+    color: #b0b0b0;
+    transition: transform 0.3s ease;
+    user-select: none;
+}
+
+.feature-section.expanded .expand-icon {
+    transform: rotate(180deg);
 }
 
 .feature-title-group {
@@ -230,17 +258,14 @@ main {
     font-weight: 600;
 }
 
-.images-grid-5x4 {
+.images-grid-masonry {
     min-height: 100px;
 }
 
-.grid-5x4 {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 0.75rem;
-    aspect-ratio: 5/4;
-    max-width: 800px;
+.masonry-grid {
+    column-count: 4;
+    column-gap: 0.75rem;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -250,7 +275,10 @@ main {
     overflow: hidden;
     border: 1px solid #404040;
     position: relative;
-    aspect-ratio: 1;
+    margin-bottom: 0.75rem;
+    break-inside: avoid;
+    display: inline-block;
+    width: 100%;
 }
 
 .image-slot.loading {
@@ -293,7 +321,7 @@ main {
 
 .image-slot img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
     display: block;
 }
@@ -382,10 +410,8 @@ main {
         grid-template-columns: 1fr;
     }
     
-    .grid-5x4 {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(5, 1fr);
-        aspect-ratio: 4/5;
+    .masonry-grid {
+        column-count: 2;
     }
     
     .filters {
