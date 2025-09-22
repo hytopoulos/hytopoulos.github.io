@@ -57,10 +57,10 @@ To find the most pleasing image I used the EMOTIC dataset with 23k images of peo
 
 <figure>
 <img src="{{page.image}}">
-<figcaption>Top 20 images that most evoke "excitement"</figcaption>
+<figcaption>Top 20 images from the top SAE feature for "excitement"</figcaption>
 </figure>
 
-I was surprised to find that the resulting features are not limited to faces, and in some cases contain no people at all. Here is a website where I collected the top 20 example of the features activated by each emotion [here (cw unfiltered reddit images)](https://hytopoulos.github.io/subsite/aemotion/).
+I was surprised to find that the resulting features are not limited to faces, and in some cases contain no people at all. Here is a website where I collected the top 20 example of the top SAE features activated by each emotion [here (cw unfiltered reddit images)](https://hytopoulos.github.io/subsite/aemotion/).
 
 ### Discussion
 
