@@ -1,4 +1,4 @@
-- name: "Aemotion"
+- name: "SAEmotion"
   path: "aemotion"
   description: "In pursuit of the happiest images on the internet using the EMOTIC dataset."
   keywords: ["Sparse Autoencoders", "VLMs", "Emotion Recognition"]
