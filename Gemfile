@@ -22,6 +22,8 @@ group :jekyll_plugins do
   gem 'jekyll-sitemap', '~> 1.4'
   gem 'jekyll-compose', '~> 0.12.0'
   gem 'jekyll-postfiles', '~> 3.1'
+  gem 'jekyll-tabs', '~> 1.2.1'
+  gem 'jekyll-latex'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -37,3 +39,5 @@ gem "csv", "~> 3.3"
 gem "base64", "~> 0.3.0"
 
 gem "bigdecimal", "~> 3.2"
+
+gem "msgpack", "~> 1.7.2"

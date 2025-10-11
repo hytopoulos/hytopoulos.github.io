@@ -189,6 +189,76 @@
   h6 {
     @include relative-font-size(0.875);
   }
+
+  ul[data-tab] {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 1.25rem 0 0.75rem 0;
+    padding: 0;
+    border-bottom: 1px solid $light;
+
+    /* Kill Klisé’s pseudo bullets / dashes */
+    > li::before {
+      content: none !important;
+    }
+
+    > li {
+      margin: 0;
+      padding: 0;
+
+      > a {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        text-decoration: none;   // neutralize Klisé link underline/borders
+        border: 0;
+        border-bottom: 2px solid transparent;
+        color: inherit;
+        background: transparent;
+        font: inherit;
+        line-height: 1.3;
+
+        &:hover,
+        &:focus {
+          color: inherit;        // avoid blue hover color on tab labels
+        }
+      }
+
+      &.active > a {
+        border-bottom-color: currentColor;
+        font-weight: 600;
+      }
+    }
+  }
+
+  /* Panels that pair with a data-tab header */
+  ul.tab-content {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    /* Remove Klisé bullets/dashes */
+    > li::before {
+      content: none !important;
+    }
+
+    > li {
+      display: none;
+      margin: 0;                 // defeat theme list spacing
+      padding: 0.25rem 0;
+
+      &.active {
+        display: block;
+      }
+
+      /* Optional niceties inside panels */
+      p:first-child { margin-top: 0; }
+      pre code { display: block; }
+    }
+  }
+
+
+  
 }
 
 .post-nav {
