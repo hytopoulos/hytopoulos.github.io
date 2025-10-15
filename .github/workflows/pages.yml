@@ -1,45 +1,28 @@
 name: Build and Deploy Jekyll
-
 on:
   push:
     branches: [ master ]
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: "pages"
   cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
           bundler-cache: true
-
-      # Make Gemfile.lock valid for Linux runners
-      - run: bundle lock --add-platform x86_64-linux
-
-      - run: bundle install --without development
-
-      # Build your site (custom plugins allowed)
-      - run: bundle exec jekyll build --trace
-
-      # Required by GitHub Pages
-      - uses: actions/configure-pages@v5
-
-      # Upload the built site
+      - run: bundle install
+      - run: bundle exec jekyll build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
