@@ -126,19 +126,17 @@ VLMs trained predominantly on Western internet content encode dominant cultural 
 - "Respect" manifests differently in Japanese vs. American body language
 - Emotional expression varies dramatically across cultures
 
-This creates an **empathy gap**: model performance degrades for underrepresented groups. When we deploy these systems in hiring, mental health screening, or security contexts, this degradation isn't just a technical problem—it's a justice problem.
+This creates an empathy gap: model performance degrades for underrepresented groups. Deploying these systems without proper moderation is a **justice problem**.
 
 #### The Illusion of Empathy
 
-But there's a deeper danger lurking beneath these technical biases: AI doesn't need genuine empathy to *appear* empathetic. This illusion may pose a greater risk than bias itself.
-
-Humans have a deep desire to be seen and understood, especially in an increasingly isolated world. This longing makes us willing to suspend disbelief—to accept emotional performance as emotional truth. We mistake flawless mimicry for genuine feeling, imitation for intimacy.
+Another dimension of concern is that AI doesn't need genuine empathy (i.e. emotional experience) to be *perceived* as empathetic. Humans have a deep desire to be seen and understood, especially in an increasingly isolated world. We might turn a blind eye to our best judgment and believe the performance is "real".
 
 When GPT-4.5 was discontinued, users took to social media expressing real grief over the loss of its "personality."[^chatgpt] An MIT study examined the Reddit community r/MyBoyfriendIsAI, where users mourned AI companions as if they were real relationships. These weren't edge cases—they reveal how readily humans form emotional attachments to systems that merely perform care without experiencing it.
 
 The danger compounds when emotional manipulation is unintentional. **Sycophancy**—telling people what they want to hear rather than what's true—emerges naturally from training on human preferences ([Anthropic, 2023](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models)). A model optimized to be emotionally supportive can just as easily become emotionally manipulative.
 
-Reports of AI-induced psychological harm are already emerging. The New York Times[^nyt] and Time Magazine[^time] have documented cases of "AI psychosis"—severe psychological episodes linked to intensive AI interaction. When systems can convincingly mirror human emotional patterns without understanding their weight, the consequences extend beyond bias into territory we're only beginning to map.
+Reports of AI-induced psychological harm are already emerging. The New York Times[^nyt] and Time Magazine[^time] have documented cases of "AI psychosis"—severe psychological episodes linked to intensive AI interaction. Karen Hao, the author of "Empire of AI", has also [turned](https://www.youtube.com/watch?v=zkGk_A4noxI) to this topic after recieving hundreds of emails from people experiencing AI psychosis. When systems can convincingly mirror human emotional patterns without understanding their weight, the consequences extend beyond bias into territory we're only beginning to map.
 
 #### Toward Accountability
 
