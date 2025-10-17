@@ -30,28 +30,24 @@ AI systems learn emotion and meaning from the internet—a cesspool of trolling,
 
 #### Measuring Bias in Emotion Features
 
-The EMOTIC dataset includes demographic labels (Male/Female, Kid/Adult) alongside emotion annotations. We can measure correlations between these attributes and our learned emotion directions. We also compare against the original EMOTIC annotations and SigLIP word embeddings:
+The EMOTIC dataset includes demographic labels (Male/Female, Kid/Adult) alongside emotion annotations. If we create directions for the demographic labels, we can see they inherit the biases of the source data and the base model. This illustrates how biases compound through multiple projections[^wyllie]:
 
 {% tabs bias %}
 {% tab bias SAE %}
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ page.gender_age_emotion_bias }}" width="100%" height="700px"></iframe>
 {% endtab %}
-{% tab bias EMOTIC %}
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ page.emotic_bias }}" width="100%" height="700px"></iframe>
-{% endtab %}
 {% tab bias SigLIP %}
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ page.siglip_bias }}" width="100%" height="700px"></iframe>
 {% endtab %}
+{% tab bias EMOTIC %}
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ page.emotic_bias }}" width="100%" height="700px"></iframe>
+{% endtab %}
 {% endtabs %}
-
-The SAE features show the *strongest* gender and age correlations—stronger than either the source data or the base model. This illustrates how biases compound through multiple projections[^wyllie]:
 
 1. **SigLIP** is trained on internet images with demographic skew
 2. **EMOTIC annotations** contain human labeling biases
 3. The **SAE** is trained on Reddit, which has strong demographic biases
-4. **Sparsity enforcement** isolates and concentrates these associations
-
-The sparsity constraint is key: by forcing the model to use few features, it creates stronger, more discrete associations—including stereotypical ones.
+4. **Sparsity enforcement**: by forcing the model to use few features, sparsity creates stronger, more discrete associations.
 
 #### Individual Feature Analysis
 
