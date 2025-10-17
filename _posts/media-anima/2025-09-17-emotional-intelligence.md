@@ -9,7 +9,7 @@ feat_map_raw: /assets/img/saliency_post/feat258516.png
 feat_ovl_raw: /assets/img/saliency_post/feat258516_ovl.png
 feat_map_smooth: /assets/img/saliency_post/feat258516_smoothgrad.png
 feat_ovl_smooth: /assets/img/saliency_post/feat258516_smoothgrad_ovl.png
-eval: /assets/img/saliency_post/eval.png
+eval: /assets/img/saliency_post/plotly_embeds_output/ap_comparison.html
 affection: /assets/img/saliency_post/emotion_img/Affection_rank01_original.png
 affection_map: /assets/img/saliency_post/emotion_map/Affection_rank01.png
 anger: /assets/img/saliency_post/emotion_img/Anger_rank01_original.png
@@ -243,10 +243,7 @@ How well can we predict emotions using just these learned directions? We evaluat
 
 [Mittal et al. (2020)](https://www.researchgate.net/profile/Uttaran-Bhattacharya-2/publication/339972569_EmotiCon_Context-Aware_Multimodal_Emotion_Recognition_using_Frege's_Principle/links/5f53d102299bf13a31a4b738/EmotiCon-Context-Aware-Multimodal-Emotion-Recognition-using-Freges-Principle.pdf) provide benchmark results on EMOTIC for comparison:
 
-<figure>
-<img src="{{ page.eval }}">
-<figcaption>Performance comparison on the EMOTIC dataset.</figcaption>
-</figure>
+<iframe src="{{ page.eval }}" width="100%" height="500px"></iframe>
 
 While not state-of-the-art, this unsupervised approach achieves reasonable performance—and crucially, gives us interpretable features we can inspect and modify.
 
