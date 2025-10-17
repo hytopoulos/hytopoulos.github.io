@@ -144,7 +144,7 @@ Reports of AI-induced psychological harm are already emerging. The New York Time
 
 Interpretability methods give us X-ray vision into AI systems. We can point to specific features and say: *here is the problematic association*. This creates pathways to accountability—we can demand transparency and ask not just "does this work?" but "*whose world* does it work for?"
 
-The challenge runs deeper than individual biases. Societal stereotypes are baked into what we call "general knowledge." Emotion, in particular, is key to self-determination and is at odds with universalization—it carries personal nuance that no global model fully captures.
+The challenge runs deeper than individual biases. Societal stereotypes are baked into what we call "general knowledge." Emotion and meaning are key to self-determination and often resist universalization—it carries personal nuance that no global model fully captures.
 
 This reveals a fundamental tension: the balance between learning universal patterns and adapting to individual contexts. Perhaps uncertainty has value. Perhaps flexibility matters more than prediction. Navigating the contradiction between learned (endogenous) and societal (exogenous) priors will define AI safety going forward.
 
