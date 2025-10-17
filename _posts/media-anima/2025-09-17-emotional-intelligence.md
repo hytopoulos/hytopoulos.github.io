@@ -29,6 +29,7 @@ peace_map: /assets/img/saliency_post/emotion_map/Peace_rank01.png
 sadness: /assets/img/saliency_post/emotion_img/Sadness_rank01_original.png
 sadness_map: /assets/img/saliency_post/emotion_map/Sadness_rank01.png
 superposition: /assets/img/saliency_post/superposition.png
+slider: /assets/img/saliency_post/sliders.png
 ---
 
 #### Introduction
@@ -247,10 +248,35 @@ How well can we predict emotions using just these learned directions? We evaluat
 
 While not state-of-the-art, this unsupervised approach achieves reasonable performance—and crucially, gives us interpretable features we can inspect and modify.
 
+#### Decomposing Emotions
+
+I created [this](https://github.com/hytopoulos/saemotion) tool to help explore the sparse autoencoder features. It visualizes emotion directions and their activations.
+
+<figure>
+<img src="{{ page.slider }}">
+<figcaption>We can configure the strength of each feature to see how it affects the image.</figcaption>
+</figure>
+
+Let's look at the top features encoded in the "Peace" direction:
+1. People at the beach tanning their legs
+2. People passed out on couches
+3. Black and white photos of older people on benches
+4. Priests delivering sermons
+5. Bikes
+
+And for "Sadness":
+1. American pallbearers carrying caskets of veterans
+2. Ghanaian "[Dancing pallbearers](https://en.wikipedia.org/wiki/Dancing_Pallbearers)", who became a popular internet meme in 2020.
+3. Obituary photos
+4. Nature documentary style photographs of Safari animals fighting.
+5. Pallbearers featuring other countries.
+
+These features do not neutrally represent emotion. Instead, they encode hierarchies of meaning through layered specificity and emotionally charged modifiers. We see that the most salient features for sadness are compounded with death rituals, national identity, and viral spectacle.
+
 #### Conclusion
 
 Using sparse autoencoders, we can decompose VLM embeddings to understand how models encode emotion. This interpretability comes with practical benefits: we can visualize model attention, search images by emotional content, and identify which features contribute to predictions.
 
-But interpretability also reveals uncomfortable truths. In the next post, we'll examine systematic biases in these emotion features—and explore what this means for deploying emotion recognition systems in the real world.
+Interpretability also reveals layered meaning that is shaped by predominantly Western cultural context. In the next post, we'll examine systematic biases in these emotion features—and explore what this means for deploying emotion recognition systems in the real world.
 
 ---
