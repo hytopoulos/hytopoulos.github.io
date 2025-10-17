@@ -30,7 +30,7 @@ AI systems learn emotion and meaning from the internet—a cesspool of trolling,
 
 #### Measuring Bias in Emotion Features
 
-The EMOTIC dataset includes demographic labels (Male/Female, Kid/Adult) alongside emotion annotations. If we create directions for the demographic labels, we can see they inherit the biases of the source data and the base model. This illustrates how biases compound through multiple projections[^wyllie]:
+The EMOTIC dataset includes demographic labels (Male/Female, Kid/Adult) alongside emotion annotations. If we create semantic directions for these demographic labels, we can measure the cosine similarity to see how they inherit the biases of the source data and the base model. Let's inspect this correlation, along with the distribution of demographic labels in EMOTIC and word embedding similarities of SigLIP:
 
 {% tabs bias %}
 {% tab bias SAE %}
@@ -48,6 +48,10 @@ The EMOTIC dataset includes demographic labels (Male/Female, Kid/Adult) alongsid
 2. **EMOTIC annotations** contain human labeling biases
 3. The **SAE** is trained on Reddit, which has strong demographic biases
 4. **Sparsity enforcement**: by forcing the model to use few features, sparsity creates stronger, more discrete associations.
+
+This illustrates how biases compound through multiple projections[^wyllie].
+
+[^wyllie]: [Wyllie et al. (2024)](https://arxiv.org/pdf/2403.07857v1): Compounding bias is also a property of "model collapse" when models are trained on synthetic data.
 
 #### Individual Feature Analysis
 
