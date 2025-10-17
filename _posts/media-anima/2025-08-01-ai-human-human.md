@@ -39,8 +39,6 @@ Furthermore, as we begin to explore the physical presence of AI, it is important
 <figcaption> Murderbot (Apple TV, 2025) portrays a security robot that has hacked its own "governor module", and maintains a rational concern for the humans it works for, yet maintains firm boundaries. </figcaption>
 </figure> -->
 
-# Concluding Remarks
-
 We have a long way to go toward implementing these interactions, or even toward a clear understanding of what it means to do so, but it is clear that we are already witnessing the side effects of a technology that is stepping into an unspoken and sacred territory of the human experience.
 
 
