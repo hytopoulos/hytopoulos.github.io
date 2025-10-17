@@ -99,10 +99,9 @@ The result is slightly better. Unfortunately, the "Male" vector encodes not just
 
 Alternative approaches include:
 - **Hard debiasing**: Project features onto subspaces orthogonal to bias dimensions ([Barbalau et al., 2025](https://arxiv.org/pdf/2509.10809))
-- **Adversarial training**: Train models to be invariant to demographic attributes
 - **Activation suppression**: Directly constrain problematic feature activations [Han et al. (2021)](https://aclanthology.org/2021.eacl-main.239.pdf)
 
-Each method has trade-offs and there is conceptual overlap. For example, steering vectors and hard debiasing assume that protected attributes are binary, but masculinity and femininity are not opposites. Debiasing remains an active research problem with no perfect solution.
+Each method has trade-offs. For example, hard debiasing assumes that protected attributes are binary, but masculinity and femininity are not opposites. Debiasing remains an active research problem with no perfect solution.
 
 #### Connecting to LLM Bias
 
