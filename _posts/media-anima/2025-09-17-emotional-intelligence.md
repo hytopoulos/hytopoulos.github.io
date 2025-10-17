@@ -268,7 +268,7 @@ And for "Sadness":
 1. American pallbearers carrying caskets of veterans
 2. Ghanaian "[Dancing pallbearers](https://en.wikipedia.org/wiki/Dancing_Pallbearers)", who became a popular internet meme in 2020.
 3. Obituary photos
-4. Nature documentary style photographs of Safari animals fighting.
+4. Nature documentary style photographs of African safari animals fighting.
 5. Pallbearers featuring other countries.
 
 These features do not neutrally represent emotion. Instead, they encode hierarchies of meaning through layered specificity and emotionally charged modifiers. We see that the most salient features for sadness are compounded with death rituals, national identity, and viral spectacle.
