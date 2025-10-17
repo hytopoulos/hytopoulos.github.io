@@ -239,7 +239,7 @@ The smoothed heatmaps still contain some artifacts[^attention], but show clear s
 
 #### Performance Evaluation
 
-How well can we predict emotions using just these learned directions? We evaluate on the EMOTIC test set by measuring cosine similarity between image embeddings and emotion directions.
+How well can we predict emotions using just these learned directions? We evaluate on the EMOTIC test set by measuring cosine similarity between image embeddings and emotion directions and then computing average precision (AP).
 
 [Mittal et al. (2020)](https://www.researchgate.net/profile/Uttaran-Bhattacharya-2/publication/339972569_EmotiCon_Context-Aware_Multimodal_Emotion_Recognition_using_Frege's_Principle/links/5f53d102299bf13a31a4b738/EmotiCon-Context-Aware-Multimodal-Emotion-Recognition-using-Freges-Principle.pdf) provide benchmark results on EMOTIC for comparison:
 
