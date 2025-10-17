@@ -78,11 +78,11 @@ Anthropic's [whitepaper](https://transformer-circuits.pub/2024/scaling-monoseman
 <figcaption>Same esteem concept in a smaller (1M) SAE: shifts from political leaders to entertainment figures.</figcaption>
 </figure>
 
-The smaller SAE still captures "groups of men," but now prioritizes TV/movie characters over world leaders. The political figures are still present but ranked lower—likely a result of what kind of content is more prevalent on Reddit. This reveals how feature specificity changes with scale.
+The smaller SAE still captures "groups of men," but now prioritizes TV/movie characters over world leaders. The political figures are still present but ranked lower—likely a result of what kind of content is more prevalent on Reddit. This matches Anthropic's findings that larger SAEs "split" into more nuanced features.
 
 #### Attempting Debiasing
 
-Can we remove demographic bias from emotion features? One approach uses **steering vectors**—linear operations in semantic space. Since we have gender and age labels, we can try:
+Can we remove demographic bias from emotion features? A common approach is to use **steering vectors**—linear operations in semantic space. Since we have gender and age labels, we can try:
 
 $$
 \text{Esteem}_{\text{Debiased}} = \text{Esteem}_{\text{Original}} - \text{Male} + \text{Adult}
@@ -100,9 +100,9 @@ The result is slightly better. Unfortunately, the "Male" vector encodes not just
 Alternative approaches include:
 - **Hard debiasing**: Project features onto subspaces orthogonal to bias dimensions ([Barbalau et al., 2025](https://arxiv.org/pdf/2509.10809))
 - **Adversarial training**: Train models to be invariant to demographic attributes
-- **Activation suppression**: Directly constrain problematic feature activations
+- **Activation suppression**: Directly constrain problematic feature activations [Han et al. (2021)](https://aclanthology.org/2021.eacl-main.239.pdf)
 
-Each method has trade-offs. For example, steering vectors and hard debiasing assume that protected attributes are binary—but masculinity and femininity are not opposites. Debiasing remains an active research problem with no perfect solution.
+Each method has trade-offs and there is conceptual overlap. For example, steering vectors and hard debiasing assume that protected attributes are binary, but masculinity and femininity are not opposites. Debiasing remains an active research problem with no perfect solution.
 
 #### Connecting to LLM Bias
 
