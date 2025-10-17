@@ -123,10 +123,10 @@ A 2025 UCSC study found GPT-4o provides different emotional responses based on u
 VLMs trained predominantly on Western internet content encode dominant cultural narratives about emotion:
 
 - What reads as "confidence" in one context may signal "arrogance" in another
-- "Respect" manifests differently in Japanese vs. American body language
-- Emotional expression varies dramatically across cultures
+- E.g. "respect" manifests differently in Japanese vs. American body language
+- Context may carry information, but meaning and values vary dramatically across cultures
 
-This creates an empathy gap: model performance degrades for underrepresented groups. Deploying these systems without proper moderation is a **justice problem**.
+This creates an empathy gap: model performance degrades for underrepresented groups. Deploying these systems without the proper safeguards is a **justice problem**.
 
 #### The Illusion of Empathy
 
