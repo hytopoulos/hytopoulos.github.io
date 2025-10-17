@@ -130,7 +130,7 @@ This creates an empathy gap: model performance degrades for underrepresented gro
 
 #### The Illusion of Empathy
 
-Another dimension of concern is that AI doesn't need genuine empathy (i.e. emotional experience) to be *perceived* as empathetic. Humans have a deep desire to be seen and understood, especially in an increasingly isolated world. We might turn a blind eye to our best judgment and believe the performance is "real".
+Another dimension of concern is that AI doesn't need genuine empathy (i.e. emotional experience) to be *perceived* as empathetic. Humans have a deep desire to be seen and understood, especially in an increasingly isolated world. And when AI technology is free and risk awareness not widespread, many seek empathy from it.
 
 When GPT-4.5 was discontinued, users took to social media expressing real grief over the loss of its "personality."[^chatgpt] An MIT study examined the Reddit community r/MyBoyfriendIsAI, where users mourned AI companions as if they were real relationships. These weren't edge cases—they reveal how readily humans form emotional attachments to systems that merely perform care without experiencing it.
 
