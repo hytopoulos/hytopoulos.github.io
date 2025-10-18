@@ -18,7 +18,7 @@ scaling_monosemanticity: /assets/img/saliency_post/scaling_monosemanticity.png
 
 In the [previous post](link-to-post-1), we explored how sparse autoencoders let us decode emotion in vision-language models. Now we examine what these interpretable features reveal: systematic biases linking emotions to gender, age, and other demographic attributes.
 
-These aren't minor artifacts—they're structural patterns learned from billions of internet images. Understanding these biases matters because VLMs are increasingly deployed in consequential contexts: hiring algorithms, mental health screening, border security. When AI systems make judgments about human emotion, whose emotions are they trained to recognize?
+These are the patterns learned from billions of internet images. Understanding these biases matters because VLMs are increasingly deployed in consequential contexts: hiring algorithms, mental health screening, border security. When AI systems make judgments about human emotion, whose emotions are they trained to recognize?
 
 AI systems learn emotion and meaning from the internet—a cesspool of trolling, political polarization, bigotry and so on. This shapes how emotions are understood by AI systems, and ultimately, how AI systems respond to human emotional states.
 
@@ -30,7 +30,7 @@ AI systems learn emotion and meaning from the internet—a cesspool of trolling,
 
 #### Measuring Bias in Emotion Features
 
-The EMOTIC dataset includes demographic labels (Male/Female, Kid/Adult) alongside emotion annotations. If we create semantic directions for these demographic labels, we can measure the cosine similarity to see how they inherit the biases of the source data and the base model. Let's inspect this correlation, along with the distribution of demographic labels in EMOTIC and word embedding similarities of SigLIP:
+The EMOTIC dataset includes demographic labels (Male/Female, Kid/Adult) alongside emotion annotations. If we create semantic directions for these demographic labels, we can measure the cosine similarity between them and out emotion directions to see what correlations exist. Let's inspect this correlation, along with the distribution of demographic labels in EMOTIC and word embedding similarities of SigLIP:
 
 {% tabs bias %}
 {% tab bias SAE %}
@@ -71,7 +71,7 @@ This feature strongly represents world leaders and political figures—overwhelm
 <figcaption>From Anthropic's research: larger SAEs produce more monosemantic features.</figcaption>
 </figure>
 
-Anthropic's [whitepaper](https://transformer-circuits.pub/2024/scaling-monosemanticity/#appendix-more-safety-features) shows that monosemanticity improves with SAE size. The same holds for VLMs. Compare the 210M feature above with a 1M-feature SAE:
+[Anthropic (2024)](https://transformer-circuits.pub/2024/scaling-monosemanticity/#appendix-more-safety-features) published a whitepaper demonstrating that monosemanticity of LLM features improves with SAE size. The same holds for VLMs. Compare the 210M feature above with a 1M-feature SAE:
 
 <figure>
 <img src="{{ page.screenshot_beforeatten }}">
@@ -112,7 +112,7 @@ John says, "I want to be alone right now." John feels ___
 (completion: sad − happy)
 ```
 
-The authors found that the feature for "sadness" activates on "John feels", indicating that these features play an important role in representing reasoning within the latent space.
+The authors found that the feature for "sadness" activates on "John feels", indicating that these features play an important role in representing **intermediate reasoning** within the latent space.
 
 ---
 
@@ -123,14 +123,14 @@ A 2025 UCSC study found GPT-4o provides different emotional responses based on u
 VLMs trained predominantly on Western internet content encode dominant cultural narratives about emotion:
 
 - What reads as "confidence" in one context may signal "arrogance" in another
-- "Respect" manifests differently in Japanese vs. American body language
-- Emotional expression varies dramatically across cultures
+- E.g. "respect" manifests differently in Japanese vs. American body language
+- Context may carry information, but meaning and values vary dramatically across cultures
 
-This creates an empathy gap: model performance degrades for underrepresented groups. Deploying these systems without proper moderation is a **justice problem**.
+This creates an empathy gap: model performance degrades for underrepresented groups. Deploying these systems without the proper safeguards is a **justice problem**.
 
 #### The Illusion of Empathy
 
-Another dimension of concern is that AI doesn't need genuine empathy (i.e. emotional experience) to be *perceived* as empathetic. Humans have a deep desire to be seen and understood, especially in an increasingly isolated world. We might turn a blind eye to our best judgment and believe the performance is "real".
+Another dimension of concern is that AI doesn't need genuine empathy (i.e. emotional experience) to be *perceived* as empathetic. Humans have a deep desire to be seen and understood, especially in an increasingly isolated world. And when AI technology is free and risk awareness not widespread, many seek empathy from it.
 
 When GPT-4.5 was discontinued, users took to social media expressing real grief over the loss of its "personality."[^chatgpt] An MIT study examined the Reddit community r/MyBoyfriendIsAI, where users mourned AI companions as if they were real relationships. These weren't edge cases—they reveal how readily humans form emotional attachments to systems that merely perform care without experiencing it.
 
