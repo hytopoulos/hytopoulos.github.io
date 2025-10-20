@@ -36,7 +36,7 @@ slider: /assets/img/saliency_post/sliders.png
 
 Vision-language models (VLMs) are AI models trained on text and images that create a joint representation of visual and linguistic information. VLMs are already being used for tasks such as robotics and medical image analysis. Understanding how these models encode emotion is important for developing AI technology that interacts with humans and can potentially make decisions that affect people's well-being.
 
-This post walks through an approach to inspect the internal workings of VLMs using sparse autoencoders (SAEs). We'll see how to disentangle emotion-related features from VLM embeddings, visualize what the model "sees" when detecting emotions, and evaluate the method's performance. In a follow-up post, we'll examine what these features reveal about bias in emotion recognition.
+This post walks through an approach to inspect the internal workings of VLMs using sparse autoencoders (SAEs). We'll see how to disentangle emotion-related features from VLM embeddings, visualize what the model "sees" when detecting emotions, and evaluate how well these features can predict emotion. In a follow-up post, we'll also examine what these features reveal about bias in emotion recognition.
 
 [^sae]: Towards Monosemanticity: Decomposing Language Models With Dictionary Learning ([Anthropic (2023)](https://transformer-circuits.pub/2023/monosemantic-features/index.html)).
 [^monosemantic]: A monosemantic feature is a feature that is associated with a single meaning.
