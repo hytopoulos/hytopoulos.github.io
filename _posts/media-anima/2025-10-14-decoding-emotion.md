@@ -67,7 +67,7 @@ The three main components are:
 2. **Sparsity constraint** (e.g., top-k activation)
 3. **Reconstruction loss** (e.g., MSE)
 
-This process extracts monosemantic[^monosemantic] features—features associated with single, interpretable concepts. After training, we have a weight matrix that disentangles embeddings into constituent features.
+Training a sparse autoencoder decomposes embeddings into monosemantic features. In essence, it unweaves the high-dimensional image representation into interpretable concepts.
 
 ```python
 class SparseAutoencoder(nn.Module):
