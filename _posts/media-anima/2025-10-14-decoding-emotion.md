@@ -105,7 +105,7 @@ The EMOTIC dataset contains 23k images labeled with 26 emotions. Our approach:
 3. For each emotion, average the activation patterns across all images labeled with that emotion
 4. This gives us an "emotion direction" in feature space
 
-Using these directions, we can rank any image by cosine similarity to measure alignment with each emotion.
+Using these directions, we can rank any image by cosine similarity to measure alignment with each emotion. Here are the Reddit images that activate each emotion direction the most:
 
 <style>
 /* Masonry container */
