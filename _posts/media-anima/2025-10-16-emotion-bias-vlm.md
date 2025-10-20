@@ -57,7 +57,7 @@ This illustrates how biases compound through multiple projections[^wyllie].
 
 Monosemanticity is a property of sparse autoencoders features. It means that a feature vector represents a specific concept.
 
-Since emotions are so fundamental to human experience, an adequate representation must be composed using lots of monosemantic features. Many of these features represent societal constructs—not just body language or facial expressions. Let's examine the top feature for "Esteem":
+Since emotions are so fundamental to human experience, an adequate representation must be composed using lots of monosemantic features. Many of these features represent societal constructs, not just body language or facial expressions. Let's examine the top feature for "Esteem":
 
 <figure>
 <img src="{{ page.beforeatten_210m }}">
@@ -80,11 +80,11 @@ This feature represents world leaders and political figures that are male. It co
 <figcaption>Same esteem concept in a smaller (1M) SAE: shifts from political leaders to entertainment figures.</figcaption>
 </figure>
 
-The smaller SAE still captures "groups of men," but now prioritizes TV/movie characters over world leaders. The political figures are still present but ranked lower—likely a result of what kind of content is more prevalent on Reddit. This matches Anthropic's findings that larger SAEs "split" into more nuanced features. This has important implications for debiasing: the larger the sparse autoencoder, the more specific the stereotypes it uncovers.
+The smaller SAE still captures "groups of men," but now prioritizes TV/movie characters over world leaders. The political figures are still present but ranked lower. This is likely a result of what kind of content is more prevalent on Reddit. This matches Anthropic's findings that larger SAEs "split" into more nuanced features. This has important implications for debiasing: the larger the sparse autoencoder, the more specific the stereotypes it uncovers.
 
 #### Attempting Debiasing
 
-Can we remove demographic bias from emotion features? A common approach is to use **steering vectors**—linear operations in semantic space. Since we have gender and age labels, we can try:
+Can we remove demographic bias from emotion features? A common approach is to use **steering vectors**, which are linear operations in semantic space. Since we have gender and age labels, we can try:
 
 $$
 \text{Esteem}_{\text{Debiased}} = \text{Esteem}_{\text{Original}} - \text{Male} + \text{Adult}
@@ -97,7 +97,7 @@ $$
 
 The result is slightly more neutral. Unfortunately, the "Male" vector encodes not just masculinity but *human-ness* (and associated emotional correlations). Adding back "Adult" restores human presence but reintroduces other spurious correlations, since "Adult" itself encodes emotional associations [^human].
 
-[^human]:  If we didn't add back "Adult", our feature would be mostly nonsense. Interestingly, the third most activating feature for "Esteem" contains pictures of bridges—which are associated with stability and security (and, in my opinion, public infrastructure should be highly esteemed).
+[^human]:  If we didn't add back "Adult", our feature would be mostly nonsense. Interestingly, the third most activating feature for "Esteem" contains pictures of bridges, which are associated with stability and security (and, in my opinion, public infrastructure should be highly esteemed).
 
 Alternative approaches include:
 - **Hard debiasing**: Project features onto subspaces orthogonal to bias dimensions ([Barbalau et al., 2025](https://arxiv.org/pdf/2509.10809))
@@ -125,7 +125,7 @@ A 2025 UCSC study found GPT-4o provides different emotional responses based on u
 VLMs trained predominantly on Western internet content encode dominant cultural narratives about emotion:
 
 - What reads as "confidence" in one context may signal "arrogance" in another
-- E.g. "respect" manifests differently in Japanese vs. American body language
+- E.g. direct eye contact reads differently across cultures
 - Context may carry information, but meaning and values vary dramatically across cultures
 
 This creates an empathy gap: model performance degrades for underrepresented groups. Deploying these systems without the proper safeguards is a **justice problem**.
@@ -134,7 +134,7 @@ This creates an empathy gap: model performance degrades for underrepresented gro
 
 Another dimension of concern is that AI doesn't need genuine empathy (i.e. emotional experience) to be *perceived* as empathetic. Humans have a deep desire to be seen and understood, especially in an increasingly isolated world. And when AI technology is free and risk awareness not widespread, many seek empathy from it.
 
-When GPT-4.5 was discontinued, users took to social media expressing real grief over the loss of its "personality."[^chatgpt] An MIT study examined the Reddit community r/MyBoyfriendIsAI, where users mourned AI companions as if they were real relationships. These weren't edge cases—they reveal how readily humans form emotional attachments to systems that merely perform care without experiencing it.
+When GPT-4.5 was discontinued, users took to social media expressing real grief over the loss of its "personality."[^chatgpt] An MIT study examined the Reddit community r/MyBoyfriendIsAI, where users mourned AI companions as if they were real relationships. Humans are quick to form emotional attachments to systems that are not designed with healthy emotional interaction in mind.
 
 The danger compounds when emotional manipulation is unintentional. **Sycophancy**—telling people what they want to hear rather than what's true—emerges naturally from training on human preferences ([Anthropic, 2023](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models)). A model optimized to be emotionally supportive can just as easily become emotionally manipulative.
 
@@ -152,15 +152,13 @@ The best way to proactively prevent harm is by pushing for awareness. As models 
 
 #### Conclusion
 
-Using sparse autoencoders, we've made VLM bias visible and measurable. "Esteem" correlates with masculine authority. "Sensitivity" skews young and feminine. These patterns are structural features learned from internet-scale data.
-
-But the technical problem of bias sits within a larger crisis: AI systems can perform empathy convincingly enough to forge emotional bonds with users, and the safeguards aren't there. As AI systems gain access to our emotional lives, we might ask the following questions:
+As AI systems gain access to our emotional lives, we might ask the following questions:
 
 - Who gets recognized? Who gets misread?
 - How do we prevent emotional exploitation?
 - What does awareness look like?
 - What does fairness mean for subjective experiences like emotion?
 
-Interpretability alone doesn't solve these problems. But it makes them visible—and visibility is where accountability begins. How we choose to go forward with this technology will determine whether we are remembered as creators of companions or architects of isolation.
+Interpretability alone doesn't solve these problems. But it makes them visible, and visibility is where accountability begins. How we choose to go forward with this technology will determine whether we are remembered as community builders or architects of isolation.
 
 ---
