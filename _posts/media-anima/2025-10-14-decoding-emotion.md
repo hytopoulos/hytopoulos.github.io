@@ -182,7 +182,7 @@ Using these directions, we can rank any image by cosine similarity to measure al
 
 #### Visualizing Model Attention with Heatmaps
 
-To understand *where* in an image the model detects emotion, we use saliency mapping—computing gradients of the output with respect to input pixels.
+To understand *where* in an image the model detects emotion, we use saliency mapping, which computes gradients of the output with respect to input pixels (full code [here](https://github.com/hytopoulos/saemotion/blob/main/saliency.py)).
 
 {% tabs mygroup %}
 {% tab mygroup LaTeX %}
