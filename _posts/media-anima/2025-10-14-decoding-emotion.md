@@ -30,6 +30,7 @@ sadness: /assets/img/saliency_post/emotion_img/Sadness_rank01_original.png
 sadness_map: /assets/img/saliency_post/emotion_map/Sadness_rank01.png
 superposition: /assets/img/saliency_post/superposition.png
 slider: /assets/img/saliency_post/sliders.png
+sadness_peace_html: /assets/img/saliency_post/sadness_peace.html
 ---
 
 #### Introduction
@@ -257,7 +258,7 @@ I created [this](https://github.com/hytopoulos/saemotion) tool to help explore t
 <figcaption>We can configure the strength of each feature to see how it affects the image.</figcaption>
 </figure>
 
-Let's look at the top features encoded in the "Peace" direction:
+Let's look at the top features encoded in the "Peace" direction (see the images [here]({{ page.sadness_peace_html }})):
 1. People at the beach tanning their legs
 2. People passed out on couches
 3. Black and white photos of older people on benches

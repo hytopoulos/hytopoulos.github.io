@@ -358,3 +358,13 @@ mark,
     }
   }
 }
+
+/* Default (light mode) */
+.invert-on-dark img {
+  filter: none;
+}
+
+/* Only invert this image in dark mode */
+[data-theme="dark"] .invert-on-dark img {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(1.05);
+}
