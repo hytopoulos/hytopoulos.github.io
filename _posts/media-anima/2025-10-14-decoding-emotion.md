@@ -99,7 +99,7 @@ Rather than training from scratch, we can use a pre-trained SAE trained on 210M 
 
 ##### Finding Emotion-Relevant Features
 
-The EMOTIC dataset contains 23k images labeled with 26 emotions. Our approach:
+We can use the EMOTIC dataset to identify the features that are related to emotion. The EMOTIC dataset contains 23k images labeled with 26 emotions. Our approach:
 
 1. Pass each EMOTIC image through the VLM to get embeddings
 2. Run embeddings through the SAE to get feature activations
