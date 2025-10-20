@@ -95,7 +95,7 @@ $$
 <figcaption>Feature 61207 after demographic adjustment.</figcaption>
 </figure>
 
-The result is slightly better. Unfortunately, the "Male" vector encodes not just masculinity but *human-ness* (and associated emotional correlations). Adding back "Adult" restores human presence but reintroduces other spurious correlations, since "Adult" itself encodes emotional associations [^human].
+The result is slightly more neutral. Unfortunately, the "Male" vector encodes not just masculinity but *human-ness* (and associated emotional correlations). Adding back "Adult" restores human presence but reintroduces other spurious correlations, since "Adult" itself encodes emotional associations [^human].
 
 [^human]:  If we didn't add back "Adult", our feature would be mostly nonsense. Interestingly, the third most activating feature for "Esteem" contains pictures of bridges—which are associated with stability and security (and, in my opinion, public infrastructure should be highly esteemed).
 
