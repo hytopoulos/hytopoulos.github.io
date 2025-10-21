@@ -16,7 +16,7 @@ scaling_monosemanticity: /assets/img/saliency_post/scaling_monosemanticity.png
 
 #### Introduction
 
-In the [previous post](link-to-post-1), we explored how sparse autoencoders let us decode emotion in vision-language models. Now we examine what these interpretable features reveal: systematic biases linking emotions to gender, age, and other demographic attributes.
+In the [previous post](link-to-post-1), we explored how sparse autoencoders let us decode emotion in vision-language models. Now we examine what these interpretable features reveal: systematic biases linking emotions to gender, culture, and other demographic attributes.
 
 These are the patterns learned from billions of internet images. Understanding these biases matters because VLMs are increasingly deployed in consequential contexts: hiring algorithms, mental health screening, border security. When AI systems make judgments about human emotion, whose emotions are they trained to recognize?
 
