@@ -41,7 +41,7 @@ jobs:
         working-directory: ./subsite/aemotion-react
         run: |
           npm ci
-          npm run build
+          CI=false npm run build
 
       # Copy React dist to the place you want it to live on the site
       - name: Add React build to site
