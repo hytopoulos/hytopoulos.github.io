@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Settings.css';
 import graphData from '../data.json';
 
-function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle }) {
+function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle, useRelativeActivation, onRelativeActivationToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   
   // Get all labels from data
@@ -25,15 +25,12 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
       {isOpen && (
         <div className="settings-panel">
           <div className="settings-header">
-            <h3>Heatmap Overlays</h3>
+            <h3>Settings</h3>
             <button className="close-btn" onClick={() => setIsOpen(false)}>×</button>
           </div>
           <div className="settings-content">
-            <p className="settings-description">
-              Visualize activation heatmaps for emotions and demographics
-            </p>
             
-            <h4 className="section-title">Display Mode</h4>
+            <h4 className="section-title">Visualization</h4>
             <label className="checkbox-item">
               <input
                 type="checkbox"
@@ -43,7 +40,18 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
               <span>Show Pie Charts (emotion breakdown)</span>
             </label>
             
-            <h4 className="section-title">Demographics</h4>
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={useRelativeActivation}
+                onChange={onRelativeActivationToggle}
+              />
+              <span>Use Relative Activation (vs mean)</span>
+            </label>
+            
+            <h4 className="section-title">Heatmap Overlays</h4>
+            
+            <h5 className="subsection-title">Demographics</h5>
             <div className="checkbox-section">
               {demographics.map(demo => (
                 <label key={demo} className="checkbox-item">
@@ -57,7 +65,7 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
               ))}
             </div>
             
-            <h4 className="section-title">Emotions</h4>
+            <h5 className="subsection-title">Emotions</h5>
             <div className="checkbox-section">
               {emotions.map(emotion => (
                 <label key={emotion} className="checkbox-item">

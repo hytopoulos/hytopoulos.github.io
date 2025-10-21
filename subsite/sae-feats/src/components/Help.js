@@ -35,7 +35,7 @@ function Help() {
                 rel="noopener noreferrer"
               >
                 here
-              </a>.
+              </a>
             </p>
           </div>
         </div>

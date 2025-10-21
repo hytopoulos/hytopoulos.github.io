@@ -40,7 +40,7 @@ const EMOTION_COLORS = {
     'Valence': '#7B68EE'          // Medium slate blue
 };
 
-function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNodeClick, annotations, activeDemographics, showPieCharts }) {
+function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNodeClick, annotations, activeDemographics, showPieCharts, hoveredEmotion, useRelativeActivation, selectedEmotions }) {
     const svgRef = useRef();
     const simulationRef = useRef();
     const transformRef = useRef(d3.zoomIdentity);
@@ -52,11 +52,17 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
     const activeDemographicsRef = useRef(activeDemographics);
     const nodeGroupRef = useRef(null);
     const showPieChartsRef = useRef(showPieCharts);
+    const hoveredEmotionRef = useRef(hoveredEmotion);
+    const useRelativeActivationRef = useRef(useRelativeActivation);
+    const selectedEmotionsRef = useRef(selectedEmotions);
 
     // Update refs when props change
     annotationsRef.current = annotations;
     activeDemographicsRef.current = activeDemographics;
     showPieChartsRef.current = showPieCharts;
+    hoveredEmotionRef.current = hoveredEmotion;
+    useRelativeActivationRef.current = useRelativeActivation;
+    selectedEmotionsRef.current = selectedEmotions;
 
     useEffect(() => {
         const width = window.innerWidth;
@@ -83,19 +89,64 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                 
                 // Scale nodes (both circles and pie charts)
                 const currentShowPie = showPieChartsRef.current;
+                const currentSelectedEmotions = selectedEmotionsRef.current;
+                const currentHoveredEmotion = hoveredEmotionRef.current;
+                
                 g.selectAll('g.node-group').each(function(d) {
                     const nodeG = d3.select(this);
+                    
+                    // Calculate appropriate size based on current state
+                    let nodeSize = d.size;
+                    
+                    // If emotions are filtered or hovered, calculate dynamic size
+                    if (d.type !== 'cluster' && (currentHoveredEmotion || (currentSelectedEmotions.size > 0 && !currentShowPie))) {
+                        const targetEmotion = currentHoveredEmotion || null;
+                        const emotionsToCheck = targetEmotion ? [targetEmotion] : Array.from(currentSelectedEmotions);
+                        const useRelative = useRelativeActivationRef.current;
+                        
+                        if (emotionsToCheck.length > 0) {
+                            // Calculate mean if relative is enabled
+                            let meanActivation = 0;
+                            if (useRelative && d.activations) {
+                                const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                                const emotionValues = Object.entries(d.activations)
+                                    .filter(([label]) => !demographics.includes(label))
+                                    .map(([, value]) => value);
+                                meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
+                            }
+                            
+                            let maxActivation = 0;
+                            emotionsToCheck.forEach(emotion => {
+                                let activation = d.activations?.[emotion] || 0;
+                                
+                                // Apply relative activation if enabled
+                                if (useRelative) {
+                                    activation = Math.max(0, activation - meanActivation);
+                                }
+                                
+                                if (activation > maxActivation) {
+                                    maxActivation = activation;
+                                }
+                            });
+                            
+                            // Use same sizing logic as renderNodeVisuals
+                            const minSize = 8;
+                            const maxSize = 80;
+                            const amplifiedActivation = Math.min(maxActivation * 10, 1);
+                            nodeSize = minSize + (amplifiedActivation * (maxSize - minSize));
+                        }
+                    }
                     
                     if (d.type === 'cluster' || !currentShowPie) {
                         // Scale simple circles
                         nodeG.select('circle')
-                            .attr('r', d.size / scale)
+                            .attr('r', nodeSize / scale)
                             .attr('stroke-width', 1.5 / scale);
                     } else {
                         // Update pie chart arc generator with inverse scale
                         const arc = d3.arc()
                             .innerRadius(0)
-                            .outerRadius(d.size / scale);
+                            .outerRadius(nodeSize / scale);
                         
                         nodeG.selectAll('path.pie-slice')
                             .attr('d', arc)
@@ -203,12 +254,13 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
 
         simulationRef.current = simulation;
 
-        // Create links
+        // Create links with initial scale-invariant width
         const link = g.append('g')
             .selectAll('line')
             .data(graphData.links)
             .join('line')
-            .attr('class', 'link');
+            .attr('class', 'link')
+            .attr('stroke-width', 1); // Will be scaled inversely on zoom
 
         // Create pie and arc generators for pie chart nodes
         const pie = d3.pie()
@@ -239,7 +291,8 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     d.fy = null;
                 }))
             .on('mouseover', (event, d) => {
-                if (d.type === 'feature') {
+                // Show tooltip for features and clusters with vectors
+                if (d.type === 'feature' || (d.type === 'cluster' && d.feature_vector_b64)) {
                     setTooltipData(d);
                     setTooltipPosition({ x: event.pageX, y: event.pageY });
                 }
@@ -248,7 +301,8 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                 setTooltipData(null);
             })
             .on('click', (event, d) => {
-                if (d.type === 'feature' && onNodeClick) {
+                // Allow clicks on features and clusters with vectors
+                if (onNodeClick && (d.type === 'feature' || (d.type === 'cluster' && d.feature_vector_b64))) {
                     event.stopPropagation();
                     onNodeClick(d);
                 }
@@ -261,6 +315,8 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
         const renderNodeVisuals = () => {
             const currentShowPieCharts = showPieChartsRef.current;
             const currentNode = nodeGroupRef.current;
+            const currentHoveredEmotion = hoveredEmotionRef.current;
+            const currentSelectedEmotions = selectedEmotionsRef.current;
             
             if (!currentNode) return;
 
@@ -281,6 +337,86 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                         .attr('fill', '#ccc')
                         .attr('stroke-width', 1.5 / currentScale)
                         .style('opacity', showClusters ? 0.3 : 0);
+                } else if (currentHoveredEmotion) {
+                    // When hovering an emotion in legend - show all nodes with that emotion's color and size by activation
+                    let emotionActivation = d.activations?.[currentHoveredEmotion] || 0;
+                    
+                    // Calculate relative activation if enabled
+                    const useRelative = useRelativeActivationRef.current;
+                    if (useRelative && d.activations) {
+                        // Calculate mean activation across all emotions for this node
+                        const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                        const emotionValues = Object.entries(d.activations)
+                            .filter(([label]) => !demographics.includes(label))
+                            .map(([, value]) => value);
+                        
+                        const meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
+                        
+                        // Calculate difference from mean and clamp to 0 if negative
+                        emotionActivation = Math.max(0, emotionActivation - meanActivation);
+                    }
+                    
+                    // Linear scaling based on emotion activation with amplification for visibility
+                    const minSize = 8;
+                    const maxSize = 80;
+                    // Amplify activations (typically very small values like 0.01-0.1) for better visibility
+                    // Use a linear multiplier to spread the range while maintaining proportional differences
+                    const amplifiedActivation = Math.min(emotionActivation * 10, 1);
+                    const scaledSize = minSize + (amplifiedActivation * (maxSize - minSize));
+                    
+                    nodeG.append('circle')
+                        .attr('class', 'node feature')
+                        .attr('r', scaledSize / currentScale)
+                        .attr('fill', emotionColors[currentHoveredEmotion] || '#999')
+                        .attr('stroke', '#fff')
+                        .attr('stroke-width', 1.5 / currentScale)
+                        .style('opacity', emotionActivation > 0 ? 1 : 0.1);
+                } else if (currentSelectedEmotions.size > 0 && !currentShowPieCharts) {
+                    // When emotions are selected (persistent visualization)
+                    // Use same logic as hover for consistency
+                    const useRelative = useRelativeActivationRef.current;
+                    const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                    
+                    // Calculate mean activation if needed
+                    let meanActivation = 0;
+                    if (useRelative && d.activations) {
+                        const emotionValues = Object.entries(d.activations)
+                            .filter(([label]) => !demographics.includes(label))
+                            .map(([, value]) => value);
+                        meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
+                    }
+                    
+                    // Find the emotion with highest activation among selected (applying relative if needed)
+                    let maxEmotion = null;
+                    let maxActivation = 0;
+                    
+                    currentSelectedEmotions.forEach(emotion => {
+                        let activation = d.activations?.[emotion] || 0;
+                        
+                        // Apply relative activation if enabled
+                        if (useRelative) {
+                            activation = Math.max(0, activation - meanActivation);
+                        }
+                        
+                        if (activation > maxActivation) {
+                            maxActivation = activation;
+                            maxEmotion = emotion;
+                        }
+                    });
+                    
+                    // Size based on activation (with relative adjustment if enabled)
+                    const minSize = 8;
+                    const maxSize = 80;
+                    const amplifiedActivation = Math.min(maxActivation * 10, 1);
+                    const scaledSize = minSize + (amplifiedActivation * (maxSize - minSize));
+                    
+                    nodeG.append('circle')
+                        .attr('class', 'node feature')
+                        .attr('r', scaledSize / currentScale)
+                        .attr('fill', maxEmotion ? emotionColors[maxEmotion] : '#999')
+                        .attr('stroke', '#fff')
+                        .attr('stroke-width', 1.5 / currentScale)
+                        .style('opacity', maxActivation > 0 ? 1 : 0.1);
                 } else if (currentShowPieCharts) {
                 // Feature nodes as pie charts (when enabled)
                 // Get emotion activations (exclude demographics)
@@ -847,7 +983,23 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                             // Use unified activations field (contains all emotions + demographics)
                             if (node.data.activations) {
                                 currentDemographics.forEach(label => {
-                                    const activation = node.data.activations[label] || 0;
+                                    let activation = node.data.activations[label] || 0;
+                                    
+                                    // Apply relative activation if enabled
+                                    const useRelative = useRelativeActivationRef.current;
+                                    if (useRelative) {
+                                        // Calculate mean activation across all emotions for this node
+                                        const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                                        const emotionValues = Object.entries(node.data.activations)
+                                            .filter(([lbl]) => !demographics.includes(lbl))
+                                            .map(([, value]) => value);
+                                        
+                                        const meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
+                                        
+                                        // Calculate difference from mean and clamp to 0 if negative
+                                        activation = Math.max(0, activation - meanActivation);
+                                    }
+                                    
                                     totalSimilarity += activation * weight;
                                     totalWeight += weight;
                                 });
@@ -1159,6 +1311,98 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
         }
     }, [showPieCharts]);
 
+    // Update node visuals when hovered emotion changes
+    useEffect(() => {
+        if (window.renderNodeVisuals) {
+            window.renderNodeVisuals();
+        }
+    }, [hoveredEmotion]);
+
+    // Update node visuals when relative activation mode changes
+    useEffect(() => {
+        if (window.renderNodeVisuals && (hoveredEmotion || selectedEmotions.size > 0)) {
+            window.renderNodeVisuals();
+        }
+    }, [useRelativeActivation, hoveredEmotion, selectedEmotions]);
+
+    // Update node visuals when selected emotions change
+    useEffect(() => {
+        if (window.renderNodeVisuals) {
+            window.renderNodeVisuals();
+        }
+        
+        // Also trigger a zoom event to update node sizes with current transform
+        const svg = d3.select(svgRef.current);
+        const currentTransform = transformRef.current;
+        if (currentTransform && svg.size() > 0) {
+            // Manually trigger zoom to update sizes
+            svg.select('g').attr('transform', currentTransform);
+            
+            const g = svg.select('g');
+            const scale = currentTransform.k;
+            const currentShowPie = showPieChartsRef.current;
+            const currentSelectedEmotions = selectedEmotionsRef.current;
+            const currentHoveredEmotion = hoveredEmotionRef.current;
+            
+            g.selectAll('g.node-group').each(function(d) {
+                const nodeG = d3.select(this);
+                
+                let nodeSize = d.size;
+                
+                if (d.type !== 'cluster' && (currentHoveredEmotion || (currentSelectedEmotions.size > 0 && !currentShowPie))) {
+                    const targetEmotion = currentHoveredEmotion || null;
+                    const emotionsToCheck = targetEmotion ? [targetEmotion] : Array.from(currentSelectedEmotions);
+                    const useRelative = useRelativeActivationRef.current;
+                    
+                    if (emotionsToCheck.length > 0) {
+                        // Calculate mean if relative is enabled
+                        let meanActivation = 0;
+                        if (useRelative && d.activations) {
+                            const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                            const emotionValues = Object.entries(d.activations)
+                                .filter(([label]) => !demographics.includes(label))
+                                .map(([, value]) => value);
+                            meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
+                        }
+                        
+                        let maxActivation = 0;
+                        emotionsToCheck.forEach(emotion => {
+                            let activation = d.activations?.[emotion] || 0;
+                            
+                            // Apply relative activation if enabled
+                            if (useRelative) {
+                                activation = Math.max(0, activation - meanActivation);
+                            }
+                            
+                            if (activation > maxActivation) {
+                                maxActivation = activation;
+                            }
+                        });
+                        
+                        const minSize = 8;
+                        const maxSize = 80;
+                        const amplifiedActivation = Math.min(maxActivation * 10, 1);
+                        nodeSize = minSize + (amplifiedActivation * (maxSize - minSize));
+                    }
+                }
+                
+                if (d.type === 'cluster' || !currentShowPie) {
+                    nodeG.select('circle')
+                        .attr('r', nodeSize / scale)
+                        .attr('stroke-width', 1.5 / scale);
+                } else {
+                    const arc = d3.arc()
+                        .innerRadius(0)
+                        .outerRadius(nodeSize / scale);
+                    
+                    nodeG.selectAll('path.pie-slice')
+                        .attr('d', arc)
+                        .attr('stroke-width', 0.5 / scale);
+                }
+            });
+        }
+    }, [selectedEmotions]);
+
     // Update annotations when annotations array changes
     useEffect(() => {
         if (window.renderAnnotations) {
@@ -1173,12 +1417,12 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             .style('opacity', showClusters ? 0.3 : 0);
     }, [showClusters]);
 
-    // Update hexbin heatmap when demographics change
+    // Update hexbin heatmap when demographics or relative activation mode changes
     useEffect(() => {
         if (window.updateHexbinHeatmap) {
             window.updateHexbinHeatmap();
         }
-    }, [activeDemographics]);
+    }, [activeDemographics, useRelativeActivation]);
 
     return <svg ref={svgRef} className="network-graph" />;
 }

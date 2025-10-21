@@ -1,5 +1,5 @@
 .settings-button {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
   width: 48px;
@@ -25,7 +25,7 @@
 
 .settings-panel {
   position: fixed;
-  top: 60px;
+  top: 80px;
   right: 20px;
   background: white;
   border: 1px solid #ccc;
@@ -36,6 +36,7 @@
   min-width: 250px;
   max-height: 80vh;
   overflow-y: auto;
+  animation: slideIn 0.2s ease;
 }
 
 @keyframes slideIn {
@@ -103,6 +104,13 @@
   color: #333;
   border-bottom: 1px solid #eee;
   padding-bottom: 5px;
+}
+
+.subsection-title {
+  margin: 12px 0 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
 }
 
 .checkbox-section {

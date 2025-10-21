@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import NetworkGraph from './components/NetworkGraph';
 import Settings from './components/Settings';
 import Help from './components/Help';
+import Legend from './components/Legend';
 import Tooltip from './components/Tooltip';
 import ImageAnnotation from './components/ImageAnnotation';
 import './App.css';
@@ -14,6 +15,9 @@ function App() {
   const [nextAnnotationId, setNextAnnotationId] = useState(0);
   const [activeHeatmapLabels, setActiveHeatmapLabels] = useState(new Set());
   const [showPieCharts, setShowPieCharts] = useState(false);
+  const [hoveredEmotion, setHoveredEmotion] = useState(null);
+  const [useRelativeActivation, setUseRelativeActivation] = useState(true);
+  const [selectedEmotions, setSelectedEmotions] = useState(new Set());
 
   const handleLabelToggle = (label) => {
     setActiveHeatmapLabels(prev => {
@@ -27,8 +31,21 @@ function App() {
     });
   };
 
+  const handleEmotionToggle = (emotion) => {
+    setSelectedEmotions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(emotion)) {
+        newSet.delete(emotion);
+      } else {
+        newSet.add(emotion);
+      }
+      return newSet;
+    });
+  };
+
   const handleNodeClick = (nodeData) => {
-    if (nodeData.type === 'feature') {
+    // Allow clicks on both feature nodes and cluster nodes (which now have vectors)
+    if (nodeData.type === 'feature' || (nodeData.type === 'cluster' && nodeData.feature_vector_b64)) {
       // Use functional updates to ensure we get latest state
       setNextAnnotationId(prevId => {
         const newId = prevId;
@@ -68,8 +85,15 @@ function App() {
         activeLabels={activeHeatmapLabels}
         showPieCharts={showPieCharts}
         onPieChartToggle={() => setShowPieCharts(!showPieCharts)}
+        useRelativeActivation={useRelativeActivation}
+        onRelativeActivationToggle={() => setUseRelativeActivation(!useRelativeActivation)}
       />
       <Help />
+      <Legend 
+        onEmotionHover={setHoveredEmotion}
+        selectedEmotions={selectedEmotions}
+        onEmotionToggle={handleEmotionToggle}
+      />
       <NetworkGraph 
         showClusters={showClusters}
         setTooltipData={setTooltipData}
@@ -78,6 +102,9 @@ function App() {
         annotations={annotations}
         activeDemographics={activeHeatmapLabels}
         showPieCharts={showPieCharts}
+        hoveredEmotion={hoveredEmotion}
+        useRelativeActivation={useRelativeActivation}
+        selectedEmotions={selectedEmotions}
       />
       <Tooltip 
         data={tooltipData}

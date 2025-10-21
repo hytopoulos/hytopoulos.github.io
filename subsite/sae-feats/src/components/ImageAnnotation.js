@@ -88,7 +88,12 @@ function ImageAnnotation({ featureData, position, onClose, annotationId }) {
     >
       <div className="annotation-header">
         <div className="annotation-title">
-          <span className="feature-id">Feature {featureData.feature_id}</span>
+          <span className="feature-id">
+            {featureData.type === 'cluster' 
+              ? `Cluster ${featureData.label}${featureData.num_features ? ` (${featureData.num_features} features)` : ''}`
+              : `Feature ${featureData.feature_id}`
+            }
+          </span>
           <span className="feature-emotion">{featureData.primary_emotion}</span>
         </div>
         <div className="annotation-actions">
