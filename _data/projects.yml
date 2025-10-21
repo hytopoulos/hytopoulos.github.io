@@ -1,7 +1,7 @@
-- name: "SAEmotion"
-  path: "aemotion"
-  description: "In pursuit of the happiest images on the internet using the EMOTIC dataset."
-  keywords: ["Sparse Autoencoders", "VLMs", "Emotion Recognition"]
+- name: "Emotion Explorer"
+  path: "sae-feats"
+  description: "Interactive graph to explore how VLMs feel about images."
+  keywords: ["Sparse Autoencoders", "VLMs", "Emotion Detection"]
   
   
 - name: "Reinforcement Learning for Decompilation"
