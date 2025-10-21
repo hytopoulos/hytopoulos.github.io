@@ -259,7 +259,7 @@ While not state-of-the-art, this unsupervised approach achieves reasonable perfo
 <figcaption>We can configure the strength of each feature to see how it affects the image.</figcaption>
 </figure> -->
 
-I created an [emotion explorer tool](https://hytopoulos.github.io/subsite/sae-feats) to help explore sparse autoencoder features. This tool displays a radial dendrogram of features, colored by the emotions they are associated and sized according to their activation strength. You can select a feature to query Reddit for images that most closely align with the feature:
+I created an [emotion explorer tool](https://hytopoulos.github.io/subsite/sae-feats) to help understand sparse autoencoder features. This tool displays a radial dendrogram of features, colored by the emotions they are most associated with and sized according to their activation strength. You can select a feature to query Reddit for images that most closely align with the feature:
 
 <figure>
 <img src="{{ page.sae_feats }}">
