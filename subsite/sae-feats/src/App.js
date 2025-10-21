@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import NetworkGraph from './components/NetworkGraph';
 import Settings from './components/Settings';
+import Help from './components/Help';
 import Tooltip from './components/Tooltip';
 import ImageAnnotation from './components/ImageAnnotation';
 import './App.css';
@@ -12,6 +13,7 @@ function App() {
   const [annotations, setAnnotations] = useState([]);
   const [nextAnnotationId, setNextAnnotationId] = useState(0);
   const [activeHeatmapLabels, setActiveHeatmapLabels] = useState(new Set());
+  const [showPieCharts, setShowPieCharts] = useState(false);
 
   const handleLabelToggle = (label) => {
     setActiveHeatmapLabels(prev => {
@@ -64,7 +66,10 @@ function App() {
       <Settings 
         onLabelToggle={handleLabelToggle}
         activeLabels={activeHeatmapLabels}
+        showPieCharts={showPieCharts}
+        onPieChartToggle={() => setShowPieCharts(!showPieCharts)}
       />
+      <Help />
       <NetworkGraph 
         showClusters={showClusters}
         setTooltipData={setTooltipData}
@@ -72,6 +77,7 @@ function App() {
         onNodeClick={handleNodeClick}
         annotations={annotations}
         activeDemographics={activeHeatmapLabels}
+        showPieCharts={showPieCharts}
       />
       <Tooltip 
         data={tooltipData}

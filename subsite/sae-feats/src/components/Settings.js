@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Settings.css';
 import graphData from '../data.json';
 
-function Settings({ onLabelToggle, activeLabels }) {
+function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   
   // Get all labels from data
@@ -32,6 +32,16 @@ function Settings({ onLabelToggle, activeLabels }) {
             <p className="settings-description">
               Visualize activation heatmaps for emotions and demographics
             </p>
+            
+            <h4 className="section-title">Display Mode</h4>
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={showPieCharts}
+                onChange={onPieChartToggle}
+              />
+              <span>Show Pie Charts (emotion breakdown)</span>
+            </label>
             
             <h4 className="section-title">Demographics</h4>
             <div className="checkbox-section">

@@ -4,12 +4,43 @@ import { hexbin as d3Hexbin } from 'd3-hexbin';
 import graphData from '../data.json';
 import './NetworkGraph.css';
 
-const COLORS = [
-    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b',
-    '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#aec7e8', '#ffbb78'
-];
+// Culturally-aligned emotion colors
+const EMOTION_COLORS = {
+    'Anger': '#DC143C',           // Crimson red
+    'Annoyance': '#FF6B6B',       // Light red
+    'Fear': '#4A0E4E',            // Dark purple
+    'Sadness': '#4A90E2',         // Blue
+    'Happiness': '#FFD700',       // Gold/yellow
+    'Joy': '#FFA500',             // Orange
+    'Pleasure': '#FF69B4',        // Hot pink
+    'Excitement': '#FF4500',      // Orange-red
+    'Peace': '#87CEEB',           // Sky blue
+    'Affection': '#FFB6C1',       // Light pink
+    'Love': '#FF1493',            // Deep pink
+    'Surprise': '#FFFF00',        // Bright yellow
+    'Confidence': '#9370DB',      // Medium purple
+    'Pride': '#DAA520',           // Goldenrod
+    'Esteem': '#B8860B',          // Dark goldenrod
+    'Anticipation': '#FFA07A',    // Light salmon
+    'Engagement': '#20B2AA',      // Light sea green
+    'Yearning': '#DDA0DD',        // Plum
+    'Sympathy': '#98FB98',        // Pale green
+    'Suffering': '#696969',       // Dim gray
+    'Pain': '#8B0000',            // Dark red
+    'Embarrassment': '#FFB6C1',   // Light pink
+    'Sensitivity': '#E6E6FA',     // Lavender
+    'Disapproval': '#A0522D',     // Sienna brown
+    'Aversion': '#556B2F',        // Dark olive green
+    'Disconnection': '#708090',   // Slate gray
+    'Doubt/Confusion': '#D3D3D3', // Light gray
+    'Disquietment': '#8B7D7B',    // Gray-brown
+    'Fatigue': '#C0C0C0',         // Silver
+    'Dominance': '#8B4513',       // Saddle brown
+    'Arousal': '#FF6347',         // Tomato
+    'Valence': '#7B68EE'          // Medium slate blue
+};
 
-function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNodeClick, annotations, activeDemographics }) {
+function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNodeClick, annotations, activeDemographics, showPieCharts }) {
     const svgRef = useRef();
     const simulationRef = useRef();
     const transformRef = useRef(d3.zoomIdentity);
@@ -19,10 +50,13 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
     const hexbinGeneratorRef = useRef(null);
     const nodesDataRef = useRef([]);
     const activeDemographicsRef = useRef(activeDemographics);
+    const nodeGroupRef = useRef(null);
+    const showPieChartsRef = useRef(showPieCharts);
 
     // Update refs when props change
     annotationsRef.current = annotations;
     activeDemographicsRef.current = activeDemographics;
+    showPieChartsRef.current = showPieCharts;
 
     useEffect(() => {
         const width = window.innerWidth;
@@ -46,9 +80,28 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
 
                 // Keep nodes constant size relative to zoom
                 const scale = event.transform.k;
-                g.selectAll('circle.node')
-                    .attr('r', d => d.size / scale)
-                    .attr('stroke-width', 1.5 / scale);
+                
+                // Scale nodes (both circles and pie charts)
+                const currentShowPie = showPieChartsRef.current;
+                g.selectAll('g.node-group').each(function(d) {
+                    const nodeG = d3.select(this);
+                    
+                    if (d.type === 'cluster' || !currentShowPie) {
+                        // Scale simple circles
+                        nodeG.select('circle')
+                            .attr('r', d.size / scale)
+                            .attr('stroke-width', 1.5 / scale);
+                    } else {
+                        // Update pie chart arc generator with inverse scale
+                        const arc = d3.arc()
+                            .innerRadius(0)
+                            .outerRadius(d.size / scale);
+                        
+                        nodeG.selectAll('path.pie-slice')
+                            .attr('d', arc)
+                            .attr('stroke-width', 0.5 / scale);
+                    }
+                });
 
                 g.selectAll('line.link')
                     .attr('stroke-width', 1 / scale);
@@ -107,14 +160,11 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
         svg.call(zoom);
 
         // Filter out demographics from emotions
-        const demographics = ['Male', 'Female', 'Kid', 'Adult'];
+        const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
         const actualEmotions = graphData.emotions.filter(e => !demographics.includes(e));
 
-        // Create emotion color map
-        const emotionColors = {};
-        actualEmotions.forEach((emotion, i) => {
-            emotionColors[emotion] = COLORS[i % COLORS.length];
-        });
+        // Use culturally-aligned emotion colors
+        const emotionColors = EMOTION_COLORS;
 
         // Radial force to keep nodes at target positions
         function radialForce() {
@@ -160,15 +210,19 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             .join('line')
             .attr('class', 'link');
 
-        // Create nodes
-        const node = g.append('g')
-            .selectAll('circle')
+        // Create pie and arc generators for pie chart nodes
+        const pie = d3.pie()
+            .value(d => d.value)
+            .sort(null); // Don't sort, keep order
+
+        // Create nodes as groups (to hold pie slices or circles)
+        const nodeGroup = g.append('g')
+            .attr('class', 'nodes');
+
+        const node = nodeGroup.selectAll('g.node-group')
             .data(graphData.nodes)
-            .join('circle')
-            .attr('class', d => `node ${d.type}`)
-            .attr('r', d => d.size)
-            .attr('fill', d => d.type === 'cluster' ? '#ccc' : emotionColors[d.primary_emotion])
-            .style('opacity', d => d.type === 'cluster' ? (showClusters ? 0.3 : 0) : 1)
+            .join('g')
+            .attr('class', d => `node-group ${d.type}`)
             .call(d3.drag()
                 .on('start', (event, d) => {
                     if (!event.active) simulation.alphaTarget(0.5).restart();
@@ -199,6 +253,115 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     onNodeClick(d);
                 }
             });
+
+        // Store node group reference
+        nodeGroupRef.current = node;
+
+        // Function to render node visuals based on current mode
+        const renderNodeVisuals = () => {
+            const currentShowPieCharts = showPieChartsRef.current;
+            const currentNode = nodeGroupRef.current;
+            
+            if (!currentNode) return;
+
+            // Clear existing visuals
+            currentNode.selectAll('*').remove();
+
+            // Get current zoom scale
+            const currentScale = transformRef.current.k;
+
+            currentNode.each(function(d) {
+                const nodeG = d3.select(this);
+                
+                if (d.type === 'cluster') {
+                    // Cluster nodes remain simple circles
+                    nodeG.append('circle')
+                        .attr('class', 'node cluster')
+                        .attr('r', d.size / currentScale)
+                        .attr('fill', '#ccc')
+                        .attr('stroke-width', 1.5 / currentScale)
+                        .style('opacity', showClusters ? 0.3 : 0);
+                } else if (currentShowPieCharts) {
+                // Feature nodes as pie charts (when enabled)
+                // Get emotion activations (exclude demographics)
+                const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                const emotionActivations = [];
+                
+                if (d.activations) {
+                    Object.entries(d.activations).forEach(([label, value]) => {
+                        if (!demographics.includes(label)) {
+                            emotionActivations.push({ 
+                                label, 
+                                value,
+                                color: emotionColors[label] || '#999',
+                                isPrimary: label === d.primary_emotion
+                            });
+                        }
+                    });
+                }
+                
+                // Sort by value and take top 5 for cleaner visualization
+                emotionActivations.sort((a, b) => b.value - a.value);
+                const topEmotions = emotionActivations.slice(0, 5);
+                
+                // Calculate rotation to point primary emotion toward center
+                // Node position relative to center (use actual position, not target)
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const angleToCenter = Math.atan2(centerY - d.y, centerX - d.x);
+                
+                // Find the angle of the primary emotion slice in the pie
+                let primarySliceAngle = 0;
+                const pieDataForAngle = pie(topEmotions);
+                pieDataForAngle.forEach(slice => {
+                    if (slice.data.isPrimary) {
+                        // Get the middle angle of this slice
+                        primarySliceAngle = (slice.startAngle + slice.endAngle) / 2;
+                    }
+                });
+                
+                // Calculate rotation needed to align primary slice with center
+                const rotationDegrees = (angleToCenter * 180 / Math.PI) - (primarySliceAngle * 180 / Math.PI);
+                
+                // Create arc generator with radius from node size
+                const arc = d3.arc()
+                    .innerRadius(0)
+                    .outerRadius(d.size / currentScale);
+                
+                // Generate pie slices
+                const pieData = pie(topEmotions);
+                
+                // Create a group for the pie with rotation
+                const pieGroup = nodeG.append('g')
+                    .attr('class', 'pie-group')
+                    .attr('transform', `rotate(${rotationDegrees})`);
+                
+                // Draw pie slices
+                pieGroup.selectAll('path.pie-slice')
+                    .data(pieData)
+                    .join('path')
+                    .attr('class', 'pie-slice')
+                    .attr('d', arc)
+                    .attr('fill', d => d.data.color)
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 0.5 / currentScale);
+            } else {
+                // Feature nodes as solid circles (default)
+                nodeG.append('circle')
+                    .attr('class', 'node feature')
+                    .attr('r', d.size / currentScale)
+                    .attr('fill', emotionColors[d.primary_emotion] || '#999')
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 1.5 / currentScale);
+                }
+            });
+        };
+
+        // Initial render of nodes
+        renderNodeVisuals();
+
+        // Store function for external use
+        window.renderNodeVisuals = renderNodeVisuals;
 
         // Create annotation container in D3
         const annotationGroup = g.append('g').attr('class', 'annotations');
@@ -362,7 +525,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
 
                     // Find the actual node in the graph
                     const graphNode = graphData.nodes.find(n => n.id === d.nodeId);
-                    const nodeSelection = g.selectAll('circle.node').filter(nd => nd === graphNode);
+                    const nodeSelection = g.selectAll('g.node-group').filter(nd => nd === graphNode);
 
                     if (d.isMinimized) {
                         // Hide the entire annotation
@@ -534,8 +697,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                 .attr('y2', d => d.target.y);
 
             node
-                .attr('cx', d => d.x)
-                .attr('cy', d => d.y);
+                .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
             // Update annotation positions
             annotationGroup.selectAll('g.annotation-group')
@@ -748,11 +910,11 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             thumbnailLayer.selectAll(`.thumbnail-node-${annotationId}`).remove();
             thumbnailLayer.selectAll(`.thumbnail-border-${annotationId}`).remove();
 
-            // Restore the original node circle
+            // Restore the original node
             const annotation = annotationsRef.current.find(a => a.id === annotationId);
             if (annotation) {
                 const graphNode = graphData.nodes.find(n => n.id === annotation.nodeId);
-                const nodeSelection = g.selectAll('circle.node').filter(nd => nd === graphNode);
+                const nodeSelection = g.selectAll('g.node-group').filter(nd => nd === graphNode);
                 nodeSelection.style('display', null);
             }
         };
@@ -986,8 +1148,16 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             window.removeEventListener('cleanup-annotation', handleCleanup);
             window.renderAnnotations = null;
             window.updateHexbinHeatmap = null;
+            window.renderNodeVisuals = null;
         };
     }, []); // Empty deps - only run once on mount
+
+    // Update node visuals when pie chart mode changes
+    useEffect(() => {
+        if (window.renderNodeVisuals) {
+            window.renderNodeVisuals();
+        }
+    }, [showPieCharts]);
 
     // Update annotations when annotations array changes
     useEffect(() => {
@@ -999,7 +1169,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
     // Update cluster visibility when showClusters changes
     useEffect(() => {
         d3.select(svgRef.current)
-            .selectAll('.node.cluster')
+            .selectAll('g.node-group.cluster circle')
             .style('opacity', showClusters ? 0.3 : 0);
     }, [showClusters]);
 

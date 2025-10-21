@@ -25,6 +25,19 @@
   stroke-width: 2.5px;
 }
 
+/* Pie chart nodes */
+.node-group {
+  cursor: pointer;
+}
+
+.pie-slice {
+  transition: opacity 0.2s;
+}
+
+.node-group:hover .pie-slice {
+  opacity: 0.85;
+}
+
 /* D3-integrated annotations */
 .image-annotation-d3 {
   background: white;
