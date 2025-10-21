@@ -48,6 +48,7 @@ jobs:
         run: |
           mkdir -p _site/subsite/sae-feats
           cp -R subsite/sae-feats/build/* _site/subsite/sae-feats/
+          cp subsite/sae-feats/thumbnail.png _site/subsite/sae-feats/thumbnail.png
 
       # Add .nojekyll inside /subsite/sae-feats to prevent Jekyll processing
       - run: touch _site/subsite/sae-feats/.nojekyll
