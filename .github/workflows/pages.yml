@@ -47,7 +47,7 @@ jobs:
       - name: Add React build to site
         run: |
           mkdir -p _site/subsite/aemotion
-          cp -R aemotion-react/build/* _site/subsite/aemotion/
+          cp -R subsite/aemotion-react/build/* _site/subsite/aemotion/
 
       # Add .nojekyll inside /subsite/aemotion to prevent Jekyll processing
       - run: touch _site/subsite/aemotion/.nojekyll
