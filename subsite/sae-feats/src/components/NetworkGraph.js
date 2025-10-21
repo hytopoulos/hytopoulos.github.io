@@ -130,27 +130,27 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                             });
                             
                             // Use same sizing logic as renderNodeVisuals
-                            const minSize = 8;
-                            const maxSize = 80;
+                            const minSize = 20;
+                            const maxSize = 100;
                             const amplifiedActivation = Math.min(maxActivation * 10, 1);
                             nodeSize = minSize + (amplifiedActivation * (maxSize - minSize));
                         }
                     }
                     
                     if (d.type === 'cluster' || !currentShowPie) {
-                        // Scale simple circles
+                        // Simple circles - no scale adjustment
                         nodeG.select('circle')
-                            .attr('r', nodeSize / scale)
-                            .attr('stroke-width', 1.5 / scale);
+                            .attr('r', nodeSize)
+                            .attr('stroke-width', 1.5);
                     } else {
-                        // Update pie chart arc generator with inverse scale
+                        // Update pie chart arc generator - no scale adjustment
                         const arc = d3.arc()
                             .innerRadius(0)
-                            .outerRadius(nodeSize / scale);
+                            .outerRadius(nodeSize);
                         
                         nodeG.selectAll('path.pie-slice')
                             .attr('d', arc)
-                            .attr('stroke-width', 0.5 / scale);
+                            .attr('stroke-width', 0.5);
                     }
                 });
 
@@ -220,7 +220,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
         // Radial force to keep nodes at target positions
         function radialForce() {
             return () => {
-                const k = 0.5;
+                const k = 0.1; // Reduced from 0.5 to allow more freedom in node positioning
                 graphData.nodes.forEach(d => {
                     const dx = d.x - (width / 2 + d.target_x);
                     const dy = d.y - (height / 2 + d.target_y);
@@ -245,11 +245,11 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     const target = graphData.nodes.find(n => n.id === d.target.id);
                     return Math.abs(source.radius - target.radius) || 40;
                 })
-                .strength(0.8))
-            .force('charge', d3.forceManyBody().strength(-30))
+                .strength(0.1))
+            .force('charge', d3.forceManyBody().strength(-50))
             .force('radial', radialForce())
-            .force('collide', d3.forceCollide(d => d.size + 2))
-            .alphaTarget(0.3)
+            .force('collide', d3.forceCollide(d => d.size + 4))
+            .alphaTarget(1)
             .velocityDecay(0.2);
 
         simulationRef.current = simulation;
@@ -323,9 +323,6 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             // Clear existing visuals
             currentNode.selectAll('*').remove();
 
-            // Get current zoom scale
-            const currentScale = transformRef.current.k;
-
             currentNode.each(function(d) {
                 const nodeG = d3.select(this);
                 
@@ -333,9 +330,9 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     // Cluster nodes remain simple circles
                     nodeG.append('circle')
                         .attr('class', 'node cluster')
-                        .attr('r', d.size / currentScale)
+                        .attr('r', d.size)
                         .attr('fill', '#ccc')
-                        .attr('stroke-width', 1.5 / currentScale)
+                        .attr('stroke-width', 1.5)
                         .style('opacity', showClusters ? 0.3 : 0);
                 } else if (currentHoveredEmotion) {
                     // When hovering an emotion in legend - show all nodes with that emotion's color and size by activation
@@ -357,8 +354,8 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     }
                     
                     // Linear scaling based on emotion activation with amplification for visibility
-                    const minSize = 8;
-                    const maxSize = 80;
+                    const minSize = 20;
+                    const maxSize = 100;
                     // Amplify activations (typically very small values like 0.01-0.1) for better visibility
                     // Use a linear multiplier to spread the range while maintaining proportional differences
                     const amplifiedActivation = Math.min(emotionActivation * 10, 1);
@@ -366,10 +363,10 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     
                     nodeG.append('circle')
                         .attr('class', 'node feature')
-                        .attr('r', scaledSize / currentScale)
+                        .attr('r', scaledSize)
                         .attr('fill', emotionColors[currentHoveredEmotion] || '#999')
                         .attr('stroke', '#fff')
-                        .attr('stroke-width', 1.5 / currentScale)
+                        .attr('stroke-width', 1.5)
                         .style('opacity', emotionActivation > 0 ? 1 : 0.1);
                 } else if (currentSelectedEmotions.size > 0 && !currentShowPieCharts) {
                     // When emotions are selected (persistent visualization)
@@ -405,17 +402,17 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     });
                     
                     // Size based on activation (with relative adjustment if enabled)
-                    const minSize = 8;
-                    const maxSize = 80;
+                    const minSize = 20;
+                    const maxSize = 100;
                     const amplifiedActivation = Math.min(maxActivation * 10, 1);
                     const scaledSize = minSize + (amplifiedActivation * (maxSize - minSize));
                     
                     nodeG.append('circle')
                         .attr('class', 'node feature')
-                        .attr('r', scaledSize / currentScale)
+                        .attr('r', scaledSize)
                         .attr('fill', maxEmotion ? emotionColors[maxEmotion] : '#999')
                         .attr('stroke', '#fff')
-                        .attr('stroke-width', 1.5 / currentScale)
+                        .attr('stroke-width', 1.5)
                         .style('opacity', maxActivation > 0 ? 1 : 0.1);
                 } else if (currentShowPieCharts) {
                 // Feature nodes as pie charts (when enabled)
@@ -462,7 +459,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                 // Create arc generator with radius from node size
                 const arc = d3.arc()
                     .innerRadius(0)
-                    .outerRadius(d.size / currentScale);
+                    .outerRadius(d.size);
                 
                 // Generate pie slices
                 const pieData = pie(topEmotions);
@@ -480,15 +477,15 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     .attr('d', arc)
                     .attr('fill', d => d.data.color)
                     .attr('stroke', '#fff')
-                    .attr('stroke-width', 0.5 / currentScale);
+                    .attr('stroke-width', 0.5);
             } else {
                 // Feature nodes as solid circles (default)
                 nodeG.append('circle')
                     .attr('class', 'node feature')
-                    .attr('r', d.size / currentScale)
+                    .attr('r', d.size)
                     .attr('fill', emotionColors[d.primary_emotion] || '#999')
                     .attr('stroke', '#fff')
-                    .attr('stroke-width', 1.5 / currentScale);
+                    .attr('stroke-width', 1.5);
                 }
             });
         };
@@ -1379,8 +1376,8 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                             }
                         });
                         
-                        const minSize = 8;
-                        const maxSize = 80;
+                        const minSize = 20;
+                        const maxSize = 100;
                         const amplifiedActivation = Math.min(maxActivation * 10, 1);
                         nodeSize = minSize + (amplifiedActivation * (maxSize - minSize));
                     }
@@ -1388,16 +1385,16 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                 
                 if (d.type === 'cluster' || !currentShowPie) {
                     nodeG.select('circle')
-                        .attr('r', nodeSize / scale)
-                        .attr('stroke-width', 1.5 / scale);
+                        .attr('r', nodeSize)
+                        .attr('stroke-width', 1.5);
                 } else {
                     const arc = d3.arc()
                         .innerRadius(0)
-                        .outerRadius(nodeSize / scale);
+                        .outerRadius(nodeSize);
                     
                     nodeG.selectAll('path.pie-slice')
                         .attr('d', arc)
-                        .attr('stroke-width', 0.5 / scale);
+                        .attr('stroke-width', 0.5);
                 }
             });
         }
