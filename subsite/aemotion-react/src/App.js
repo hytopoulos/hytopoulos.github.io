@@ -1,0 +1,84 @@
+import React, { useState } from 'react';
+import NetworkGraph from './components/NetworkGraph';
+import Settings from './components/Settings';
+import Tooltip from './components/Tooltip';
+import ImageAnnotation from './components/ImageAnnotation';
+import './App.css';
+
+function App() {
+  const [showClusters, setShowClusters] = useState(true);
+  const [tooltipData, setTooltipData] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [annotations, setAnnotations] = useState([]);
+  const [nextAnnotationId, setNextAnnotationId] = useState(0);
+  const [activeHeatmapLabels, setActiveHeatmapLabels] = useState(new Set());
+
+  const handleLabelToggle = (label) => {
+    setActiveHeatmapLabels(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(label)) {
+        newSet.delete(label);
+      } else {
+        newSet.add(label);
+      }
+      return newSet;
+    });
+  };
+
+  const handleNodeClick = (nodeData) => {
+    if (nodeData.type === 'feature') {
+      // Use functional updates to ensure we get latest state
+      setNextAnnotationId(prevId => {
+        const newId = prevId;
+        const newAnnotation = {
+          id: newId,
+          nodeId: nodeData.id,
+          featureData: nodeData
+        };
+        
+        console.log('Adding annotation:', newAnnotation.id, 'Total annotations will be:', annotations.length + 1);
+        
+        setAnnotations(prevAnnotations => [...prevAnnotations, newAnnotation]);
+        
+        return prevId + 1;
+      });
+    }
+  };
+
+  // Add close function to handleNodeClick
+  handleNodeClick.close = (annotationId) => {
+    console.log('Closing annotation:', annotationId);
+    
+    // Cleanup thumbnails if annotation was minimized
+    window.dispatchEvent(new CustomEvent('cleanup-annotation', { detail: annotationId }));
+    
+    setAnnotations(prevAnnotations => {
+      const filtered = prevAnnotations.filter(ann => ann.id !== annotationId);
+      console.log('Remaining annotations:', filtered.map(a => a.id));
+      return filtered;
+    });
+  };
+
+  return (
+    <div className="App">
+      <Settings 
+        onLabelToggle={handleLabelToggle}
+        activeLabels={activeHeatmapLabels}
+      />
+      <NetworkGraph 
+        showClusters={showClusters}
+        setTooltipData={setTooltipData}
+        setTooltipPosition={setTooltipPosition}
+        onNodeClick={handleNodeClick}
+        annotations={annotations}
+        activeDemographics={activeHeatmapLabels}
+      />
+      <Tooltip 
+        data={tooltipData}
+        position={tooltipPosition}
+      />
+    </div>
+  );
+}
+
+export default App;

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emotional Features with Sparse Autoencoders</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    /* --- saliency overlay styles --- */
+    .img-wrap { 
+      position: relative; 
+      display: inline-block; 
+    }
+    .img-wrap > img.base-img { 
+      display: block; 
+    }
+    .img-wrap > img.saliency {
+      position: absolute; 
+      inset: 0; 
+      width: 100%; 
+      height: 100%;
+      opacity: 0.6;
+      mix-blend-mode: normal; 
+      pointer-events: none; 
+      display: none;
+    }
+    /* Show overlay only on hover */
+    .img-wrap:hover > img.saliency { 
+      display: block; 
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Emotional Features with Sparse Autoencoders</h1>
+    <p style="padding: 1rem;">
+      This is a showcase of features extracted from a sparse autoencoder trained on 1 million reddit images.
+      Features are ranked by delta frequency (within-class % - across-class %) and labeled with the most correlated emotion.
+      The code can be found <a href="https://github.com/hytopoulos/saemotion">here</a>.
+      Hover over an image to see a heatmap of where the feature is activated (sorry, not all images are processed).
+    </p>
+  </header>
+
+  <main>
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading emotion analysis data...</p>
+    </div>
+
+    <div id="content" class="content hidden">
+      <div class="filters">
+        <label for="emotion-filter">Filter by Emotion:</label>
+        <select id="emotion-filter">
+          <option value="all">All Emotions</option>
+        </select>
+      </div>
+
+      <div id="results-container" class="results-container">
+        <!-- Results populated by script.js -->
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+
+  <!-- saliency overlay logic -->
+  <script>
+  (function () {
+    const SALIENCY_ROOT = "/assets/img/saliency_outputs";
+    const PAD = (num, len) => String(num).padStart(len, "0");
+
+    let urlToMeta = null;
+    async function loadTop20() {
+      if (urlToMeta) return urlToMeta;
+      const res = await fetch("Top_20_images_per_feature.json");
+      const list = await res.json();
+      const map = new Map();
+      for (const row of list) {
+        map.set(row.image_url, { feature: row.feature_index, rank: row.rank });
+      }
+      urlToMeta = map;
+      return map;
+    }
+
+    function attachOverlayIfMatch(imgEl, metaMap) {
+      if (!imgEl || imgEl.classList.contains("base-img") || imgEl.closest(".img-wrap")) return;
+
+      const absoluteSrc = imgEl.src;
+      const attrSrc = imgEl.getAttribute("src");
+      let meta = metaMap.get(absoluteSrc) || metaMap.get(attrSrc);
+      if (!meta) return;
+
+      const featP = PAD(meta.feature, 5);
+      const rankP = PAD(meta.rank, 2);
+      const overlaySrc = `${SALIENCY_ROOT}/feature_${featP}/feat${featP}_rank${rankP}.png`;
+
+      const wrap = document.createElement("div");
+      wrap.className = "img-wrap";
+      imgEl.classList.add("base-img");
+
+      const overlay = new Image();
+      overlay.className = "saliency";
+      overlay.alt = `Saliency feature ${meta.feature} rank ${meta.rank}`;
+      overlay.src = overlaySrc;
+
+      const parent = imgEl.parentNode;
+      if (!parent) return;
+      parent.replaceChild(wrap, imgEl);
+      wrap.appendChild(imgEl);
+      wrap.appendChild(overlay);
+    }
+
+    async function scanAndAttach() {
+      const map = await loadTop20();
+      const container = document.getElementById("results-container") || document.body;
+      container.querySelectorAll("img").forEach(img => attachOverlayIfMatch(img, map));
+    }
+
+    const observer = new MutationObserver(async (mutations) => {
+      const map = await loadTop20();
+      for (const m of mutations) {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType === 1) {
+            if (node.tagName === "IMG") {
+              attachOverlayIfMatch(node, map);
+            } else {
+              node.querySelectorAll && node.querySelectorAll("img")
+                .forEach(img => attachOverlayIfMatch(img, map));
+            }
+          }
+        });
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      scanAndAttach();
+      const root = document.getElementById("content") || document.body;
+      observer.observe(root, { childList: true, subtree: true });
+    });
+  })();
+  </script>
+</body>
+</html>
