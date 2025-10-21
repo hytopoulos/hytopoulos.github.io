@@ -277,7 +277,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             .attr('class', d => `node-group ${d.type}`)
             .call(d3.drag()
                 .on('start', (event, d) => {
-                    if (!event.active) simulation.alphaTarget(0.5).restart();
+                    if (!event.active) simulation.alphaTarget(1).restart();
                     d.fx = d.x;
                     d.fy = d.y;
                 })
@@ -286,7 +286,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     d.fy = event.y;
                 })
                 .on('end', (event, d) => {
-                    if (!event.active) simulation.alphaTarget(0.3);
+                    if (!event.active) simulation.alphaTarget(1);
                     d.fx = null;
                     d.fy = null;
                 }))
@@ -1047,7 +1047,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
 
         // Restart simulation event listener
         const handleRestart = () => {
-            simulation.alpha(1).alphaTarget(0.3).restart();
+            simulation.alpha(1).alphaTarget(1).restart();
             svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
         };
 
