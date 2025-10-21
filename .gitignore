@@ -6,3 +6,7 @@ _drafts
 klise-*.gem
 Gemfile.lock
 .DS_Store
+
+# React app
+subsite/aemotion-react/node_modules/
+subsite/aemotion-react/build/
