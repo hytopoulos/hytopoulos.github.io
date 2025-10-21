@@ -31,6 +31,7 @@ sadness_map: /assets/img/saliency_post/emotion_map/Sadness_rank01.png
 superposition: /assets/img/saliency_post/superposition.png
 slider: /assets/img/saliency_post/sliders.png
 sadness_peace_html: /assets/img/saliency_post/sadness_peace.html
+sae_feats: /assets/img/saliency_post/sae_feats.png
 ---
 
 #### Introduction
@@ -251,14 +252,21 @@ While not state-of-the-art, this unsupervised approach achieves reasonable perfo
 
 #### Decomposing Emotions
 
-I created [this](https://github.com/hytopoulos/saemotion) tool to help explore the sparse autoencoder features. It visualizes emotion directions and their activations.
+<!-- I created [this](https://github.com/hytopoulos/saemotion) tool to help explore the sparse autoencoder features. It visualizes emotion directions and their activations.
 
 <figure>
 <img src="{{ page.slider }}">
 <figcaption>We can configure the strength of each feature to see how it affects the image.</figcaption>
+</figure> -->
+
+I created an [emotion explorer tool](https://hytopoulos.github.io/subsite/sae-feats) to help explore sparse autoencoder features. This tool displays a radial dendrogram of features, colored by the emotions they are associated and sized according to their activation strength. You can select a feature to query Reddit for images that most closely align with the feature:
+
+<figure>
+<img src="{{ page.sae_feats }}">
+<figcaption>Decomposing emotions into disentangled features.</figcaption>
 </figure>
 
-Let's look at the top features encoded in the "Peace" direction (see the images [here]({{ page.sadness_peace_html }})):
+Let's look at the top ranking features for our "Peace" direction (see the images [here]({{ page.sadness_peace_html }})):
 1. People at the beach tanning their legs
 2. People passed out on couches
 3. Black and white photos of older people on benches
@@ -272,7 +280,7 @@ And for "Sadness":
 4. Nature documentary style photographs of African safari animals fighting.
 5. Pallbearers featuring other countries.
 
-These features do not neutrally represent emotion. Instead, they encode hierarchies of meaning through layered specificity and emotionally charged modifiers. We see that the most salient features for sadness are compounded with death rituals, national identity, and viral spectacle.
+These features do not neutrally represent emotion. Instead, they reflect cultural signifiers. More specifically, they show a compound of modifiers that encode multiple layers of meaning. They are also biased toward Western culture.
 
 #### Conclusion
 
