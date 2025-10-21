@@ -6902,13 +6902,9 @@
       "type": "feature",
       "feature_id": 51425,
       "label": "51425",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0039459085,
+      "primary_emotion": "Doubt/Confusion",
+      "primary_activation": 0.0018949033,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0039459085
-        ],
         [
           "Doubt/Confusion",
           0.0018949033
@@ -6916,6 +6912,10 @@
         [
           "Anticipation",
           0.0016208795
+        ],
+        [
+          "Surprise",
+          0.0015825833
         ]
       ],
       "activations": {
@@ -6987,12 +6987,12 @@
           0.0046228133
         ],
         [
-          "Teenager",
-          0.004482926
-        ],
-        [
           "Excitement",
           0.0043898127
+        ],
+        [
+          "Yearning",
+          0.004378552
         ]
       ],
       "activations": {
@@ -7075,12 +7075,12 @@
           0.003675376
         ],
         [
-          "Teenager",
-          0.0028672265
-        ],
-        [
           "Happiness",
           0.0027847858
+        ],
+        [
+          "Yearning",
+          0.0027189394
         ]
       ],
       "activations": {
@@ -7144,13 +7144,9 @@
       "type": "feature",
       "feature_id": 248789,
       "label": "248789",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.018194286,
+      "primary_emotion": "Sympathy",
+      "primary_activation": 0.017855769,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.018194286
-        ],
         [
           "Sympathy",
           0.017855769
@@ -7158,6 +7154,10 @@
         [
           "Yearning",
           0.016700407
+        ],
+        [
+          "Excitement",
+          0.016085614
         ]
       ],
       "activations": {
@@ -7221,13 +7221,9 @@
       "type": "feature",
       "feature_id": 5559,
       "label": "5559",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.00684103,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.005944506,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.00684103
-        ],
         [
           "Excitement",
           0.005944506
@@ -7235,6 +7231,10 @@
         [
           "Anticipation",
           0.0056416714
+        ],
+        [
+          "Confidence",
+          0.0056105037
         ]
       ],
       "activations": {
@@ -7287,13 +7287,9 @@
       "type": "feature",
       "feature_id": 127838,
       "label": "127838",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0034242729,
+      "primary_emotion": "Disconnection",
+      "primary_activation": 0.0031163674,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0034242729
-        ],
         [
           "Disconnection",
           0.0031163674
@@ -7301,6 +7297,10 @@
         [
           "Excitement",
           0.0028473153
+        ],
+        [
+          "Anticipation",
+          0.002610891
         ]
       ],
       "activations": {
@@ -7372,12 +7372,12 @@
           0.008786829
         ],
         [
-          "Teenager",
-          0.008754261
-        ],
-        [
           "Happiness",
           0.008464165
+        ],
+        [
+          "Pleasure",
+          0.008134744
         ]
       ],
       "activations": {
@@ -7441,13 +7441,9 @@
       "type": "feature",
       "feature_id": 85522,
       "label": "85522",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.00820845,
+      "primary_emotion": "Esteem",
+      "primary_activation": 0.006204667,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.00820845
-        ],
         [
           "Esteem",
           0.006204667
@@ -7455,6 +7451,10 @@
         [
           "Happiness",
           0.005786988
+        ],
+        [
+          "Sympathy",
+          0.005638548
         ]
       ],
       "activations": {
@@ -7507,13 +7507,9 @@
       "type": "feature",
       "feature_id": 190765,
       "label": "190765",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0052160244,
+      "primary_emotion": "Doubt/Confusion",
+      "primary_activation": 0.0044318475,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0052160244
-        ],
         [
           "Doubt/Confusion",
           0.0044318475
@@ -7521,6 +7517,10 @@
         [
           "Sympathy",
           0.0044093877
+        ],
+        [
+          "Esteem",
+          0.004240646
         ]
       ],
       "activations": {
@@ -7683,13 +7683,9 @@
       "type": "feature",
       "feature_id": 46669,
       "label": "46669",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.004008539,
+      "primary_emotion": "Affection",
+      "primary_activation": 0.002851925,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.004008539
-        ],
         [
           "Affection",
           0.002851925
@@ -7697,6 +7693,10 @@
         [
           "Pleasure",
           0.0027009838
+        ],
+        [
+          "Excitement",
+          0.0026274112
         ]
       ],
       "activations": {
@@ -7749,13 +7749,9 @@
       "type": "feature",
       "feature_id": 183235,
       "label": "183235",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.009528545,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.0045249346,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.009528545
-        ],
         [
           "Excitement",
           0.0045249346
@@ -7763,6 +7759,10 @@
         [
           "Anticipation",
           0.0041469466
+        ],
+        [
+          "Confidence",
+          0.0038880506
         ]
       ],
       "activations": {
@@ -7826,13 +7826,9 @@
       "type": "feature",
       "feature_id": 241953,
       "label": "241953",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0058972584,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.00513519,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0058972584
-        ],
         [
           "Excitement",
           0.00513519
@@ -7840,6 +7836,10 @@
         [
           "Sensitivity",
           0.0049065035
+        ],
+        [
+          "Anticipation",
+          0.0046836413
         ]
       ],
       "activations": {
@@ -7903,13 +7903,9 @@
       "type": "feature",
       "feature_id": 78520,
       "label": "78520",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0037268167,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.0032831042,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0037268167
-        ],
         [
           "Excitement",
           0.0032831042
@@ -7917,6 +7913,10 @@
         [
           "Anticipation",
           0.003026705
+        ],
+        [
+          "Confidence",
+          0.002822235
         ]
       ],
       "activations": {
@@ -7991,13 +7991,9 @@
       "type": "feature",
       "feature_id": 93821,
       "label": "93821",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0055054794,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.005047329,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0055054794
-        ],
         [
           "Excitement",
           0.005047329
@@ -8005,6 +8001,10 @@
         [
           "Anticipation",
           0.0048698615
+        ],
+        [
+          "Confidence",
+          0.0045979423
         ]
       ],
       "activations": {
@@ -8068,13 +8068,9 @@
       "type": "feature",
       "feature_id": 143625,
       "label": "143625",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0036357557,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.0032014984,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0036357557
-        ],
         [
           "Excitement",
           0.0032014984
@@ -8082,6 +8078,10 @@
         [
           "Anticipation",
           0.0029266863
+        ],
+        [
+          "Confidence",
+          0.0028113436
         ]
       ],
       "activations": {
@@ -8134,13 +8134,9 @@
       "type": "feature",
       "feature_id": 214593,
       "label": "214593",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.003722,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.0034032622,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.003722
-        ],
         [
           "Excitement",
           0.0034032622
@@ -8148,6 +8144,10 @@
         [
           "Anticipation",
           0.002981135
+        ],
+        [
+          "Confidence",
+          0.0029047567
         ]
       ],
       "activations": {
@@ -8211,13 +8211,9 @@
       "type": "feature",
       "feature_id": 61774,
       "label": "61774",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.005068578,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.00406266,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.005068578
-        ],
         [
           "Excitement",
           0.00406266
@@ -8225,6 +8221,10 @@
         [
           "Happiness",
           0.0039121048
+        ],
+        [
+          "Sympathy",
+          0.003640714
         ]
       ],
       "activations": {
@@ -8277,13 +8277,9 @@
       "type": "feature",
       "feature_id": 241544,
       "label": "241544",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0060211853,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.0048864055,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0060211853
-        ],
         [
           "Excitement",
           0.0048864055
@@ -8291,6 +8287,10 @@
         [
           "Confidence",
           0.004836296
+        ],
+        [
+          "Anticipation",
+          0.004778347
         ]
       ],
       "activations": {
@@ -8839,8 +8839,8 @@
           0.005240495
         ],
         [
-          "Teenager",
-          0.0048295506
+          "Anticipation",
+          0.0047900463
         ]
       ],
       "activations": {
@@ -9993,13 +9993,9 @@
       "type": "feature",
       "feature_id": 27884,
       "label": "27884",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0049854503,
+      "primary_emotion": "Confidence",
+      "primary_activation": 0.004910289,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0049854503
-        ],
         [
           "Confidence",
           0.004910289
@@ -10007,6 +10003,10 @@
         [
           "Excitement",
           0.0048610927
+        ],
+        [
+          "Anticipation",
+          0.0048587993
         ]
       ],
       "activations": {
@@ -10070,13 +10070,9 @@
       "type": "feature",
       "feature_id": 79131,
       "label": "79131",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.009046963,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.008483418,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.009046963
-        ],
         [
           "Excitement",
           0.008483418
@@ -10084,6 +10080,10 @@
         [
           "Confidence",
           0.008386883
+        ],
+        [
+          "Anticipation",
+          0.007920122
         ]
       ],
       "activations": {
@@ -10148,8 +10148,8 @@
           0.004451197
         ],
         [
-          "Teenager",
-          0.004309216
+          "Anticipation",
+          0.0042604124
         ]
       ],
       "activations": {
@@ -10221,12 +10221,12 @@
           0.005197428
         ],
         [
-          "Teenager",
-          0.004822485
-        ],
-        [
           "Anticipation",
           0.00420428
+        ],
+        [
+          "Confidence",
+          0.0040175975
         ]
       ],
       "activations": {
@@ -10532,13 +10532,9 @@
       "type": "feature",
       "feature_id": 158328,
       "label": "158328",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0050963587,
+      "primary_emotion": "Confidence",
+      "primary_activation": 0.0030003954,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0050963587
-        ],
         [
           "Confidence",
           0.0030003954
@@ -10546,6 +10542,10 @@
         [
           "Excitement",
           0.0029121619
+        ],
+        [
+          "Anticipation",
+          0.0020576552
         ]
       ],
       "activations": {
@@ -10609,13 +10609,9 @@
       "type": "feature",
       "feature_id": 45657,
       "label": "45657",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.01316628,
+      "primary_emotion": "Confidence",
+      "primary_activation": 0.006803843,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.01316628
-        ],
         [
           "Confidence",
           0.006803843
@@ -10623,6 +10619,10 @@
         [
           "Excitement",
           0.0065894956
+        ],
+        [
+          "Anticipation",
+          0.004942181
         ]
       ],
       "activations": {
@@ -10675,13 +10675,9 @@
       "type": "feature",
       "feature_id": 221053,
       "label": "221053",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.019348873,
+      "primary_emotion": "Confidence",
+      "primary_activation": 0.010078832,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.019348873
-        ],
         [
           "Confidence",
           0.010078832
@@ -10689,6 +10685,10 @@
         [
           "Excitement",
           0.010035826
+        ],
+        [
+          "Anticipation",
+          0.0078067225
         ]
       ],
       "activations": {
@@ -10752,13 +10752,9 @@
       "type": "feature",
       "feature_id": 118658,
       "label": "118658",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.00634541,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.00502374,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.00634541
-        ],
         [
           "Excitement",
           0.00502374
@@ -10766,6 +10762,10 @@
         [
           "Confidence",
           0.005017198
+        ],
+        [
+          "Fear",
+          0.003739585
         ]
       ],
       "activations": {
@@ -10818,13 +10818,9 @@
       "type": "feature",
       "feature_id": 224017,
       "label": "224017",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0039836196,
+      "primary_emotion": "Excitement",
+      "primary_activation": 0.0034466228,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0039836196
-        ],
         [
           "Excitement",
           0.0034466228
@@ -10832,6 +10828,10 @@
         [
           "Confidence",
           0.0030347814
+        ],
+        [
+          "Fear",
+          0.002753822
         ]
       ],
       "activations": {
@@ -10895,13 +10895,9 @@
       "type": "feature",
       "feature_id": 85033,
       "label": "85033",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.005433395,
+      "primary_emotion": "Confidence",
+      "primary_activation": 0.0054014777,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.005433395
-        ],
         [
           "Confidence",
           0.0054014777
@@ -10909,6 +10905,10 @@
         [
           "Anticipation",
           0.00523679
+        ],
+        [
+          "Excitement",
+          0.005039322
         ]
       ],
       "activations": {
@@ -10972,13 +10972,9 @@
       "type": "feature",
       "feature_id": 157268,
       "label": "157268",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.005166075,
+      "primary_emotion": "Confidence",
+      "primary_activation": 0.0048953146,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.005166075
-        ],
         [
           "Confidence",
           0.0048953146
@@ -10986,6 +10982,10 @@
         [
           "Excitement",
           0.004699444
+        ],
+        [
+          "Anticipation",
+          0.0046219905
         ]
       ],
       "activations": {
@@ -12447,8 +12447,8 @@
           0.008294879
         ],
         [
-          "Teenager",
-          0.007191924
+          "Esteem",
+          0.007113488
         ]
       ],
       "activations": {
@@ -13766,13 +13766,9 @@
       "type": "feature",
       "feature_id": 255563,
       "label": "255563",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0029174723,
+      "primary_emotion": "Happiness",
+      "primary_activation": 0.0016364228,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0029174723
-        ],
         [
           "Happiness",
           0.0016364228
@@ -13780,6 +13776,10 @@
         [
           "Pleasure",
           0.0016056302
+        ],
+        [
+          "Peace",
+          0.0015349868
         ]
       ],
       "activations": {
@@ -13851,12 +13851,12 @@
           0.0022573483
         ],
         [
-          "Teenager",
-          0.0022209438
-        ],
-        [
           "Sympathy",
           0.0019190004
+        ],
+        [
+          "Affection",
+          0.001905548
         ]
       ],
       "activations": {
@@ -13909,13 +13909,9 @@
       "type": "feature",
       "feature_id": 242971,
       "label": "242971",
-      "primary_emotion": "Teenager",
-      "primary_activation": 0.0019942112,
+      "primary_emotion": "Affection",
+      "primary_activation": 0.0018691191,
       "top3_emotions": [
-        [
-          "Teenager",
-          0.0019942112
-        ],
         [
           "Affection",
           0.0018691191
@@ -13923,6 +13919,10 @@
         [
           "Surprise",
           0.0017966247
+        ],
+        [
+          "Happiness",
+          0.0017500377
         ]
       ],
       "activations": {
@@ -13994,12 +13994,12 @@
           0.0029205608
         ],
         [
-          "Teenager",
-          0.0027970718
-        ],
-        [
           "Affection",
           0.0026201592
+        ],
+        [
+          "Aversion",
+          0.0025714699
         ]
       ],
       "activations": {
@@ -15446,12 +15446,12 @@
           0.0043319333
         ],
         [
-          "Teenager",
-          0.003605423
-        ],
-        [
           "Disconnection",
           0.0033231068
+        ],
+        [
+          "Sensitivity",
+          0.0033204956
         ]
       ],
       "activations": {
@@ -15523,12 +15523,12 @@
           0.006043682
         ],
         [
-          "Teenager",
-          0.0037395288
-        ],
-        [
           "Sensitivity",
           0.0034337398
+        ],
+        [
+          "Embarrassment",
+          0.0031751315
         ]
       ],
       "activations": {
@@ -15820,12 +15820,12 @@
           0.0033840644
         ],
         [
-          "Teenager",
-          0.0032129667
-        ],
-        [
           "Doubt/Confusion",
           0.0030678725
+        ],
+        [
+          "Yearning",
+          0.003006927
         ]
       ],
       "activations": {
@@ -15897,12 +15897,12 @@
           0.0030066005
         ],
         [
-          "Teenager",
-          0.0026150786
-        ],
-        [
           "Disapproval",
           0.002421349
+        ],
+        [
+          "Disconnection",
+          0.002182725
         ]
       ],
       "activations": {
@@ -18884,7 +18884,6 @@
     "Suffering",
     "Surprise",
     "Sympathy",
-    "Teenager",
     "Yearning"
   ],
   "labels": [
