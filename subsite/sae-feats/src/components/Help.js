@@ -24,14 +24,8 @@ function Help() {
             <p>
               This tool visualizes how vision-language models represent emotion. 
               Each node corresponds to a separate concept that is understood by the AI model.
+              Nodes that are farther away in the tree are less related to each other.
             </p>
-            
-            <p>
-              Most emotions have 1-2 nodes that are most directly associated with them. 
-              You can find these nodes using the heatmap setting. Nodes that are farther 
-              away in the tree are less related to each other.
-            </p>
-            
             <p>
               These concepts were extracted using a sparse autoencoder. You can read more 
               about sparse autoencoders{' '}
