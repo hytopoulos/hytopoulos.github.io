@@ -83,7 +83,7 @@ exclude:
   - lighthouse.png
   - klise-*.gem
   - klise.gemspec
-  - subsite/aemotion-react
+  - subsite/sae-feats
 
 # Plugins
 plugins:

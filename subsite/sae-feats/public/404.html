@@ -6,7 +6,7 @@
     <script>
       // SPA redirect for GitHub Pages
       const l = window.location;
-      const base = '/subsite/aemotion';
+      const base = '/subsite/sae-feats';
       const path = l.pathname.startsWith(base) ? l.pathname.slice(base.length) : l.pathname;
       l.replace(base + '/?p=' + encodeURIComponent(path + l.search + l.hash));
     </script>

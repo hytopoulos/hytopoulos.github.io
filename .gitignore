@@ -8,5 +8,5 @@ Gemfile.lock
 .DS_Store
 
 # React app
-subsite/aemotion-react/node_modules/
-subsite/aemotion-react/build/
+subsite/sae-feats/node_modules/
+subsite/sae-feats/build/

@@ -32,13 +32,13 @@ jobs:
       # Build your site (custom plugins allowed)
       - run: bundle exec jekyll build --trace
 
-      # --- Build React subsite at /subsite/aemotion ---
+      # --- Build React subsite at /subsite/sae-feats ---
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
       
       - name: Install & build React app
-        working-directory: ./subsite/aemotion-react
+        working-directory: ./subsite/sae-feats
         run: |
           npm ci
           CI=false npm run build
@@ -46,11 +46,11 @@ jobs:
       # Copy React dist to the place you want it to live on the site
       - name: Add React build to site
         run: |
-          mkdir -p _site/subsite/aemotion
-          cp -R subsite/aemotion-react/build/* _site/subsite/aemotion/
+          mkdir -p _site/subsite/sae-feats
+          cp -R subsite/sae-feats/build/* _site/subsite/sae-feats/
 
-      # Add .nojekyll inside /subsite/aemotion to prevent Jekyll processing
-      - run: touch _site/subsite/aemotion/.nojekyll
+      # Add .nojekyll inside /subsite/sae-feats to prevent Jekyll processing
+      - run: touch _site/subsite/sae-feats/.nojekyll
 
       # Required by GitHub Pages
       - uses: actions/configure-pages@v5

@@ -2,7 +2,7 @@
   "name": "feature-network-react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/subsite/aemotion",
+  "homepage": "/subsite/sae-feats",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
