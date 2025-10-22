@@ -23,8 +23,8 @@ function Help() {
           <div className="help-content">
             <p>
               This tool visualizes how vision-language models represent emotion. 
-              Each node corresponds to a separate concept that is understood by the AI model.
-              Nodes that are farther away in the tree are less related to each other.
+              Each <b>node</b> represents a distinct concept that is encoded in the AI model.
+              Each <b>cluster</b> contains multiple nodes and represents a more abstract concept.
             </p>
             <p>
               These concepts were extracted using a sparse autoencoder. You can read more 
