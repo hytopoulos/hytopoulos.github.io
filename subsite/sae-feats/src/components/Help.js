@@ -24,7 +24,7 @@ function Help() {
             <p>
               This tool visualizes how vision-language models represent emotion. 
               Each <b>node</b> represents a distinct concept that is encoded in the AI model.
-              Each <b>cluster</b> contains multiple nodes and represents a more abstract concept.
+              Each <b>cluster</b> contains multiple nodes and represents a more general concept.
             </p>
             <p>
               Select a node or cluster to query Reddit for images that activate the representation.
