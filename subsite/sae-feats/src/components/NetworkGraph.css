@@ -7,6 +7,7 @@
 .link {
   stroke: #999;
   stroke-opacity: 0.3;
+  transition: opacity 0.3s ease;
   /* stroke-width handled programmatically for scale-invariance */
 }
 
@@ -28,6 +29,7 @@
 /* Pie chart nodes */
 .node-group {
   cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
 .pie-slice {
@@ -177,4 +179,9 @@
   font-size: 11px;
   font-weight: 600;
   color: #1f77b4;
+}
+
+/* Voronoi cells */
+.voronoi-layer path {
+  transition: opacity 0.2s ease, stroke-width 0.2s ease, stroke 0.2s ease, stroke-opacity 0.2s ease;
 }

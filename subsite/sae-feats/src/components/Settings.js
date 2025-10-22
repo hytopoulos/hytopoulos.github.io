@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Settings.css';
 import graphData from '../data.json';
 
-function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle, useRelativeActivation, onRelativeActivationToggle }) {
+function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle, useRelativeActivation, onRelativeActivationToggle, sizeClustersByFeatures, onSizeClustersByFeaturesToggle, showVoronoi, onShowVoronoiToggle, filterIntensity, onFilterIntensityChange }) {
   const [isOpen, setIsOpen] = useState(false);
   
   // Get all labels from data
@@ -47,6 +47,40 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
                 onChange={onRelativeActivationToggle}
               />
               <span>Use Relative Activation (vs mean)</span>
+            </label>
+            
+            {useRelativeActivation && (
+              <div className="slider-item">
+                <label>
+                  <span>Filter Intensity: {filterIntensity}% of mean</span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="500"
+                    value={filterIntensity}
+                    onChange={(e) => onFilterIntensityChange(Number(e.target.value))}
+                    style={{ width: '100%' }}
+                  />
+                </label>
+              </div>
+            )}
+            
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={sizeClustersByFeatures}
+                onChange={onSizeClustersByFeaturesToggle}
+              />
+              <span>Size Clusters by Feature Count</span>
+            </label>
+            
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={showVoronoi}
+                onChange={onShowVoronoiToggle}
+              />
+              <span>Show Voronoi Cells</span>
             </label>
             
             <h4 className="section-title">Heatmap Overlays</h4>

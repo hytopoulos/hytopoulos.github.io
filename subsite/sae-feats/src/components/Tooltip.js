@@ -5,6 +5,7 @@ function Tooltip({ data, position }) {
   if (!data) return null;
 
   const isCluster = data.type === 'cluster';
+  const isFeature = data.type === 'feature';
   const header = isCluster ? `Cluster ${data.label}` : `Feature ${data.feature_id}`;
 
   return (
@@ -32,10 +33,12 @@ function Tooltip({ data, position }) {
               <span className="label">Primary:</span>
               <span className="value">{data.primary_emotion}</span>
             </div>
-            <div className="tooltip-row">
-              <span className="label">Activation:</span>
-              <span className="value">{data.primary_activation.toFixed(6)}</span>
-            </div>
+            {data.primary_activation !== undefined && (
+              <div className="tooltip-row">
+                <span className="label">Activation:</span>
+                <span className="value">{data.primary_activation.toFixed(6)}</span>
+              </div>
+            )}
           </>
         )}
         {data.top3_emotions && (
@@ -52,6 +55,11 @@ function Tooltip({ data, position }) {
         {isCluster && data.feature_vector_b64 && (
           <div className="tooltip-hint" style={{ marginTop: '8px', fontSize: '11px', fontStyle: 'italic', color: '#666' }}>
             Click to query images
+          </div>
+        )}
+        {isFeature && (
+          <div className="tooltip-hint" style={{ marginTop: '8px', fontSize: '11px', fontStyle: 'italic', color: '#666' }}>
+            Click to view images
           </div>
         )}
       </div>

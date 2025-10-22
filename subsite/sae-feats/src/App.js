@@ -18,6 +18,9 @@ function App() {
   const [hoveredEmotion, setHoveredEmotion] = useState(null);
   const [useRelativeActivation, setUseRelativeActivation] = useState(true);
   const [selectedEmotions, setSelectedEmotions] = useState(new Set());
+  const [sizeClustersByFeatures, setSizeClustersByFeatures] = useState(false);
+  const [showVoronoi, setShowVoronoi] = useState(true); // Voronoi enabled by default
+  const [filterIntensity, setFilterIntensity] = useState(200); // 0-500%, default 200%
 
   const handleLabelToggle = (label) => {
     setActiveHeatmapLabels(prev => {
@@ -87,6 +90,12 @@ function App() {
         onPieChartToggle={() => setShowPieCharts(!showPieCharts)}
         useRelativeActivation={useRelativeActivation}
         onRelativeActivationToggle={() => setUseRelativeActivation(!useRelativeActivation)}
+        sizeClustersByFeatures={sizeClustersByFeatures}
+        onSizeClustersByFeaturesToggle={() => setSizeClustersByFeatures(!sizeClustersByFeatures)}
+        showVoronoi={showVoronoi}
+        onShowVoronoiToggle={() => setShowVoronoi(!showVoronoi)}
+        filterIntensity={filterIntensity}
+        onFilterIntensityChange={setFilterIntensity}
       />
       <Help />
       <Legend 
@@ -105,6 +114,9 @@ function App() {
         hoveredEmotion={hoveredEmotion}
         useRelativeActivation={useRelativeActivation}
         selectedEmotions={selectedEmotions}
+        sizeClustersByFeatures={sizeClustersByFeatures}
+        showVoronoi={showVoronoi}
+        filterIntensity={filterIntensity}
       />
       <Tooltip 
         data={tooltipData}

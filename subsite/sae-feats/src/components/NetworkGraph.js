@@ -40,7 +40,7 @@ const EMOTION_COLORS = {
     'Valence': '#7B68EE'          // Medium slate blue
 };
 
-function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNodeClick, annotations, activeDemographics, showPieCharts, hoveredEmotion, useRelativeActivation, selectedEmotions }) {
+function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNodeClick, annotations, activeDemographics, showPieCharts, hoveredEmotion, useRelativeActivation, selectedEmotions, sizeClustersByFeatures, showVoronoi, filterIntensity }) {
     const svgRef = useRef();
     const simulationRef = useRef();
     const transformRef = useRef(d3.zoomIdentity);
@@ -55,6 +55,10 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
     const hoveredEmotionRef = useRef(hoveredEmotion);
     const useRelativeActivationRef = useRef(useRelativeActivation);
     const selectedEmotionsRef = useRef(selectedEmotions);
+    const sizeClustersByFeaturesRef = useRef(sizeClustersByFeatures);
+    const voronoiLayerRef = useRef(null);
+    const showVoronoiRef = useRef(showVoronoi);
+    const filterIntensityRef = useRef(filterIntensity);
 
     // Update refs when props change
     annotationsRef.current = annotations;
@@ -63,6 +67,9 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
     hoveredEmotionRef.current = hoveredEmotion;
     useRelativeActivationRef.current = useRelativeActivation;
     selectedEmotionsRef.current = selectedEmotions;
+    sizeClustersByFeaturesRef.current = sizeClustersByFeatures;
+    showVoronoiRef.current = showVoronoi;
+    filterIntensityRef.current = filterIntensity;
 
     useEffect(() => {
         const width = window.innerWidth;
@@ -98,8 +105,57 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     // Calculate appropriate size based on current state
                     let nodeSize = d.size;
                     
-                    // If emotions are filtered or hovered, calculate dynamic size
-                    if (d.type !== 'cluster' && (currentHoveredEmotion || (currentSelectedEmotions.size > 0 && !currentShowPie))) {
+                    // Check if emotions are being filtered
+                    const hasEmotionFilter = currentHoveredEmotion || (currentSelectedEmotions.size > 0 && !currentShowPie);
+                    
+                    // For clusters
+                    if (d.type === 'cluster') {
+                        if (hasEmotionFilter && d.activations) {
+                            // Clusters respond to emotion filters
+                            const targetEmotion = currentHoveredEmotion || null;
+                            const emotionsToCheck = targetEmotion ? [targetEmotion] : Array.from(currentSelectedEmotions);
+                            const useRelative = useRelativeActivationRef.current;
+                            
+                            let meanActivation = 0;
+                            if (useRelative) {
+                                const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                                const emotionValues = Object.entries(d.activations)
+                                    .filter(([label]) => !demographics.includes(label))
+                                    .map(([, value]) => value);
+                                meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
+                            }
+                            
+                            let maxActivation = 0;
+                            emotionsToCheck.forEach(emotion => {
+                                let activation = d.activations?.[emotion] || 0;
+                                if (useRelative) {
+                                    const intensityFactor = filterIntensityRef.current / 100;
+                                    activation = Math.max(0, activation - (meanActivation * intensityFactor));
+                                }
+                                if (activation > maxActivation) {
+                                    maxActivation = activation;
+                                }
+                            });
+                            
+                            const minSize = 10;
+                            const maxSize = 200;
+                            const amplifiedActivation = Math.min(maxActivation * 10, 1);
+                            nodeSize = minSize + (amplifiedActivation * (maxSize - minSize));
+                        } else {
+                            // No filter: check if sizing by features is enabled
+                            const useSizeByFeatures = sizeClustersByFeaturesRef.current;
+                            if (useSizeByFeatures && d.num_features) {
+                                const minClusterSize = 10;
+                                const maxClusterSize = 100;
+                                const maxFeatures = 1036;
+                                const scaleFactor = Math.log(d.num_features + 1) / Math.log(maxFeatures + 1);
+                                nodeSize = minClusterSize + scaleFactor * (maxClusterSize - minClusterSize);
+                            }
+                        }
+                    }
+                    
+                    // For feature nodes - if emotions are filtered or hovered, calculate dynamic size
+                    if (d.type !== 'cluster' && hasEmotionFilter) {
                         const targetEmotion = currentHoveredEmotion || null;
                         const emotionsToCheck = targetEmotion ? [targetEmotion] : Array.from(currentSelectedEmotions);
                         const useRelative = useRelativeActivationRef.current;
@@ -119,9 +175,10 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                             emotionsToCheck.forEach(emotion => {
                                 let activation = d.activations?.[emotion] || 0;
                                 
-                                // Apply relative activation if enabled
+                                // Apply relative activation with filter intensity if enabled
                                 if (useRelative) {
-                                    activation = Math.max(0, activation - meanActivation);
+                                    const intensityFactor = filterIntensityRef.current / 100;
+                                    activation = Math.max(0, activation - (meanActivation * intensityFactor));
                                 }
                                 
                                 if (activation > maxActivation) {
@@ -130,8 +187,8 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                             });
                             
                             // Use same sizing logic as renderNodeVisuals
-                            const minSize = 20;
-                            const maxSize = 100;
+                            const minSize = 10;
+                            const maxSize = 200;
                             const amplifiedActivation = Math.min(maxActivation * 10, 1);
                             nodeSize = minSize + (amplifiedActivation * (maxSize - minSize));
                         }
@@ -327,15 +384,87 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                 const nodeG = d3.select(this);
                 
                 if (d.type === 'cluster') {
-                    // Cluster nodes remain simple circles
-                    nodeG.append('circle')
-                        .attr('class', 'node cluster')
-                        .attr('r', d.size)
-                        .attr('fill', '#ccc')
-                        .attr('stroke-width', 1.5)
-                        .style('opacity', showClusters ? 0.3 : 0);
+                    // Check if emotions are being filtered
+                    const hasEmotionFilter = currentHoveredEmotion || (currentSelectedEmotions.size > 0 && !currentShowPieCharts);
+                    
+                    if (hasEmotionFilter && d.activations) {
+                        // When emotions are filtered, respond like feature nodes
+                        const targetEmotion = currentHoveredEmotion || null;
+                        const emotionsToCheck = targetEmotion ? [targetEmotion] : Array.from(currentSelectedEmotions);
+                        const useRelative = useRelativeActivationRef.current;
+                        
+                        // Calculate mean activation if needed
+                        let meanActivation = 0;
+                        if (useRelative) {
+                            const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                            const emotionValues = Object.entries(d.activations)
+                                .filter(([label]) => !demographics.includes(label))
+                                .map(([, value]) => value);
+                            meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
+                        }
+                        
+                        // Find emotion with highest activation among selected
+                        let maxEmotion = null;
+                        let maxActivation = 0;
+                        
+                        emotionsToCheck.forEach(emotion => {
+                            let activation = d.activations?.[emotion] || 0;
+                            if (useRelative) {
+                                const intensityFactor = filterIntensityRef.current / 100;
+                                activation = Math.max(0, activation - (meanActivation * intensityFactor));
+                            }
+                            if (activation > maxActivation) {
+                                maxActivation = activation;
+                                maxEmotion = emotion;
+                            }
+                        });
+                        
+                        // Size based on activation
+                        const minSize = 10;
+                        const maxSize = 200;
+                        const amplifiedActivation = Math.min(maxActivation * 10, 1);
+                        const clusterSize = minSize + (amplifiedActivation * (maxSize - minSize));
+                        
+                        // Use cluster's primary emotion color
+                        const clusterColor = d.primary_emotion ? emotionColors[d.primary_emotion] : '#ccc';
+                        
+                        nodeG.append('circle')
+                            .attr('class', 'node cluster')
+                            .attr('r', clusterSize)
+                            .attr('fill', clusterColor)
+                            .attr('stroke', '#fff')
+                            .attr('stroke-width', 1.5)
+                            .style('opacity', maxActivation > 0 ? 0.6 : 0.1);
+                    } else {
+                        // Default cluster rendering when no emotion filter
+                        const useSizeByFeatures = sizeClustersByFeaturesRef.current;
+                        
+                        // Calculate size based on feature count if enabled
+                        let clusterSize = d.size;
+                        if (useSizeByFeatures && d.num_features) {
+                            // Scale cluster size based on number of features
+                            // Use log scale to prevent extreme size differences
+                            const minClusterSize = 10;
+                            const maxClusterSize = 100;
+                            const maxFeatures = 1036; // Total features from data
+                            const scaleFactor = Math.log(d.num_features + 1) / Math.log(maxFeatures + 1);
+                            clusterSize = minClusterSize + scaleFactor * (maxClusterSize - minClusterSize);
+                        }
+                        
+                        // Color by primary emotion if sizing by features
+                        const clusterColor = useSizeByFeatures && d.primary_emotion 
+                            ? (emotionColors[d.primary_emotion] || '#ccc')
+                            : '#ccc';
+                        
+                        nodeG.append('circle')
+                            .attr('class', 'node cluster')
+                            .attr('r', clusterSize)
+                            .attr('fill', clusterColor)
+                            .attr('stroke-width', 1.5)
+                            .style('opacity', showClusters ? 0.3 : 0);
+                    }
                 } else if (currentHoveredEmotion) {
-                    // When hovering an emotion in legend - show all nodes with that emotion's color and size by activation
+                    // When hovering an emotion in legend - show nodes sized by activation
                     let emotionActivation = d.activations?.[currentHoveredEmotion] || 0;
                     
                     // Calculate relative activation if enabled
@@ -349,28 +478,31 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                         
                         const meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
                         
-                        // Calculate difference from mean and clamp to 0 if negative
-                        emotionActivation = Math.max(0, emotionActivation - meanActivation);
+                        // Apply filter intensity
+                        const intensityFactor = filterIntensityRef.current / 100;
+                        emotionActivation = Math.max(0, emotionActivation - (meanActivation * intensityFactor));
                     }
                     
                     // Linear scaling based on emotion activation with amplification for visibility
-                    const minSize = 20;
-                    const maxSize = 100;
+                    const minSize = 10;
+                    const maxSize = 200;
                     // Amplify activations (typically very small values like 0.01-0.1) for better visibility
                     // Use a linear multiplier to spread the range while maintaining proportional differences
                     const amplifiedActivation = Math.min(emotionActivation * 10, 1);
                     const scaledSize = minSize + (amplifiedActivation * (maxSize - minSize));
                     
+                    // Use node's primary emotion color, not filtered emotion
+                    const nodeColor = d.primary_emotion ? emotionColors[d.primary_emotion] : '#999';
+                    
                     nodeG.append('circle')
                         .attr('class', 'node feature')
                         .attr('r', scaledSize)
-                        .attr('fill', emotionColors[currentHoveredEmotion] || '#999')
+                        .attr('fill', nodeColor)
                         .attr('stroke', '#fff')
                         .attr('stroke-width', 1.5)
                         .style('opacity', emotionActivation > 0 ? 1 : 0.1);
                 } else if (currentSelectedEmotions.size > 0 && !currentShowPieCharts) {
                     // When emotions are selected (persistent visualization)
-                    // Use same logic as hover for consistency
                     const useRelative = useRelativeActivationRef.current;
                     const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
                     
@@ -383,34 +515,36 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                         meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
                     }
                     
-                    // Find the emotion with highest activation among selected (applying relative if needed)
-                    let maxEmotion = null;
+                    // Find the emotion with highest activation among selected (applying relative + intensity)
                     let maxActivation = 0;
                     
                     currentSelectedEmotions.forEach(emotion => {
                         let activation = d.activations?.[emotion] || 0;
                         
-                        // Apply relative activation if enabled
+                        // Apply relative activation with filter intensity if enabled
                         if (useRelative) {
-                            activation = Math.max(0, activation - meanActivation);
+                            const intensityFactor = filterIntensityRef.current / 100;
+                            activation = Math.max(0, activation - (meanActivation * intensityFactor));
                         }
                         
                         if (activation > maxActivation) {
                             maxActivation = activation;
-                            maxEmotion = emotion;
                         }
                     });
                     
                     // Size based on activation (with relative adjustment if enabled)
-                    const minSize = 20;
-                    const maxSize = 100;
+                    const minSize = 10;
+                    const maxSize = 200;
                     const amplifiedActivation = Math.min(maxActivation * 10, 1);
                     const scaledSize = minSize + (amplifiedActivation * (maxSize - minSize));
+                    
+                    // Use node's primary emotion color, not filtered emotion
+                    const nodeColor = d.primary_emotion ? emotionColors[d.primary_emotion] : '#999';
                     
                     nodeG.append('circle')
                         .attr('class', 'node feature')
                         .attr('r', scaledSize)
-                        .attr('fill', maxEmotion ? emotionColors[maxEmotion] : '#999')
+                        .attr('fill', nodeColor)
                         .attr('stroke', '#fff')
                         .attr('stroke-width', 1.5)
                         .style('opacity', maxActivation > 0 ? 1 : 0.1);
@@ -513,13 +647,190 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
 
         hexbinGeneratorRef.current = hexbin;
 
+        // Create Voronoi layer BEFORE defining renderVoronoi so it exists when called
+        const voronoiLayer = g.append('g')
+            .attr('class', 'voronoi-layer')
+            .style('pointer-events', 'none'); // Will be toggled by useEffect
+
+        voronoiLayerRef.current = voronoiLayer;
+
+        // Function to render Voronoi cells
+        const renderVoronoi = () => {
+            const currentShowVoronoi = showVoronoiRef.current;
+            const voronoi = voronoiLayerRef.current;
+            if (!voronoi) return;
+
+            voronoi.selectAll('*').remove();
+
+            if (!currentShowVoronoi) return;
+
+            // Get all nodes with valid positions (both clusters and features)
+            const allNodes = graphData.nodes.filter(n => 
+                n.x !== undefined && 
+                n.y !== undefined
+            );
+
+            if (allNodes.length === 0) return;
+
+            // Use d3.Delaunay for Voronoi computation
+            const points = allNodes.map(n => [n.x, n.y]);
+            const delaunay = d3.Delaunay.from(points);
+            const voronoiDiagram = delaunay.voronoi([
+                -10000, -10000, // Extend bounds significantly
+                width + 10000, height + 10000
+            ]);
+
+            // Get emotion filters
+            const hasEmotionFilter = hoveredEmotionRef.current || (selectedEmotionsRef.current.size > 0 && !showPieChartsRef.current);
+
+            // Render each Voronoi cell
+            allNodes.forEach((node, i) => {
+                const cell = voronoiDiagram.cellPolygon(i);
+                if (!cell) return;
+
+                const isCluster = node.type === 'cluster';
+                
+                // Only render cells for clusters
+                if (!isCluster) return;
+
+                let fillColor = '#ccc';
+                let opacity = 0.2;
+                
+                // Color by cluster's primary emotion if available
+                if (node.primary_emotion) {
+                    fillColor = emotionColors[node.primary_emotion] || '#ccc';
+                    
+                    // Scale opacity by number of features (log scale) - only when no filter
+                    if (node.num_features) {
+                        const maxFeatures = 1036;
+                        const featureRatio = Math.log(node.num_features + 1) / Math.log(maxFeatures + 1);
+                        opacity = 0.05 + (featureRatio * 0.65); // Range: 0.05 to 0.7
+                    } else {
+                        opacity = 0.25;
+                    }
+                }
+                
+                // If emotion filter is active, OVERRIDE opacity based on activation
+                if (hasEmotionFilter && node.activations) {
+                    const targetEmotion = hoveredEmotionRef.current || null;
+                    const emotionsToCheck = targetEmotion ? [targetEmotion] : Array.from(selectedEmotionsRef.current);
+                    const useRelative = useRelativeActivationRef.current;
+
+                    let meanActivation = 0;
+                    if (useRelative) {
+                        const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                        const emotionValues = Object.entries(node.activations)
+                            .filter(([label]) => !demographics.includes(label))
+                            .map(([, value]) => value);
+                        meanActivation = emotionValues.reduce((sum, val) => sum + val, 0) / emotionValues.length;
+                    }
+
+                    let maxActivation = 0;
+                    emotionsToCheck.forEach(emotion => {
+                        let activation = node.activations?.[emotion] || 0;
+                        if (useRelative) {
+                            // Apply filter intensity as percentage of mean
+                            const intensityFactor = filterIntensityRef.current / 100;
+                            activation = Math.max(0, activation - (meanActivation * intensityFactor));
+                        }
+                        if (activation > maxActivation) {
+                            maxActivation = activation;
+                        }
+                    });
+
+                    // Override opacity completely based on activation
+                    if (maxActivation > 0) {
+                        const amplified = Math.min(maxActivation * 10, 1);
+                        opacity = 0.3 + (amplified * 0.6); // Range: 0.3 to 0.9 for active
+                    } else {
+                        opacity = 0.02; // Almost invisible for inactive clusters
+                    }
+                }
+
+                const pathEl = voronoi.append('path')
+                    .datum(node) // Attach node data
+                    .attr('d', `M${cell.join('L')}Z`)
+                    .attr('fill', fillColor)
+                    .attr('opacity', opacity)
+                    .attr('data-base-opacity', opacity) // Store original opacity
+                    .attr('stroke', '#999')
+                    .attr('stroke-width', 1)
+                    .attr('stroke-opacity', 0.5)
+                    .style('cursor', 'pointer')
+                    .style('pointer-events', 'all'); // Ensure the path itself can receive events
+                
+                pathEl.on('mouseover', function(event, d) {
+                        // Focus the cell - increase opacity and highlight border
+                        d3.select(this)
+                            .attr('opacity', 1.0) // Full opacity on hover
+                            .attr('stroke', '#000')
+                            .attr('stroke-width', 3)
+                            .attr('stroke-opacity', 1);
+                        
+                        // Show cluster tooltip
+                        const tooltipContent = {
+                            type: 'cluster',
+                            label: d.label,
+                            depth: d.depth,
+                            num_features: d.num_features,
+                            primary_emotion: d.primary_emotion,
+                            primary_activation: d.activations?.[d.primary_emotion] || 0,
+                            feature_vector_b64: d.feature_vector_b64,
+                            activations: d.activations
+                        };
+                        
+                        // Add top 3 emotions if activations available
+                        if (d.activations) {
+                            const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
+                            const emotionEntries = Object.entries(d.activations)
+                                .filter(([label]) => !demographics.includes(label))
+                                .sort((a, b) => b[1] - a[1])
+                                .slice(0, 3);
+                            tooltipContent.top3_emotions = emotionEntries;
+                        }
+                        
+                        setTooltipData(tooltipContent);
+                        setTooltipPosition({ x: event.pageX, y: event.pageY });
+                    })
+                    .on('mouseout', function(event, d) {
+                        // Restore original opacity and stroke
+                        const originalOpacity = d3.select(this).attr('data-base-opacity');
+                        d3.select(this)
+                            .attr('opacity', originalOpacity) // Restore original opacity
+                            .attr('stroke', '#999')
+                            .attr('stroke-width', 1)
+                            .attr('stroke-opacity', 0.5);
+                        
+                        setTooltipData(null);
+                    })
+                    .on('click', function(event, d) {
+                        event.stopPropagation();
+                        if (onNodeClick) {
+                            onNodeClick(d);
+                        }
+                    });
+            });
+        };
+
+        // Store render function for external access
+        window.renderVoronoi = renderVoronoi;
+
         // Create thumbnail layer (above nodes)
         const thumbnailLayer = g.append('g').attr('class', 'thumbnails');
+
+        // Voronoi layer already created above (before renderVoronoi function)
+        // Move it to the top for proper interaction
+        voronoiLayerRef.current.raise();
+
+        // Ensure thumbnails and annotations are above Voronoi
+        thumbnailLayer.raise();
 
         // Function to render annotations in D3
         const renderAnnotations = () => {
             const currentAnnotations = annotationsRef.current;
-            console.log('Rendering annotations:', currentAnnotations.length, currentAnnotations.map(a => a.id));
+
+            // Ensure annotations are above everything (including thumbnails and Voronoi)
+            annotationGroup.raise();
 
             // Render annotation groups
             const annotationSelection = annotationGroup
@@ -528,9 +839,6 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
 
             // Remove old annotations
             annotationSelection.exit().remove();
-
-            console.log('Enter selection size:', annotationSelection.enter().size());
-            console.log('Update selection size:', annotationSelection.size());
 
             // Add new annotation groups
             const annotationEnter = annotationSelection.enter()
@@ -790,8 +1098,6 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             // Update all annotations (enter + update)
             const allAnnotations = annotationSelection.merge(annotationEnter);
 
-            console.log('All annotations size:', allAnnotations.size());
-
             allAnnotations.each(function (d, i) {
                 const nodeData = graphData.nodes.find(n => n.id === d.nodeId);
                 if (nodeData && nodeData.x !== undefined && nodeData.y !== undefined) {
@@ -822,6 +1128,9 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
 
             node
                 .attr('transform', d => `translate(${d.x}, ${d.y})`);
+
+            // Don't update Voronoi on every tick - it destroys hover states
+            // Voronoi cells are static once created
 
             // Update annotation positions
             annotationGroup.selectAll('g.annotation-group')
@@ -1289,6 +1598,17 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             d3.zoomIdentity.translate(...initialTranslate).scale(initialScale)
         );
 
+        // Initial Voronoi render after simulation settles
+        // Also re-render periodically during early simulation
+        const voronoiRenderTimes = [100, 500, 1000, 2000]; // Render at these times
+        voronoiRenderTimes.forEach(time => {
+            setTimeout(() => {
+                if (showVoronoiRef.current) {
+                    renderVoronoi();
+                }
+            }, time);
+        });
+
         // Cleanup
         return () => {
             simulation.stop();
@@ -1297,6 +1617,7 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             window.renderAnnotations = null;
             window.updateHexbinHeatmap = null;
             window.renderNodeVisuals = null;
+            window.renderVoronoi = null;
         };
     }, []); // Empty deps - only run once on mount
 
@@ -1307,10 +1628,30 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
         }
     }, [showPieCharts]);
 
+    // Update node visuals when cluster sizing mode changes
+    useEffect(() => {
+        if (window.renderNodeVisuals) {
+            window.renderNodeVisuals();
+        }
+        if (window.renderVoronoi) {
+            window.renderVoronoi();
+        }
+    }, [sizeClustersByFeatures]);
+
+    // Update Voronoi when showVoronoi changes
+    useEffect(() => {
+        if (window.renderVoronoi) {
+            window.renderVoronoi();
+        }
+    }, [showVoronoi]);
+
     // Update node visuals when hovered emotion changes
     useEffect(() => {
         if (window.renderNodeVisuals) {
             window.renderNodeVisuals();
+        }
+        if (window.renderVoronoi) {
+            window.renderVoronoi();
         }
     }, [hoveredEmotion]);
 
@@ -1319,7 +1660,10 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
         if (window.renderNodeVisuals && (hoveredEmotion || selectedEmotions.size > 0)) {
             window.renderNodeVisuals();
         }
-    }, [useRelativeActivation, hoveredEmotion, selectedEmotions]);
+        if (window.renderVoronoi) {
+            window.renderVoronoi();
+        }
+    }, [useRelativeActivation, hoveredEmotion, selectedEmotions, filterIntensity]);
 
     // Update node visuals when selected emotions change
     useEffect(() => {
@@ -1345,6 +1689,18 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                 
                 let nodeSize = d.size;
                 
+                // For clusters, check if sizing by features is enabled
+                if (d.type === 'cluster') {
+                    const useSizeByFeatures = sizeClustersByFeaturesRef.current;
+                    if (useSizeByFeatures && d.num_features) {
+                        const minClusterSize = 10;
+                        const maxClusterSize = 100;
+                        const maxFeatures = 1036;
+                        const scaleFactor = Math.log(d.num_features + 1) / Math.log(maxFeatures + 1);
+                        nodeSize = minClusterSize + scaleFactor * (maxClusterSize - minClusterSize);
+                    }
+                }
+                
                 if (d.type !== 'cluster' && (currentHoveredEmotion || (currentSelectedEmotions.size > 0 && !currentShowPie))) {
                     const targetEmotion = currentHoveredEmotion || null;
                     const emotionsToCheck = targetEmotion ? [targetEmotion] : Array.from(currentSelectedEmotions);
@@ -1365,9 +1721,10 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                         emotionsToCheck.forEach(emotion => {
                             let activation = d.activations?.[emotion] || 0;
                             
-                            // Apply relative activation if enabled
+                            // Apply relative activation with filter intensity if enabled
                             if (useRelative) {
-                                activation = Math.max(0, activation - meanActivation);
+                                const intensityFactor = filterIntensityRef.current / 100;
+                                activation = Math.max(0, activation - (meanActivation * intensityFactor));
                             }
                             
                             if (activation > maxActivation) {
@@ -1375,8 +1732,8 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                             }
                         });
                         
-                        const minSize = 20;
-                        const maxSize = 100;
+                        const minSize = 10;
+                        const maxSize = 200;
                         const amplifiedActivation = Math.min(maxActivation * 10, 1);
                         nodeSize = minSize + (amplifiedActivation * (maxSize - minSize));
                     }
@@ -1397,6 +1754,11 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                 }
             });
         }
+        
+        // Update Voronoi to reflect emotion filters
+        if (window.renderVoronoi) {
+            window.renderVoronoi();
+        }
     }, [selectedEmotions]);
 
     // Update annotations when annotations array changes
@@ -1412,6 +1774,19 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
             .selectAll('g.node-group.cluster circle')
             .style('opacity', showClusters ? 0.3 : 0);
     }, [showClusters]);
+
+    // Show/hide links in Voronoi mode
+    useEffect(() => {
+        const svg = d3.select(svgRef.current);
+        
+        // Hide links in Voronoi mode
+        svg.selectAll('line.link')
+            .style('display', showVoronoi ? 'none' : null);
+        
+        // Voronoi layer always accepts pointer events when visible
+        svg.select('.voronoi-layer')
+            .style('pointer-events', showVoronoi ? 'all' : 'none');
+    }, [showVoronoi]);
 
     // Update hexbin heatmap when demographics or relative activation mode changes
     useEffect(() => {
