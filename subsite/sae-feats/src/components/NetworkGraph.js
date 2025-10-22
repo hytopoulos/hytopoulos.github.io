@@ -40,7 +40,7 @@ const EMOTION_COLORS = {
     'Valence': '#7B68EE'          // Medium slate blue
 };
 
-function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNodeClick, annotations, activeDemographics, showPieCharts, hoveredEmotion, useRelativeActivation, selectedEmotions, sizeClustersByFeatures, showVoronoi, filterIntensity }) {
+function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNodeClick, annotations, activeDemographics, showPieCharts, hoveredEmotion, useRelativeActivation, selectedEmotions, sizeClustersByFeatures, showVoronoi, filterIntensity, showNodes }) {
     const svgRef = useRef();
     const simulationRef = useRef();
     const transformRef = useRef(d3.zoomIdentity);
@@ -1787,6 +1787,14 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
         svg.select('.voronoi-layer')
             .style('pointer-events', showVoronoi ? 'all' : 'none');
     }, [showVoronoi]);
+
+    // Hide/show nodes based on showNodes setting
+    useEffect(() => {
+        const svg = d3.select(svgRef.current);
+        
+        svg.selectAll('g.node-group')
+            .style('display', showNodes ? null : 'none');
+    }, [showNodes]);
 
     // Update hexbin heatmap when demographics or relative activation mode changes
     useEffect(() => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Settings.css';
 import graphData from '../data.json';
 
-function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle, useRelativeActivation, onRelativeActivationToggle, sizeClustersByFeatures, onSizeClustersByFeaturesToggle, showVoronoi, onShowVoronoiToggle, filterIntensity, onFilterIntensityChange }) {
+function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle, useRelativeActivation, onRelativeActivationToggle, sizeClustersByFeatures, onSizeClustersByFeaturesToggle, showVoronoi, onShowVoronoiToggle, filterIntensity, onFilterIntensityChange, showNodes, onShowNodesToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   
   // Get all labels from data
@@ -81,6 +81,15 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
                 onChange={onShowVoronoiToggle}
               />
               <span>Show Voronoi Cells</span>
+            </label>
+            
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={showNodes}
+                onChange={onShowNodesToggle}
+              />
+              <span>Show Nodes</span>
             </label>
             
             <h4 className="section-title">Heatmap Overlays</h4>

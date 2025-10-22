@@ -21,6 +21,7 @@ function App() {
   const [sizeClustersByFeatures, setSizeClustersByFeatures] = useState(false);
   const [showVoronoi, setShowVoronoi] = useState(true); // Voronoi enabled by default
   const [filterIntensity, setFilterIntensity] = useState(200); // 0-500%, default 200%
+  const [showNodes, setShowNodes] = useState(false); // Nodes hidden by default
 
   const handleLabelToggle = (label) => {
     setActiveHeatmapLabels(prev => {
@@ -96,6 +97,8 @@ function App() {
         onShowVoronoiToggle={() => setShowVoronoi(!showVoronoi)}
         filterIntensity={filterIntensity}
         onFilterIntensityChange={setFilterIntensity}
+        showNodes={showNodes}
+        onShowNodesToggle={() => setShowNodes(!showNodes)}
       />
       <Help />
       <Legend 
@@ -117,6 +120,7 @@ function App() {
         sizeClustersByFeatures={sizeClustersByFeatures}
         showVoronoi={showVoronoi}
         filterIntensity={filterIntensity}
+        showNodes={showNodes}
       />
       <Tooltip 
         data={tooltipData}
