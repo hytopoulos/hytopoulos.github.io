@@ -27,6 +27,10 @@ function Help() {
               Each <b>cluster</b> contains multiple nodes and represents a more abstract concept.
             </p>
             <p>
+              Select a node or cluster to query Reddit for images that activate the representation.
+              Each image is scored according to its cosine similarity to the representation.
+            </p>
+            <p>
               These concepts were extracted using a sparse autoencoder. You can read more 
               about sparse autoencoders{' '}
               <a 
