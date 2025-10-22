@@ -810,15 +810,6 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
                     }
                 }
             });
-
-            const initialScale = 0.2; // zoom in 1.5× (adjust as you like)
-            const initialTranslate = [width / 2 - (width / 2) * initialScale, height / 2 - (height / 2) * initialScale];
-
-            svg.call(
-                zoom.transform,
-                d3.zoomIdentity.translate(...initialTranslate).scale(initialScale)
-            );
-
         };
 
         // Update positions on tick
@@ -1289,6 +1280,14 @@ function NetworkGraph({ showClusters, setTooltipData, setTooltipPosition, onNode
 
         // Store render function
         window.renderAnnotations = renderAnnotations;
+
+        // Set initial zoom transform (only once on mount)
+        const initialScale = 0.2;
+        const initialTranslate = [width / 2 - (width / 2) * initialScale, height / 2 - (height / 2) * initialScale];
+        svg.call(
+            zoom.transform,
+            d3.zoomIdentity.translate(...initialTranslate).scale(initialScale)
+        );
 
         // Cleanup
         return () => {
