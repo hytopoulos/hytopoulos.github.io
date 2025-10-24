@@ -1,7 +1,7 @@
 .tooltip {
   position: absolute;
   background: var(--color-tooltip-bg);
-  color: var(--color-text-primary);
+  color: var(--color-tooltip-text);
   padding: 12px;
   border-radius: 10px;
   pointer-events: none;
@@ -16,7 +16,7 @@
 .tooltip-header {
   margin-bottom: 8px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid var(--color-tooltip-divider);
 }
 
 .tooltip-header strong {
@@ -41,7 +41,7 @@
 }
 
 .tooltip-row .label {
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--color-tooltip-label);
 }
 
 .tooltip-row .value {
@@ -51,7 +51,7 @@
 .tooltip-section {
   margin-top: 8px;
   padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid var(--color-tooltip-divider);
 }
 
 .tooltip-section strong {
