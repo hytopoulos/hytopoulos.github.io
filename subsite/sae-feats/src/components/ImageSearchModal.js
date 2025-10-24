@@ -4,7 +4,14 @@ import './ImageSearchModal.css';
 const BACKEND_URL = 'https://nooscope.osmarks.net/backend';
 const TOP_K = 20;
 
-function ImageSearchModal({ featureData, onClose }) {
+function ImageSearchModal({
+  featureData,
+  onClose,
+  biasMeanVectors,
+  genderBiasSteering,
+  ageBiasSteering,
+  biasReductionStrength
+}) {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -13,17 +20,13 @@ function ImageSearchModal({ featureData, onClose }) {
     if (featureData && featureData.feature_vector_b64) {
       searchImages();
     }
-  }, [featureData]);
-
-  const base64ToFloat32Array = (base64String) => {
-    const binaryString = atob(base64String);
-    const len = binaryString.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-    return new Float32Array(bytes.buffer);
-  };
+  }, [
+    featureData,
+    biasMeanVectors,
+    genderBiasSteering,
+    ageBiasSteering,
+    biasReductionStrength
+  ]);
 
   const l2norm = (vec) => {
     const norm = Math.sqrt(vec.reduce((sum, val) => sum + val * val, 0));
@@ -35,11 +38,27 @@ function ImageSearchModal({ featureData, onClose }) {
     setError(null);
 
     try {
-      // Decode base64 feature vector
-      const featureVector = base64ToFloat32Array(featureData.feature_vector_b64);
-      
-      // Normalize
-      const normalizedVector = l2norm(Array.from(featureVector));
+      const baseB64 = featureData.original_feature_vector_b64 || featureData.feature_vector_b64;
+      const binaryString = atob(baseB64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      let vector = new Float32Array(bytes.buffer);
+
+      if ((genderBiasSteering || ageBiasSteering) && biasMeanVectors) {
+        const reductionFactor = Math.max(0, Math.min(1, (biasReductionStrength ?? 100) / 100));
+        // applyDebiasing expects Float32Array, import lazily to avoid bundle bloat
+        const { applyDebiasing } = await import('../utils');
+        vector = applyDebiasing(vector, biasMeanVectors, {
+          genderBiasSteering,
+          ageBiasSteering,
+          biasReductionStrength: reductionFactor
+        });
+      }
+
+      const normalizedVector = l2norm(Array.from(vector));
 
       // Build payload
       const payload = {

@@ -1,45 +1,29 @@
 import React, { useState } from 'react';
 import './Legend.css';
+import { DEMOGRAPHICS, getEmotionsOnly, EMOTION_COLORS } from '../constants';
+import { useVisualization } from '../contexts';
+import graphData from '../data.json';
 
-// Culturally-aligned emotion colors (matching NetworkGraph)
-const EMOTION_COLORS = {
-    'Anger': '#DC143C',
-    'Annoyance': '#FF6B6B',
-    'Fear': '#4A0E4E',
-    'Sadness': '#4A90E2',
-    'Happiness': '#FFD700',
-    'Joy': '#FFA500',
-    'Pleasure': '#FF69B4',
-    'Excitement': '#FF4500',
-    'Peace': '#87CEEB',
-    'Affection': '#FFB6C1',
-    'Love': '#FF1493',
-    'Surprise': '#FFFF00',
-    'Confidence': '#9370DB',
-    'Pride': '#DAA520',
-    'Esteem': '#B8860B',
-    'Anticipation': '#FFA07A',
-    'Engagement': '#20B2AA',
-    'Yearning': '#DDA0DD',
-    'Sympathy': '#98FB98',
-    'Suffering': '#696969',
-    'Pain': '#8B0000',
-    'Embarrassment': '#FFB6C1',
-    'Sensitivity': '#E6E6FA',
-    'Disapproval': '#A0522D',
-    'Aversion': '#556B2F',
-    'Disconnection': '#708090',
-    'Doubt/Confusion': '#D3D3D3',
-    'Disquietment': '#8B7D7B',
-    'Fatigue': '#C0C0C0',
-    'Dominance': '#8B4513',
-    'Arousal': '#FF6347',
-    'Valence': '#7B68EE'
+const DEMOGRAPHIC_COLORS = {
+    Male: '#4C6FFF',
+    Female: '#FF6BBA',
+    Kid: '#6FCF97',
+    Adult: '#888888',
+    Teenager: '#F2C94C'
 };
 
-function Legend({ onEmotionHover, selectedEmotions, onEmotionToggle }) {
+const getColorForLabel = (label) => EMOTION_COLORS[label] || DEMOGRAPHIC_COLORS[label] || '#888888';
+
+function Legend() {
     const [isOpen, setIsOpen] = useState(false);
-    const emotions = Object.keys(EMOTION_COLORS);
+    const { selectedEmotions, setHoveredEmotion, toggleEmotion } = useVisualization();
+    
+    // Get emotions that actually exist in data
+    const allLabels = graphData.labels || [];
+    const emotionsInData = getEmotionsOnly(allLabels);
+    
+    const demographics = DEMOGRAPHICS.filter(demo => allLabels.includes(demo));
+    const hasActiveSelection = selectedEmotions.size > 0;
 
     return (
         <>
@@ -55,28 +39,74 @@ function Legend({ onEmotionHover, selectedEmotions, onEmotionToggle }) {
             
             {isOpen && (
                 <div className="legend-panel">
-                    <h3 className="legend-title">Filter</h3>
-                    <div className="legend-grid">
-                        {emotions.map(emotion => (
-                            <label 
-                                key={emotion} 
-                                className="legend-item"
-                                onMouseEnter={() => onEmotionHover && onEmotionHover(emotion)}
-                                onMouseLeave={() => onEmotionHover && onEmotionHover(null)}
-                            >
-                                <input
-                                    type="checkbox"
-                                    className="legend-checkbox"
-                                    checked={selectedEmotions.has(emotion)}
-                                    onChange={() => onEmotionToggle(emotion)}
-                                    style={{ 
-                                        accentColor: EMOTION_COLORS[emotion],
-                                        backgroundColor: EMOTION_COLORS[emotion]
-                                    }}
-                                />
-                                <span className="legend-label">{emotion}</span>
-                            </label>
-                        ))}
+                    <div className="legend-scroll">
+                        {demographics.length > 0 && (
+                            <>
+                                <h4 className="legend-section-title">Demographics</h4>
+                                <div className="legend-items">
+                                    {demographics.map(demo => {
+                                        const isSelected = selectedEmotions.has(demo);
+                                        const color = getColorForLabel(demo);
+                                        const showColor = !hasActiveSelection || isSelected;
+                                        return (
+                                            <div
+                                                key={demo}
+                                                className={`legend-item${isSelected ? ' selected' : ''}`}
+                                                onClick={() => toggleEmotion(demo)}
+                                                onMouseEnter={() => setHoveredEmotion(demo)}
+                                                onMouseLeave={() => setHoveredEmotion(null)}
+                                                style={{
+                                                    '--legend-item-color': color,
+                                                    '--legend-checkbox-color': color,
+                                                    '--legend-checkbox-bg': showColor ? color : 'transparent'
+                                                }}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="legend-checkbox"
+                                                    checked={isSelected}
+                                                    onChange={() => toggleEmotion(demo)}
+                                                    onClick={(event) => event.stopPropagation()}
+                                                />
+                                                <span className="legend-label">{demo}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </>
+                        )}
+                        
+                        <h4 className="legend-section-title">Emotions</h4>
+                        <div className="legend-items">
+                            {emotionsInData.map(emotion => {
+                                const isSelected = selectedEmotions.has(emotion);
+                                const color = getColorForLabel(emotion);
+                                const showColor = !hasActiveSelection || isSelected;
+                                return (
+                                    <div
+                                        key={emotion}
+                                        className={`legend-item${isSelected ? ' selected' : ''}`}
+                                        onClick={() => toggleEmotion(emotion)}
+                                        onMouseEnter={() => setHoveredEmotion(emotion)}
+                                        onMouseLeave={() => setHoveredEmotion(null)}
+                                        style={{
+                                            '--legend-item-color': color,
+                                            '--legend-checkbox-color': color,
+                                            '--legend-checkbox-bg': showColor ? color : 'transparent'
+                                        }}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            className="legend-checkbox"
+                                            checked={isSelected}
+                                            onChange={() => toggleEmotion(emotion)}
+                                            onClick={(event) => event.stopPropagation()}
+                                        />
+                                        <span className="legend-label">{emotion}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             )}

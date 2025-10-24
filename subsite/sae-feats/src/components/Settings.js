@@ -1,16 +1,34 @@
 import React, { useState } from 'react';
 import './Settings.css';
-import graphData from '../data.json';
+import { useVisualization } from '../contexts';
 
-function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle, useRelativeActivation, onRelativeActivationToggle, sizeClustersByFeatures, onSizeClustersByFeaturesToggle, showVoronoi, onShowVoronoiToggle, filterIntensity, onFilterIntensityChange, showNodes, onShowNodesToggle }) {
+function Settings() {
   const [isOpen, setIsOpen] = useState(false);
   
-  // Get all labels from data
-  const allLabels = graphData.labels || [];
+  // Get all settings from Context
+  const {
+    showPieCharts,
+    toggleShowPieCharts,
+    useRelativeActivation,
+    toggleUseRelativeActivation,
+    sizeClustersByFeatures,
+    toggleSizeClustersByFeatures,
+    showVoronoi,
+    toggleShowVoronoi,
+    showHeatmap,
+    toggleShowHeatmap,
+    filterIntensity,
+    setFilterIntensity,
+    showNodes,
+    toggleShowNodes,
+    genderBiasSteering,
+    toggleGenderBiasSteering,
+    ageBiasSteering,
+    toggleAgeBiasSteering,
+    biasReductionStrength,
+    setBiasReductionStrength
+  } = useVisualization();
   
-  // Categorize labels
-  const demographics = ['Male', 'Female', 'Kid', 'Adult', 'Teenager'];
-  const emotions = allLabels.filter(label => !demographics.includes(label));
 
   return (
     <>
@@ -35,7 +53,7 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
               <input
                 type="checkbox"
                 checked={showPieCharts}
-                onChange={onPieChartToggle}
+                onChange={toggleShowPieCharts}
               />
               <span>Show Pie Charts (emotion breakdown)</span>
             </label>
@@ -44,7 +62,7 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
               <input
                 type="checkbox"
                 checked={useRelativeActivation}
-                onChange={onRelativeActivationToggle}
+                onChange={toggleUseRelativeActivation}
               />
               <span>Use Relative Activation (vs mean)</span>
             </label>
@@ -58,7 +76,7 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
                     min="0"
                     max="500"
                     value={filterIntensity}
-                    onChange={(e) => onFilterIntensityChange(Number(e.target.value))}
+                    onChange={(e) => setFilterIntensity(Number(e.target.value))}
                     style={{ width: '100%' }}
                   />
                 </label>
@@ -69,7 +87,7 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
               <input
                 type="checkbox"
                 checked={sizeClustersByFeatures}
-                onChange={onSizeClustersByFeaturesToggle}
+                onChange={toggleSizeClustersByFeatures}
               />
               <span>Size Clusters by Feature Count</span>
             </label>
@@ -78,7 +96,7 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
               <input
                 type="checkbox"
                 checked={showVoronoi}
-                onChange={onShowVoronoiToggle}
+                onChange={toggleShowVoronoi}
               />
               <span>Show Voronoi Cells</span>
             </label>
@@ -87,39 +105,53 @@ function Settings({ onLabelToggle, activeLabels, showPieCharts, onPieChartToggle
               <input
                 type="checkbox"
                 checked={showNodes}
-                onChange={onShowNodesToggle}
+                onChange={toggleShowNodes}
               />
               <span>Show Nodes</span>
             </label>
             
-            <h4 className="section-title">Heatmap Overlays</h4>
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={showHeatmap}
+                onChange={toggleShowHeatmap}
+              />
+              <span>Show Heatmap (uses filter selections)</span>
+            </label>
             
-            <h5 className="subsection-title">Demographics</h5>
-            <div className="checkbox-section">
-              {demographics.map(demo => (
-                <label key={demo} className="checkbox-item">
-                  <input
-                    type="checkbox"
-                    checked={activeLabels.has(demo)}
-                    onChange={() => onLabelToggle(demo)}
-                  />
-                  <span>{demo}</span>
-                </label>
-              ))}
-            </div>
+            <h4 className="section-title">Bias Steering</h4>
             
-            <h5 className="subsection-title">Emotions</h5>
-            <div className="checkbox-section">
-              {emotions.map(emotion => (
-                <label key={emotion} className="checkbox-item">
-                  <input
-                    type="checkbox"
-                    checked={activeLabels.has(emotion)}
-                    onChange={() => onLabelToggle(emotion)}
-                  />
-                  <span>{emotion}</span>
-                </label>
-              ))}
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={genderBiasSteering}
+                onChange={toggleGenderBiasSteering}
+              />
+              <span>Gender Bias Steering</span>
+            </label>
+            
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={ageBiasSteering}
+                onChange={toggleAgeBiasSteering}
+              />
+              <span>Age Bias Steering</span>
+            </label>
+            
+            <div className="slider-container" style={{ opacity: (genderBiasSteering || ageBiasSteering) ? 1 : 0.5 }}>
+              <label>
+                <span>Reduction Strength: {biasReductionStrength}%</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={biasReductionStrength}
+                  onChange={(e) => setBiasReductionStrength(parseInt(e.target.value))}
+                  disabled={!genderBiasSteering && !ageBiasSteering}
+                  style={{ width: '100%' }}
+                />
+              </label>
             </div>
           </div>
         </div>

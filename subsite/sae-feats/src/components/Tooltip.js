@@ -1,7 +1,11 @@
 import React from 'react';
 import './Tooltip.css';
+import { getTopNEmotions } from '../utils';
+import { useTooltipContext } from '../contexts';
 
-function Tooltip({ data, position }) {
+function Tooltip() {
+  const { tooltipData: data, tooltipPosition: position } = useTooltipContext();
+  
   if (!data) return null;
 
   const isCluster = data.type === 'cluster';
@@ -33,7 +37,7 @@ function Tooltip({ data, position }) {
               <span className="label">Primary:</span>
               <span className="value">{data.primary_emotion}</span>
             </div>
-            {data.primary_activation !== undefined && (
+            {data.primary_activation !== undefined && data.primary_activation !== null && (
               <div className="tooltip-row">
                 <span className="label">Activation:</span>
                 <span className="value">{data.primary_activation.toFixed(6)}</span>
@@ -47,7 +51,7 @@ function Tooltip({ data, position }) {
             {data.top3_emotions.map(([emotion, value], idx) => (
               <div key={idx} className="tooltip-row small">
                 <span className="label">{emotion}:</span>
-                <span className="value">{value.toFixed(6)}</span>
+                <span className="value">{value !== undefined ? value.toFixed(6) : 'N/A'}</span>
               </div>
             ))}
           </div>
