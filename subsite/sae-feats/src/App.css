@@ -1,7 +1,7 @@
 .App {
   width: 100vw;
   height: 100vh;
-  background: #fafafa;
+  background: var(--color-app-bg);
   position: relative;
   overflow: hidden;
 }

@@ -2,17 +2,16 @@
   position: fixed;
   top: 0;
   left: 0;
-  background: white;
+  background: var(--color-surface);
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--color-shadow-elevated);
   width: 400px;
   max-height: 600px;
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  border: 2px solid #e0e0e0;
+  border: 1px solid var(--color-border);
   will-change: transform;
-  /* No transition on transform for smooth 60fps updates */
 }
 
 .image-annotation.collapsed {
@@ -69,11 +68,11 @@
 
 .annotation-header {
   padding: 12px 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f8f9fa;
+  background: var(--color-surface-alt);
   border-radius: 10px 10px 0 0;
   cursor: move;
 }
@@ -88,12 +87,12 @@
 .feature-id {
   font-weight: 600;
   font-size: 14px;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .feature-emotion {
   font-size: 12px;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .annotation-actions {
@@ -107,7 +106,7 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #666;
+  color: var(--color-text-muted);
   padding: 0;
   width: 24px;
   height: 24px;
@@ -120,14 +119,15 @@
 
 .toggle-button:hover,
 .close-button:hover {
-  background: #e0e0e0;
-  color: #333;
+  background: var(--color-button-hover);
+  color: var(--color-text-primary);
 }
 
 .annotation-body {
   overflow-y: auto;
   flex: 1;
   padding: 12px;
+  background: var(--color-surface);
 }
 
 .loading-state,
@@ -139,21 +139,22 @@
   justify-content: center;
   padding: 40px 20px;
   text-align: center;
+  color: var(--color-text-secondary);
 }
 
 .loading-state p,
 .error-state p,
 .empty-state p {
   margin: 0;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 13px;
 }
 
 .spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #1f77b4;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top: 3px solid var(--color-accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 12px;
@@ -167,7 +168,7 @@
 .error-state button {
   margin-top: 12px;
   padding: 6px 12px;
-  background: #1f77b4;
+  background: var(--color-accent);
   color: white;
   border: none;
   border-radius: 4px;
@@ -176,7 +177,7 @@
 }
 
 .error-state button:hover {
-  background: #1565c0;
+  background: var(--color-accent-strong);
 }
 
 .image-grid {
@@ -186,7 +187,7 @@
 }
 
 .image-item {
-  background: #f9f9f9;
+  background: var(--color-surface-alt);
   border-radius: 6px;
   overflow: hidden;
   transition: transform 0.2s;
@@ -212,7 +213,7 @@
 .image-info .score {
   font-size: 11px;
   font-weight: 600;
-  color: #1f77b4;
+  color: var(--color-accent);
 }
 
 /* Make annotation draggable visually */

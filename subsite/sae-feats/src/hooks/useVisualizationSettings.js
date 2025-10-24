@@ -2,8 +2,15 @@
  * Custom hook for managing visualization settings state
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { FILTER_DEFAULTS } from '../constants';
+
+const getSystemTheme = () => {
+  if (typeof window === 'undefined' || !window.matchMedia) {
+    return 'light';
+  }
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
 
 /**
  * Hook to manage all visualization settings
@@ -33,6 +40,50 @@ export const useVisualizationSettings = () => {
   // Emotion selection
   const [selectedEmotions, setSelectedEmotions] = useState(new Set());
   const [hoveredEmotion, setHoveredEmotion] = useState(null);
+
+  // Theme settings
+  const [themeMode, setThemeMode] = useState(() => {
+    if (typeof window === 'undefined') return 'system';
+    const stored = window.localStorage.getItem('themeMode');
+    return stored || 'system';
+  });
+  const [resolvedTheme, setResolvedTheme] = useState(getSystemTheme());
+
+  useEffect(() => {
+    if (themeMode === 'system') {
+      const systemTheme = getSystemTheme();
+      setResolvedTheme(systemTheme);
+    }
+  }, [themeMode]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (event) => {
+      if (themeMode === 'system') {
+        setResolvedTheme(event.matches ? 'dark' : 'light');
+      }
+    };
+
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, [themeMode]);
+
+  useEffect(() => {
+    if (themeMode !== 'system') {
+      setResolvedTheme(themeMode);
+    }
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('themeMode', themeMode);
+    }
+  }, [themeMode]);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', resolvedTheme);
+    }
+  }, [resolvedTheme]);
 
   // Toggle functions
   const toggleShowClusters = useCallback(() => setShowClusters(prev => !prev), []);
@@ -141,6 +192,11 @@ export const useVisualizationSettings = () => {
     toggleEmotion,
     clearSelectedEmotions,
     hoveredEmotion,
-    setHoveredEmotion
+    setHoveredEmotion,
+
+    // Theme settings
+    themeMode,
+    setThemeMode,
+    resolvedTheme
   };
 };

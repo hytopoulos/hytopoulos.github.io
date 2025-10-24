@@ -26,9 +26,15 @@ function Settings() {
     ageBiasSteering,
     toggleAgeBiasSteering,
     biasReductionStrength,
-    setBiasReductionStrength
+    setBiasReductionStrength,
+    themeMode,
+    setThemeMode
   } = useVisualization();
   
+
+  const handleThemeChange = (mode) => {
+    setThemeMode(mode);
+  };
 
   return (
     <>
@@ -152,6 +158,29 @@ function Settings() {
                   style={{ width: '100%' }}
                 />
               </label>
+            </div>
+
+            <h4 className="section-title">Theme</h4>
+            <div className="theme-options">
+              {[
+                { value: 'system', label: 'System' },
+                { value: 'light', label: 'Light' },
+                { value: 'dark', label: 'Dark' }
+              ].map(option => (
+                <label
+                  key={option.value}
+                  className={`radio-item ${themeMode === option.value ? 'active' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="theme-mode"
+                    value={option.value}
+                    checked={themeMode === option.value}
+                    onChange={() => handleThemeChange(option.value)}
+                  />
+                  <span>{option.label}</span>
+                </label>
+              ))}
             </div>
           </div>
         </div>

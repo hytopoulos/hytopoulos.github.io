@@ -4,6 +4,60 @@
   box-sizing: border-box;
 }
 
+:root {
+  --color-app-bg: #f7f8fb;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f0f2f7;
+  --color-border: #d8dde5;
+  --color-border-strong: #c1c7d0;
+  --color-text-primary: #1c1f26;
+  --color-text-secondary: #4c5568;
+  --color-text-muted: #70798c;
+  --color-accent: #1f77b4;
+  --color-accent-strong: #1558a0;
+  --color-button-bg: #ffffff;
+  --color-button-border: #d8dde5;
+  --color-button-hover: #eef1f7;
+  --color-button-icon: #5a6375;
+  --color-highlight: #e4ecff;
+  --color-highlight-border: #b6ccff;
+  --color-tooltip-bg: rgba(15, 17, 21, 0.92);
+  --color-tooltip-border: rgba(255, 255, 255, 0.1);
+  --color-scrollbar-track: rgba(0, 0, 0, 0.05);
+  --color-scrollbar-thumb: rgba(120, 130, 150, 0.4);
+  --color-shadow-elevated: 0 8px 24px rgba(15, 23, 42, 0.12);
+  --color-shadow-float: 0 6px 18px rgba(15, 23, 42, 0.16);
+  --color-slider-track: #d0d5df;
+  --color-slider-thumb: #1f77b4;
+}
+
+:root[data-theme='dark'] {
+  --color-app-bg: #0f1117;
+  --color-surface: #171a23;
+  --color-surface-alt: #1f232e;
+  --color-border: #2a2f3a;
+  --color-border-strong: #3a4251;
+  --color-text-primary: #f1f4f9;
+  --color-text-secondary: #c5c9d3;
+  --color-text-muted: #969eb2;
+  --color-accent: #4fa3ff;
+  --color-accent-strong: #82c0ff;
+  --color-button-bg: #1f232e;
+  --color-button-border: #303643;
+  --color-button-hover: #262c38;
+  --color-button-icon: #c5c9d3;
+  --color-highlight: rgba(79, 163, 255, 0.2);
+  --color-highlight-border: rgba(79, 163, 255, 0.45);
+  --color-tooltip-bg: rgba(16, 19, 26, 0.94);
+  --color-tooltip-border: rgba(255, 255, 255, 0.08);
+  --color-scrollbar-track: rgba(255, 255, 255, 0.04);
+  --color-scrollbar-thumb: rgba(136, 153, 178, 0.35);
+  --color-shadow-elevated: 0 10px 28px rgba(5, 11, 20, 0.48);
+  --color-shadow-float: 0 14px 32px rgba(5, 11, 20, 0.56);
+  --color-slider-track: #3a4251;
+  --color-slider-thumb: #4fa3ff;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -12,6 +66,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+  background: var(--color-app-bg);
+  color: var(--color-text-primary);
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 code {

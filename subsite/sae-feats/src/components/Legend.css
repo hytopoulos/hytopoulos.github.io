@@ -2,27 +2,27 @@
   position: fixed;
   top: 20px;
   left: 20px;
-  background: white;
-  border: 2px solid #ddd;
-  border-radius: 8px;
+  background: var(--color-button-bg);
+  border: 2px solid var(--color-button-border);
+  border-radius: 10px;
   padding: 10px 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--color-shadow-float);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 13px;
   font-weight: 500;
-  color: #555;
+  color: var(--color-button-icon);
   transition: all 0.2s ease;
   z-index: 1000;
 }
 
 .legend-toggle-bottom:hover {
-  background: #f5f5f5;
-  color: #333;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: var(--color-button-hover);
+  color: var(--color-text-primary);
+  box-shadow: var(--color-shadow-elevated);
   transform: translateY(-1px);
 }
 
@@ -34,11 +34,11 @@
   position: fixed;
   top: 70px;
   left: 20px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
   padding: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--color-shadow-elevated);
   backdrop-filter: blur(10px);
   z-index: 999;
   max-width: 360px;
@@ -47,12 +47,12 @@
 }
 
 .legend-scroll {
-  padding: 14px 16px;
-  max-height: calc(100vh - 120px);
+  padding: 20px;
+  max-height: calc(100vh - 130px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 @keyframes slideIn {
@@ -70,9 +70,9 @@
   margin: 0 0 16px 0;
   font-size: 16px;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text-primary);
   padding-bottom: 12px;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--color-border);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
@@ -80,7 +80,7 @@
   margin: 12px 0 8px 0;
   font-size: 13px;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text-primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -92,7 +92,7 @@
 .legend-items {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .legend-grid {
@@ -107,22 +107,23 @@
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #333;
-  padding: 6px 8px;
-  border-radius: 6px;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--color-text-primary);
+  padding: 8px 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.15s ease, box-shadow 0.15s ease, border 0.15s ease;
+  border: 1px solid transparent;
 }
 
 .legend-item:hover {
-  background: #f5f5f5;
+  background: var(--color-button-hover);
 }
 
 .legend-item.selected {
-  background: #e7f1ff;
-  box-shadow: inset 0 0 0 1px #b3d4ff;
+  background: var(--color-highlight);
+  box-shadow: inset 0 0 0 1px var(--color-highlight-border);
 }
 
 .legend-checkbox {
@@ -132,7 +133,7 @@
   flex-shrink: 0;
   cursor: pointer;
   margin: 0;
-  border: 2px solid var(--legend-item-color, #888888);
+  border: 2px solid var(--legend-item-color, var(--color-border));
   background: var(--legend-checkbox-bg, transparent);
   appearance: none;
   display: grid;
@@ -147,7 +148,7 @@
   border-radius: 2px;
   transform: scale(0);
   transition: transform 0.1s ease;
-  background: white;
+  background: #ffffff;
 }
 
 .legend-checkbox:checked {
@@ -162,6 +163,7 @@
   font-weight: 500;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 12px;
+  color: var(--color-text-primary);
 }
 
 /* Scrollbar styling */
@@ -170,17 +172,17 @@
 }
 
 .legend-grid::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--color-scrollbar-track);
   border-radius: 3px;
 }
 
 .legend-grid::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--color-scrollbar-thumb);
   border-radius: 3px;
 }
 
 .legend-grid::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--color-accent);
 }
 
 /* Responsive adjustments */

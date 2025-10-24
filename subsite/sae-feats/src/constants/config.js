@@ -46,10 +46,10 @@ export const ZOOM = {
 export const SIMULATION = {
   ALPHA_TARGET: 1,
   VELOCITY_DECAY: 0.2,
-  RADIAL_FORCE_K: 0.1,
+  RADIAL_FORCE_K: 0.05,
   LINK_STRENGTH: 0.1,
   CHARGE_STRENGTH: -50,
-  COLLISION_PADDING: 4
+  COLLISION_PADDING: 5
 };
 
 // Vector dimensions
