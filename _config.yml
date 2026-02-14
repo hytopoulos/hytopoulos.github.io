@@ -11,9 +11,9 @@ mode: dark # default theme "dark" | "light"
 author:
   name: Theo Hytopoulos # author name
   bio: >- # tell to the world
-    I am a freelance ML researcher and programmer interested in data-driven storytelling, social reasoning and alignment.
+    Welcome to my blog where I write about AI ethics.
     <br>
-    Check out my profile: <a href="https://github.com/hytopoulos" target="_blank" rel="noopener">@github</a>.
+    Check out my GitHub profile: <a href="https://github.com/hytopoulos" target="_blank" rel="noopener">@github</a>.
   username: hytopoulos # general username
   github: hytopoulos # github username
   twitter: hytopoulos # twitter username
